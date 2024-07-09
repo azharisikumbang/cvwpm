@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+table.table-content {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.table-content th {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 12px 8px;
+    text-align: center;
+}
+
+table.table-content td {
+    border-bottom: 1px solid #dee2e6;
+    padding: 8px;
+}
+
+table.table-content tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+table.table-content tr:nth-child(odd) {
+    background-color: #fff;
+}

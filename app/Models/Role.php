@@ -9,17 +9,15 @@ class Role extends Model
 {
     use \Sushi\Sushi;
 
-    const ID_NONE = 1;
-    const ID_ADMIN_WEB = 2;
-    const ID_ADMIN_STOCK = 3;
-    const ID_ADMIN_PURCHASING = 4;
-    const ID_SALES = 5;
-    const ID_MANAGER = 6;
+    const ID_ADMIN_WEB = 1;
+    const ID_ADMIN_STOCK = 2;
+    const ID_ADMIN_PURCHASING = 3;
+    const ID_SALES = 4;
+    const ID_MANAGER = 5;
 
     protected $appends = ['displayble_name', 'sidebar_menu_view'];
 
     protected $rows = [
-        ['id' => self::ID_NONE, 'name' => 'NONE', 'path' => '/logout'],
         ['id' => self::ID_ADMIN_WEB, 'name' => 'ADMIN_WEB', 'path' => '/admin-web'],
         ['id' => self::ID_ADMIN_STOCK, 'name' => 'ADMIN_STOCK', 'path' => '/admin-stock'],
         ['id' => self::ID_ADMIN_PURCHASING, 'name' => 'ADMIN_PURCHASING', 'path' => '/admin-purchasing'],

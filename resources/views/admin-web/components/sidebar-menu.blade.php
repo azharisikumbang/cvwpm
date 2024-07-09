@@ -19,7 +19,7 @@
             Data Master
         </div>
 
-        <a href=""
+        <a href="{{ route('admin-web.users.index') }}"
             class="flex items-center p-2 text-base text-white transition duration-75 rounded-lg hover:bg-blue-700 group hover:underline ">
             <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                 viewBox="0 0 20 19">

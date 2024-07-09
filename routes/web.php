@@ -29,8 +29,16 @@ Route::prefix('user')
 Route::prefix('admin-web')
     ->middleware(['auth', sprintf("role:%s", Role::ID_ADMIN_WEB)])
     ->group(function () {
-
         Route::get('/', [\App\Http\Controllers\AdminWeb\HomeController::class, '__invoke'])->name('admin-web.index');
+
+        // user management
+        Route::get('/users', [\App\Http\Controllers\AdminWeb\UserController::class, 'index'])->name('admin-web.users.index');
+        Route::get('/users/create', [\App\Http\Controllers\AdminWeb\UserController::class, 'create'])->name('admin-web.users.create');
+        Route::post('/users', [\App\Http\Controllers\AdminWeb\UserController::class, 'store'])->name('admin-web.users.store');
+        Route::get('/users/{user}', [\App\Http\Controllers\AdminWeb\UserController::class, 'show'])->name('admin-web.users.show');
+        Route::get('/users/{user}/edit', [\App\Http\Controllers\AdminWeb\UserController::class, 'edit'])->name('admin-web.users.edit');
+        Route::put('/users/{user}', [\App\Http\Controllers\AdminWeb\UserController::class, 'update'])->name('admin-web.users.update');
+        Route::delete('/users/{user}', [\App\Http\Controllers\AdminWeb\UserController::class, 'destroy'])->name('admin-web.users.destroy');
 
     });
 
