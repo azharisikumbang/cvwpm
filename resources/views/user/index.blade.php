@@ -4,8 +4,8 @@
 
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
-route('admin-web.index') => 'Dashboard',
-route('user.profile.index') => 'Pengelolaan Profil Pengguna'
+route('admin-web.index') => 'Panel Web Admin',
+route('user.profile.index') => 'Perbaharui Profile Pengguna'
 ]])
 @endsection
 

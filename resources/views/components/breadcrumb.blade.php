@@ -12,7 +12,7 @@
         </li>
         @else
         <li class="inline-flex items-center">
-            <a href="#"
+            <a href="{{ $link }}"
                 class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 hover:underline">
                 @if($loop->first)
                 <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
