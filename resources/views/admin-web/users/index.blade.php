@@ -55,7 +55,6 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
                     <th>Email</th>
                     <th>Username akun</th>
                     <th>Sebagai (role)</th>
-                    <th style="text-align: center; width: 180px">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,15 +65,6 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
                     <td style="text-align: center">{{ $user['email'] }}</td>
                     <td style="text-align: center">{{ $user['username'] }}</td>
                     <td style="text-align: center">{{ $user['role']['displayble_name'] }}</td>
-                    <td style="text-align: center">
-                        <a href="{{ route('admin-web.users.edit', $user['id']) }}" class="btn btn-primary">Edit</a>
-                        <form action="{{ route('admin-web.users.destroy', $user['id']) }}" method="POST"
-                            class="inline-block">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Hapus</button>
-                        </form>
-                    </td>
                 </tr>
                 @empty
                 <tr>
@@ -86,7 +76,7 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
 
         <div class="flex mt-4 justify-end">
             <!-- Previous Button -->
-            <a href="#"
+            <a href="{{ $users['prev_page_url'] }}"
                 class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
                 <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     fill="none" viewBox="0 0 14 10">
@@ -95,7 +85,7 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
                 </svg>
                 Halaman Sebelumnya
             </a>
-            <a href="#"
+            <a href="{{ $users['next_page_url'] }}"
                 class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 -700">
                 Halaman Selanjutnya
                 <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"

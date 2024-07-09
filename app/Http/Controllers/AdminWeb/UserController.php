@@ -21,7 +21,10 @@ class UserController extends Controller
                     ->orWhere('username', 'like', '%' . request('search') . '%')
                     ->orWhere('email', 'like', '%' . request('search') . '%');
             })
-            ->orderBy('name')->paginate(10);
+            ->when(request('page'), function ($query) {
+                $query->offset((request('page') - 1) * 10);
+            })
+            ->orderBy('name')->paginate(request('per_page', 10));
 
         return view('admin-web.users.index', ['users' => $users->toArray()]);
     }

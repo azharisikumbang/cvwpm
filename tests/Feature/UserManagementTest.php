@@ -112,4 +112,24 @@ class UserManagementTest extends TestCase
         $response->assertSee($users[0]->name);
         $response->assertDontSee($users[1]->name);
     }
+
+    public function test_paginate_correctly()
+    {
+
+        $this->markTestIncomplete('This test has not been implemented yet.');
+
+        $users = User::factory(100)->create();
+        $users = $users->sortBy('name')->values();
+
+        $admin = User::factory()->create(['role_id' => Role::ID_ADMIN_WEB]);
+
+        $response = $this->actingAs($admin)->get(route('admin-web.users.index'), [
+            'page' => 2,
+        ]);
+
+        $response->assertStatus(200);
+
+        $response->assertSee($users[10]->name);
+        $response->assertSee($users[11]->name);
+    }
 }
