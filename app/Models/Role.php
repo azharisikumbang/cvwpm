@@ -38,7 +38,7 @@ class Role extends Model
 
     public function getDisplaybleName()
     {
-        return ucfirst(
+        return ucwords(
             strtolower(str_replace("_", " ", $this->name))
         );
     }
