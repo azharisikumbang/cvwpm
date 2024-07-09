@@ -41,7 +41,7 @@
             Pengaturan Akun
         </div>
 
-        <a href=""
+        <a href="{{ route('user.password.index') }}"
             class="flex items-center p-2 text-base text-gray-600 transition duration-75 rounded-lg hover:bg-gray-100 group ">
             <svg class="w-6 h-6 text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                 viewBox="0 0 20 19">

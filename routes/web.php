@@ -20,7 +20,7 @@ Route::prefix('user')
     ->group(function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile.index');
         Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
-        Route::get('/password', [ChangePasswordController::class, 'index'])->name('user.password');
+        Route::get('/password', [ChangePasswordController::class, 'index'])->name('user.password.index');
         Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');
     });
 
