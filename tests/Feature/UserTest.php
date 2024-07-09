@@ -22,6 +22,60 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_user_can_update_profile()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->put('/user/profile', [
+            'name' => 'newname',
+            'email' => 'newemail@localtest'
+        ]);
+
+        $response->assertRedirect('/user/profile');
+        $response->assertSessionHas('success', 'Profil pengguna berhasil diperbaharui.');
+        $response->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'newname',
+            'email' => 'newemail@localtest',
+        ]);
+
+        $this->assertDatabaseCount('users', 1);
+    }
+
+    public function test_update_profile_doesnt_affect_other_user()
+    {
+        User::factory(10)->create();
+
+        $testUser = User::factory()->create([
+            'name' => 'Test User',
+            'username' => 'testuser',
+            'email' => 'test@localtest',
+        ]);
+
+        $user = User::factory()->create([
+            'username' => 'user',
+        ]);
+
+        $this->actingAs($user)->put('/user/profile', [
+            'name' => 'newname',
+            'email' => 'newemail@localtest'
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'username' => 'testuser',
+            'name' => 'Test User',
+            'email' => 'test@localtest',
+            'role_id' => $testUser->role->id,
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'newname',
+            'email' => 'newemail@localtest',
+            'role_id' => $testUser->role->id,
+        ]);
+    }
+
     public function test_user_can_update_password()
     {
         $user = User::factory()->create([

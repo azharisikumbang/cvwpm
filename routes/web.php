@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\User\ChangePasswordController;
+use App\Http\Controllers\User\ProfileController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +12,17 @@ Route::get('/', [HomeController::class, '__invoke'])->name('homepage');
 Route::get('/login', [AuthenticationController::class, 'login'])->name('authentication.login');
 Route::post('/login', [AuthenticationController::class, 'authenticate'])->name('authentication.authenticate');
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authentication.logout');
+
+
+// authenticated only
+Route::prefix('user')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+        Route::get('/password', [ChangePasswordController::class, 'index'])->name('user.password');
+        Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');
+    });
 
 
 // admin-web
