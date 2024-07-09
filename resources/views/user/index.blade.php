@@ -1,11 +1,11 @@
 @extends('app')
 
-@section('title', 'Pengelolaan Profil Pengguna')
+@section('title', 'Perbaharui Profil Pengguna')
 
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
 route('admin-web.index') => 'Panel Web Admin',
-route('user.profile.index') => 'Perbaharui Profile Pengguna'
+route('user.profile.index') => 'Perbaharui Profil Pengguna',
 ]])
 @endsection
 
@@ -15,8 +15,8 @@ route('user.profile.index') => 'Perbaharui Profile Pengguna'
 
 @section('content')
 <div>
-    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-600 md:text-2xl">
-        Perbaharui Profile
+    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-600 md:text-2xl mb-2">
+        @yield('title')
     </h1>
 
     @session('success')

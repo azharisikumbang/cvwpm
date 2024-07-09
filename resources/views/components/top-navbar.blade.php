@@ -1,9 +1,9 @@
-<nav class="fixed z-30 w-full border-b border-gray-200">
-    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+<nav class="w-full border-b border-gray-200 mb-2">
+    <div class="py-2 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
             <div class="flex">
                 <span @click="toggleSidebar"
-                    class="hover:bg-gray-200 flex items-center border rounded px-2 cursor-pointer">
+                    class="hover:bg-gray-200 flex items-center border rounded p-2 cursor-pointer">
                     <svg class="w-5" viewBox="0 0 20 20">
                         <path fill="gray"
                             d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314
@@ -13,10 +13,6 @@
                         </path>
                     </svg>
                 </span>
-                <a href="{{ route('homepage') }}" class="flex text-gray-600 ml-2 md:mr-24">
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">{{
-                        env('APP_NAME') }}</span>
-                </a>
             </div>
             <div class="italic text-sm text-gray-400">
                 <span>Login sebagai {{ auth()->user()->username }}</span>

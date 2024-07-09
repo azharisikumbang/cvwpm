@@ -6,24 +6,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $title ?? 'Halo' }} - {{ env('APP_NAME') }}</title>
+    <title>@yield('title') - {{ env('APP_NAME') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body x-data="global">
-    @include('components.top-navbar')
-
-    <div class="flex pt-14 overflow-hidden">
+<body x-data="global" class="bg-gray-100">
+    <div class="flex">
         @include('components.sidebar')
 
-        <div id="main" class="p-4 relative w-full h-full overflow-y-auto lg:ml-64 ml:0 transition-all">
-            @yield('breadcrumb')
-            @yield('alert')
+        <div id="main" class="relative w-full h-full overflow-y-auto lg:ml-64 ml:0 transition-all">
+            @include('components.top-navbar')
 
-            <main class="py-4">
+            @yield('breadcrumb')
+
+            <div class="p-4 bg-white m-4 shadow rounded-lg">
                 @yield('content')
-            </main>
+            </div>
         </div>
 
     </div>
