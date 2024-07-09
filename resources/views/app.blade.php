@@ -18,12 +18,19 @@
         @include('components.sidebar')
 
         <div id="main" class="p-4 relative w-full h-full overflow-y-auto lg:ml-64 ml:0 transition-all">
-            @yield('content')
+            @yield('breadcrumb')
+            @yield('alert')
+
+            <main class="py-4">
+                @yield('content')
+            </main>
         </div>
 
     </div>
 
+    <div class="bg-red-200 bg-green-200 bg-yellow-200" style="display:none"></div>
     @yield('script')
+
 </body>
 
 </html>

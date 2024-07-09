@@ -10,7 +10,10 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        return view('user.index');
+        $user = auth()->user();
+        $user->load('role');
+
+        return view('user.index', ['user' => $user->toArray()]);
     }
 
     public function edit()
@@ -23,7 +26,7 @@ class ProfileController extends Controller
         $request->user()->update($request->validated());
 
         return redirect()
-            ->route('user.profile')
+            ->route('user.profile.index')
             ->with('success', 'Profil pengguna berhasil diperbaharui.')
         ;
     }

@@ -18,7 +18,7 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authe
 Route::prefix('user')
     ->middleware('auth')
     ->group(function () {
-        Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile');
+        Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile.index');
         Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
         Route::get('/password', [ChangePasswordController::class, 'index'])->name('user.password');
         Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');

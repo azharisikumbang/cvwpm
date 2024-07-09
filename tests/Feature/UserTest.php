@@ -87,7 +87,7 @@ class UserTest extends TestCase
             'password_confirmation' => 'newpassword',
         ]);
 
-        $response->assertRedirect('/user/profile');
+        $response->assertRedirect('/user/password');
         $response->assertSessionHas('success', 'Password pengguna berhasil diperbaharui.');
 
         $this->assertDatabaseHas('users', [

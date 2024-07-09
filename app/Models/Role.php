@@ -16,6 +16,8 @@ class Role extends Model
     const ID_SALES = 5;
     const ID_MANAGER = 6;
 
+    protected $appends = ['displayble_name', 'sidebar_menu_view'];
+
     protected $rows = [
         ['id' => self::ID_NONE, 'name' => 'NONE', 'path' => '/logout'],
         ['id' => self::ID_ADMIN_WEB, 'name' => 'ADMIN_WEB', 'path' => '/admin-web'],
@@ -38,7 +40,19 @@ class Role extends Model
 
     public function getDisplaybleName()
     {
-        return ucfirst(str_replace("_", " ", $this->name));
+        return ucfirst(
+            strtolower(str_replace("_", " ", $this->name))
+        );
+    }
+
+    public function getDisplaybleNameAttribute()
+    {
+        return $this->getDisplaybleName();
+    }
+
+    public function getSidebarMenuViewAttribute()
+    {
+        return $this->getSidebarMenuView();
     }
 
     public function getSidebarMenuView()
