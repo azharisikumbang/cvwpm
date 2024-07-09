@@ -41,6 +41,19 @@ class Role extends Model
         return ucfirst(str_replace("_", " ", $this->name));
     }
 
+    public function getSidebarMenuView()
+    {
+        return match ($this->id)
+        {
+            self::ID_ADMIN_WEB => 'admin-web.components.sidebar-menu',
+            self::ID_ADMIN_STOCK => 'admin-stock.components.sidebar-menu',
+            self::ID_ADMIN_PURCHASING => 'admin-purchasing.components.sidebar-menu',
+            self::ID_SALES => 'sales.components.sidebar-menu',
+            self::ID_MANAGER => 'manager.components.sidebar-menu',
+        };
+
+    }
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class);

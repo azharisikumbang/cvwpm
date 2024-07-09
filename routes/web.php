@@ -16,9 +16,9 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authe
 Route::prefix('admin-web')
     ->middleware(['auth', sprintf("role:%s", Role::ID_ADMIN_WEB)])
     ->group(function () {
-        Route::get('/', function () {
-            echo "admin-web";
-        });
+
+        Route::get('/', [\App\Http\Controllers\AdminWeb\HomeController::class, '__invoke'])->name('admin-web.index');
+
     });
 
 // admin-stock
