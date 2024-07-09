@@ -15,7 +15,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('role')->orderBy('name')->paginate(10);
+        $users = User::with('role')
+            ->when(request('search'), function ($query) {
+                $query->where('name', 'like', '%' . request('search') . '%')
+                    ->orWhere('username', 'like', '%' . request('search') . '%')
+                    ->orWhere('email', 'like', '%' . request('search') . '%');
+            })
+            ->orderBy('name')->paginate(10);
 
         return view('admin-web.users.index', ['users' => $users->toArray()]);
     }

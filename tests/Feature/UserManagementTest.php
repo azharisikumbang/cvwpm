@@ -100,4 +100,16 @@ class UserManagementTest extends TestCase
         $response->assertSessionHasErrors(['username']);
         $this->assertDatabaseCount('users', 1);
     }
+
+    public function test_name_or_username_can_be_searched()
+    {
+        $users = User::factory(100)->create();
+        $admin = User::factory()->create(['role_id' => Role::ID_ADMIN_WEB]);
+
+        $response = $this->actingAs($admin)->get(route('admin-web.users.index', ['search' => $users[0]->name]));
+
+        $response->assertStatus(200);
+        $response->assertSee($users[0]->name);
+        $response->assertDontSee($users[1]->name);
+    }
 }
