@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateUserProfileTest;
+use App\Http\Requests\UpdateUserProfileRequest;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -16,12 +16,7 @@ class ProfileController extends Controller
         return view('user.index', ['user' => $user->toArray()]);
     }
 
-    public function edit()
-    {
-        return view('user.edit');
-    }
-
-    public function update(UpdateUserProfileTest $request)
+    public function update(UpdateUserProfileRequest $request)
     {
         $request->user()->update($request->validated());
 
