@@ -41,9 +41,10 @@ Route::prefix('admin-web')
 Route::prefix('admin-stock')
     ->middleware(['auth', sprintf("role:%s", Role::ID_ADMIN_STOCK)])
     ->group(function () {
-        Route::get('/', function () {
-            echo "admin-stock";
-        });
+        Route::get('/', [\App\Http\Controllers\AdminStock\HomeController::class, '__invoke'])->name('admin-stock.index');
+
+        // barang management
+        Route::resource('/barang', \App\Http\Controllers\AdminStock\BarangController::class)->names('admin-stock.barang');
     });
 
 // admin-purchasing
