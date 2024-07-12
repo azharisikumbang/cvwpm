@@ -17,10 +17,17 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        // admin
         User::factory()->create([
             'username' => 'admin',
             'password' => Hash::make('12345678'),
             'role_id' => Role::ID_ADMIN_WEB
+        ]);
+
+        User::factory()->create([
+            'username' => 'adminstock',
+            'password' => Hash::make('12345678'),
+            'role_id' => Role::ID_ADMIN_STOCK
         ]);
     }
 }
