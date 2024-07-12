@@ -5,7 +5,7 @@
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
 route('admin-stock.index') => 'Panel Admin Stok',
-'#' => 'Data Master Too',
+'#' => 'Data Master Toko',
 ]])
 @endsection
 
