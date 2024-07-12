@@ -4,7 +4,6 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ProfileController;
-use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 // public
@@ -14,7 +13,7 @@ Route::post('/login', [AuthenticationController::class, 'authenticate'])->name('
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authentication.logout');
 
 
-// authenticated only
+// authenticated
 Route::prefix('user')
     ->middleware('auth')
     ->group(function () {
@@ -24,55 +23,9 @@ Route::prefix('user')
         Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');
     });
 
-
-// admin-web
-Route::prefix('admin-web')
-    ->middleware(['auth', sprintf("role:%s", Role::ID_ADMIN_WEB)])
-    ->group(function () {
-        Route::get('/', [\App\Http\Controllers\AdminWeb\HomeController::class, '__invoke'])->name('admin-web.index');
-
-        // user management
-        Route::get('/users', [\App\Http\Controllers\AdminWeb\UserController::class, 'index'])->name('admin-web.users.index');
-        Route::get('/users/create', [\App\Http\Controllers\AdminWeb\UserController::class, 'create'])->name('admin-web.users.create');
-        Route::post('/users', [\App\Http\Controllers\AdminWeb\UserController::class, 'store'])->name('admin-web.users.store');
-    });
-
-// admin-stock
-Route::prefix('admin-stock')
-    ->middleware(['auth', sprintf("role:%s", Role::ID_ADMIN_STOCK)])
-    ->group(function () {
-        Route::get('/', [\App\Http\Controllers\AdminStock\HomeController::class, '__invoke'])->name('admin-stock.index');
-
-        // barang management
-        Route::resource('/barang', \App\Http\Controllers\AdminStock\BarangController::class)->names('admin-stock.barang');
-
-        // toko management
-        Route::resource('/toko', \App\Http\Controllers\AdminStock\TokoController::class)->names('admin-stock.toko');
-    });
-
-// admin-purchasing
-Route::prefix('admin-purchasing')
-    ->middleware(['auth', sprintf("role:%s", Role::ID_ADMIN_PURCHASING)])
-    ->group(function () {
-        Route::get('/', function () {
-            echo "admin-purchasing";
-        });
-    });
-
-// sales
-Route::prefix('sales')
-    ->middleware(['auth', sprintf("role:%s", Role::ID_SALES)])
-    ->group(function () {
-        Route::get('/', function () {
-            echo "sales";
-        });
-    });
-
-// manager
-Route::prefix('manager')
-    ->middleware(['auth', sprintf("role:%s", Role::ID_MANAGER)])
-    ->group(function () {
-        Route::get('/', function () {
-            echo "manager";
-        });
-    });
+// role based routes
+require __DIR__ . '/admin-web.php';
+require __DIR__ . '/admin-stock.php';
+require __DIR__ . '/admin-purchasing.php';
+require __DIR__ . '/sales.php';
+require __DIR__ . '/manager.php';
