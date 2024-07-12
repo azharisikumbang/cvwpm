@@ -28,4 +28,17 @@ class LoginRequest extends FormRequest
             'password' => 'required',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'username.required' => 'Username harus diisi.',
+            'password.required' => 'Password harus diisi.',
+        ];
+    }
 }

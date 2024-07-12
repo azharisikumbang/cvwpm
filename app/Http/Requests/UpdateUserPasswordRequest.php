@@ -25,4 +25,18 @@ class UpdateUserPasswordRequest extends FormRequest
             'password' => 'required|string|min:8|confirmed',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'password.required' => 'Kata sandi baru harus diisi.',
+            'password.min' => 'Kata sandi baru minimal terdiri dari 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi baru tidak cocok.',
+        ];
+    }
 }
