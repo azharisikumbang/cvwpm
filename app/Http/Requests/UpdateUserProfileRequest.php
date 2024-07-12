@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserProfileTest extends FormRequest
+class UpdateUserProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,20 @@ class UpdateUserProfileTest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|email',
+            'kontak' => 'required|string',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama Lengkap harus diisi.',
+            'kontak.required' => 'No handphone harus diisi.',
         ];
     }
 }
