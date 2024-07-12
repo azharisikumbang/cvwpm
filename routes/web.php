@@ -45,6 +45,9 @@ Route::prefix('admin-stock')
 
         // barang management
         Route::resource('/barang', \App\Http\Controllers\AdminStock\BarangController::class)->names('admin-stock.barang');
+
+        // toko management
+        Route::resource('/toko', \App\Http\Controllers\AdminStock\TokoController::class)->names('admin-stock.toko');
     });
 
 // admin-purchasing
