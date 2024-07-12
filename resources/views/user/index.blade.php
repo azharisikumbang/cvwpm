@@ -47,11 +47,11 @@ route('user.profile.index') => 'Perbaharui Profil Pengguna',
             </div>
 
             <div>
-                <label class=" block mb-2 text-sm font-medium text-gray-900" for="email">
-                    Email</label>
+                <label class=" block mb-2 text-sm font-medium text-gray-900" for="kontak">
+                    No Handphone</label>
                 <input
                     class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                    id="email" type="email" name="email" value="{{ $user['email'] }}" required>
+                    id="kontak" type="text" name="kontak" value="{{ $user['kontak'] }}" required>
             </div>
 
             <div>

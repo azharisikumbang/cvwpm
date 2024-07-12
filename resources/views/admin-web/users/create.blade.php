@@ -1,12 +1,12 @@
 @extends('app')
 
-@section('title', 'Data Akun Pengguna')
+@section('title', 'Tambah Pengguna Baru')
 
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
 route('admin-web.index') => 'Panel Web Admin',
-route('admin-web.users.index') => 'Data Akun Pengguna',
-route('admin-web.users.create') => 'Buat Akun Baru',
+route('admin-web.users.index') => 'Data Staf dan Pengguna',
+route('admin-web.users.create') => 'Tambah Pengguna Baru',
 ]])
 @endsection
 
@@ -34,6 +34,10 @@ route('admin-web.users.create') => 'Buat Akun Baru',
         <form method="POST" action="{{ route('admin-web.users.store') }}" class="space-y-4 md:space-y-6">
             @csrf
 
+            <div class="border-b border-gray-200 font-bold text-gray-600">
+                Informasi Staf
+            </div>
+
             <div>
                 <label class=" block mb-2 text-sm font-medium text-gray-900" for="name">
                     Nama Lengkap</label>
@@ -44,10 +48,14 @@ route('admin-web.users.create') => 'Buat Akun Baru',
 
             <div>
                 <label class=" block mb-2 text-sm font-medium text-gray-900" for="name">
-                    Email</label>
+                    No Handphone</label>
                 <input
                     class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                    id="email" type="email" name="email" required>
+                    type="text" name="kontak" required>
+            </div>
+
+            <div class="border-b border-gray-200 font-bold text-gray-600">
+                Informasi Akun
             </div>
 
             <div>

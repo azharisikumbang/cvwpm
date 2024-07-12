@@ -22,7 +22,9 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'jabatan',
+        'kontak',
     ];
 
     /**
@@ -56,5 +58,10 @@ class User extends Authenticatable
     public function hasRole(string|int|Role $role): bool
     {
         return $this->role->id == $role || $this->role->name == $role || $this->role == $role;
+    }
+
+    public function getJabatanAttribute(): string
+    {
+        return $this->jabatan ?? $this->role->displayble_name;
     }
 }

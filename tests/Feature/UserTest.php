@@ -28,7 +28,7 @@ class UserTest extends TestCase
 
         $response = $this->actingAs($user)->put('/user/profile', [
             'name' => 'newname',
-            'email' => 'newemail@localtest'
+            'kontak' => '081234567890',
         ]);
 
         $response->assertRedirect('/user/profile');
@@ -37,7 +37,7 @@ class UserTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'name' => 'newname',
-            'email' => 'newemail@localtest',
+            'kontak' => '081234567890',
         ]);
 
         $this->assertDatabaseCount('users', 1);
@@ -50,7 +50,7 @@ class UserTest extends TestCase
         $testUser = User::factory()->create([
             'name' => 'Test User',
             'username' => 'testuser',
-            'email' => 'test@localtest',
+            'kontak' => '081234567890',
         ]);
 
         $user = User::factory()->create([
@@ -59,19 +59,19 @@ class UserTest extends TestCase
 
         $this->actingAs($user)->put('/user/profile', [
             'name' => 'newname',
-            'email' => 'newemail@localtest'
+            'kontak' => '081234567891'
         ]);
 
         $this->assertDatabaseHas('users', [
             'username' => 'testuser',
             'name' => 'Test User',
-            'email' => 'test@localtest',
+            'kontak' => '081234567890',
             'role_id' => $testUser->role->id,
         ]);
 
         $this->assertDatabaseHas('users', [
             'name' => 'newname',
-            'email' => 'newemail@localtest',
+            'kontak' => '081234567891',
             'role_id' => $testUser->role->id,
         ]);
     }

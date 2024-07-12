@@ -42,7 +42,7 @@ class UserManagementTest extends TestCase
 
         $request = [
             'name' => 'Test User',
-            'email' => 'test@localhost',
+            'kontak' => '081234567890',
             'role_id' => Role::ID_ADMIN_STOCK,
             'password' => 'password',
             'username' => 'testuser'
@@ -57,7 +57,7 @@ class UserManagementTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'name' => $request['name'],
-            'email' => $request['email'],
+            'kontak' => $request['kontak'],
             'role_id' => $request['role_id'],
             'username' => $request['username']
         ]);
@@ -71,7 +71,7 @@ class UserManagementTest extends TestCase
 
         $request = [
             'name' => '',
-            'email' => '',
+            'kontak' => '',
             'role_id' => 0,
             'password' => '',
             'username' => ''
@@ -79,7 +79,7 @@ class UserManagementTest extends TestCase
 
         $response = $this->actingAs($admin)->post(route('admin-web.users.store'), $request);
 
-        $response->assertSessionHasErrors(['name', 'email', 'role_id', 'password', 'username']);
+        $response->assertSessionHasErrors(['name', 'kontak', 'role_id', 'password', 'username']);
         $this->assertDatabaseCount('users', 1);
     }
 

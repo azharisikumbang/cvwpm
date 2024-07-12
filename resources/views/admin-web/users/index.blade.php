@@ -52,9 +52,9 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
                 <tr>
                     <th style="width: 24px">No</th>
                     <th>Nama Lengkap</th>
-                    <th>Email</th>
+                    <th>No Handphone</th>
                     <th>Username akun</th>
-                    <th>Sebagai (role)</th>
+                    <th>Hak Akses</th>
                 </tr>
             </thead>
             <tbody>
@@ -62,7 +62,7 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
                 <tr>
                     <td style="text-align: center">{{ $loop->index + 1 }}</td>
                     <td style="text-align: center">{{ $user['name'] }}</td>
-                    <td style="text-align: center">{{ $user['email'] }}</td>
+                    <td style="text-align: center">{{ $user['kontak'] }}</td>
                     <td style="text-align: center">{{ $user['username'] }}</td>
                     <td style="text-align: center">{{ $user['role']['displayble_name'] }}</td>
                 </tr>
