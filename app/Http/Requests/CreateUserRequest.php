@@ -25,10 +25,29 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'kontak' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role_id' => ['required', Rule::in(Role::pluck('id'))]
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama Lengkap harus diisi.',
+            'kontak.required' => 'No handphone harus diisi.',
+            'username.required' => 'Username harus diisi.',
+            'username.unique' => 'Username sudah digunakan.',
+            'password.required' => 'Password harus diisi.',
+            'password.min' => 'Password minimal terdiri dari 8 karakter.',
+            'role_id.required' => 'Hak akses harus diisi.',
+            'role_id.in' => 'Hak akses tidak valid.'
         ];
     }
 }
