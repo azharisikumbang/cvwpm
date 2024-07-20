@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PengajuanPembelianDetail>
  */
-class PengejuanPembelianDetailFactory extends Factory
+class PengajuanPembelianDetailFactory extends Factory
 {
     /**
      * Define the model's default state.
