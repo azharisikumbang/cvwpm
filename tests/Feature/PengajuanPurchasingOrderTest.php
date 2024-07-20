@@ -199,7 +199,7 @@ class PengajuanPurchasingOrderTest extends TestCase
             ]
         );
 
-        $response->assertOk();
+        $response->assertRedirect();
         $response->assertSessionDoesntHaveErrors();
 
         // test on database
@@ -272,7 +272,7 @@ class PengajuanPurchasingOrderTest extends TestCase
             ]
         );
 
-        $response->assertOk();
+        $response->assertRedirect();
         $response->assertSessionDoesntHaveErrors();
 
         // test on database
