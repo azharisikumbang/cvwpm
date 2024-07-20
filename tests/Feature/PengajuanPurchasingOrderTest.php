@@ -273,7 +273,7 @@ class PengajuanPurchasingOrderTest extends TestCase
         );
 
         $response->assertRedirect();
-        $response->assertSessionDoesntHaveErrors();
+        $response->assertSessionHasErrors();
 
         // test on database
         $this->assertDatabaseEmpty('purchase_orders');
