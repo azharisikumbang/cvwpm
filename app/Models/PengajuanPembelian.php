@@ -17,7 +17,7 @@ class PengajuanPembelian extends Model
 
     const STATUS_REJECTED = 'rejected';
 
-    const STATU_REVISED = 'revised';
+    const STATUS_REVISED = 'revised';
 
     protected $fillable = [
         'status',
@@ -56,9 +56,9 @@ class PengajuanPembelian extends Model
         return match ($this->status)
         {
             self::STATUS_PENDING => 'Diajukan Ke Purchasing',
-            self::STATUS_APPROVED => 'Diterima',
+            self::STATUS_APPROVED => 'Sudah di PO',
             self::STATUS_REJECTED => 'Ditolak',
-            self::STATU_REVISED => 'Direvisi',
+            self::STATUS_REVISED => 'Direvisi',
             default => 'Unknown',
         };
     }
@@ -70,7 +70,7 @@ class PengajuanPembelian extends Model
             self::STATUS_PENDING => 'yellow',
             self::STATUS_APPROVED => 'green',
             self::STATUS_REJECTED => 'red',
-            self::STATU_REVISED => 'info',
+            self::STATUS_REVISED => 'info',
             default => 'gray',
         };
     }
