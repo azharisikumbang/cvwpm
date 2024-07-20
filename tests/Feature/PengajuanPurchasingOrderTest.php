@@ -124,7 +124,6 @@ class PengajuanPurchasingOrderTest extends TestCase
             ]
         );
 
-        $response->assertOk();
         $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect();
 
