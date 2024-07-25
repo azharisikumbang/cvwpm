@@ -45,6 +45,11 @@ class PurchaseOrder extends Model
         return $this->belongsTo(Gudang::class);
     }
 
+    public function deliveryOrders(): HasMany
+    {
+        return $this->hasMany(DeliveryOrder::class);
+    }
+
     public function getJumlahKotakAttribute(): int
     {
         return $this->riwayatStok->sum('jumlah_kotak');
