@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             'role_id' => Role::ID_ADMIN_WEB
         ]);
 
+        $this->call([GudangSeeder::class]);
+
         // // admin stock
         // User::factory()->create([
         //     'username' => 'adminstock',

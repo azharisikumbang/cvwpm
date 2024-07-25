@@ -15,11 +15,7 @@ route('admin-stock.barang.index') => 'Data Master Barang',
         @yield('title')
     </h1>
 
-    @session('success')
-    <div class="w-full">
-        <x-alert color="green" :message="$value" />
-    </div>
-    @endsession
+    @include('components.flash-message')
 
     <div class="w-full">
         <div class="flex justify-between items-center w-full mb-4">
@@ -56,7 +52,7 @@ route('admin-stock.barang.index') => 'Data Master Barang',
                 <tr>
                     <th style="width: 64px">No</th>
                     <th style="text-align: left">Nama Barang</th>
-                    <th style="width: 64px">Satuan</th>
+                    <th>Stok Gudang</th>
                     <th>Harga Satuan</th>
                     <th></th>
                 </tr>
@@ -65,8 +61,9 @@ route('admin-stock.barang.index') => 'Data Master Barang',
                 @forelse ($barang['data'] as $item)
                 <tr>
                     <td style="text-align: center">{{ $loop->index + 1 }}</td>
-                    <td style="text-align: left; font-weight: 600; text-decoration: uppercase">{{ $item['nama'] }}</td>
-                    <td style="text-align: center">{{ $item['satuan'] }}</td>
+                    <td style="text-align: left; font-weight: 600; text-decoration: uppercase">{{ $item['nama_kemasan']
+                        }}</td>
+                    <td style="text-align: center">{{ $item['jumlah_text'] }}</td>
                     <td style="text-align: center">{{ $item['harga_rupiah'] }}</td>
                     <td>
                         <div class="flex justify-end gap-4">
@@ -115,29 +112,11 @@ route('admin-stock.barang.index') => 'Data Master Barang',
             </tbody>
         </table>
 
-        @if($barang['total'] > 0)
-        <div class="flex mt-4 justify-end">
-            <!-- Previous Button -->
-            <a href="{{ $barang['prev_page_url'] }}"
-                class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
-                <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 5H1m0 0 4 4M1 5l4-4" />
-                </svg>
-                Halaman Sebelumnya
-            </a>
-            <a href="{{ $barang['next_page_url'] }}"
-                class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 -700">
-                Halaman Selanjutnya
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M1 5h12m0 0L9 1m4 4L9 9" />
-                </svg>
-            </a>
-        </div>
-        @endif
+        @include('components.table-footer-navigation', [
+        'total' => $barang['total'],
+        'prev_page_url' => $barang['prev_page_url'],
+        'next_page_url' => $barang['next_page_url'],
+        ])
     </div>
 </div>
 @endsection

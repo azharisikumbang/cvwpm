@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Barang;
+use App\Models\Gudang;
+use App\Models\Staf;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -105,11 +107,25 @@ class ManajemenBarangTest extends TestCase
     // fitur
     public function test_tambah_data_barang_baru()
     {
-        $this->asAdminStock();
+        $user = $this->asAdminStock();
+        $gudang = Gudang::create([
+            'nama' => 'Gudang Padang',
+            'lokasi' => 'Padang',
+        ]);
+
+        Staf::factory()->create([
+            'jabatan' => 'Admin Stock',
+            'user_id' => $user->id,
+            'gudang_kerja' => $gudang->id
+        ]);
 
         $response = $this->post('/admin-stock/barang', [
             'nama' => 'Barang Baru',
-            'harga' => 10000,
+            'kemasan' => [
+                ['varian' => '10gr', 'harga' => 10000],
+                ['varian' => '20gr', 'harga' => 20000],
+                ['varian' => '30gr', 'harga' => 30000]
+            ],
             'satuan' => 'pcs'
         ]);
 
@@ -118,10 +134,36 @@ class ManajemenBarangTest extends TestCase
 
         $this->assertDatabaseHas('barang', [
             'nama' => 'Barang Baru',
+            'satuan' => 'pcs',
+            'gudang_id' => $gudang->id,
+            'jumlah_dus' => 0,
+            'jumlah_satuan' => 0,
             'harga' => 10000,
-            'satuan' => 'pcs'
+            'jumlah_kotak' => 0,
+            'kemasan' => '10gr'
         ]);
-        $this->assertDatabaseCount('barang', 1);
+
+        $this->assertDatabaseHas('barang', [
+            'nama' => 'Barang Baru',
+            'satuan' => 'pcs',
+            'gudang_id' => $gudang->id,
+            'jumlah_dus' => 0,
+            'jumlah_satuan' => 0,
+            'harga' => 20000,
+            'jumlah_kotak' => 0,
+            'kemasan' => '20gr'
+        ]);
+
+        $this->assertDatabaseHas('barang', [
+            'nama' => 'Barang Baru',
+            'satuan' => 'pcs',
+            'gudang_id' => $gudang->id,
+            'jumlah_dus' => 0,
+            'jumlah_satuan' => 0,
+            'harga' => 30000,
+            'jumlah_kotak' => 0,
+            'kemasan' => '30gr'
+        ]);
     }
 
     public function test_ubah_data_barang()

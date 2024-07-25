@@ -27,8 +27,7 @@ class StoreStafRequest extends FormRequest
             'nama' => ['required', 'string'],
             'jabatan' => ['required', Rule::in(Role::pluck('id'))],
             'kontak' => ['required', 'string'],
-            'gudang_kerja' => ['required', 'exists:gudang,id'],
-            'user_id' => ['nullable', 'exists:users,id']
+            'gudang_kerja' => ['required', 'exists:gudang,id']
         ];
     }
 

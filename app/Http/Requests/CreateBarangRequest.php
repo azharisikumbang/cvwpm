@@ -23,7 +23,9 @@ class CreateBarangRequest extends FormRequest
     {
         return [
             'nama' => 'required|string|unique:barang,nama',
-            'harga' => 'required|numeric|min:0',
+            'kemasan' => 'required|array',
+            'kemasan.*.varian' => 'required|string',
+            'kemasan.*.harga' => 'required|numeric|min:0',
             'satuan' => 'required|string',
         ];
     }
@@ -37,13 +39,13 @@ class CreateBarangRequest extends FormRequest
     {
         return [
             'nama.required' => 'Nama barang wajib diisi',
-            'nama.string' => 'Nama barang harus berupa string',
-            'nama.unique' => 'Nama barang sudah ada',
-            'harga.required' => 'Harga barang wajib diisi',
-            'harga.numeric' => 'Harga barang harus berupa angka',
-            'harga.min' => 'Harga barang minimal Rp. 0',
-            'satuan.required' => 'Satuan barang wajib diisi',
-            'satuan.string' => 'Satuan barang tidak boleh angka',
+            'nama.unique' => 'Nama barang sudah terdaftar',
+            'kemasan.required' => 'Kemasan wajib diisi',
+            'kemasan.*.varian.required' => 'Varian kemasan wajib diisi',
+            'kemasan.*.harga.required' => 'Harga kemasan wajib diisi',
+            'kemasan.*.harga.numeric' => 'Harga kemasan harus berupa angka',
+            'kemasan.*.harga.min' => 'Harga kemasan tidak boleh kurang dari 0',
+            'satuan.required' => 'Satuan wajib diisi',
         ];
     }
 }

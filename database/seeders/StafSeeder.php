@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Staf;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,6 @@ class StafSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateBarangRequest;
 use App\Http\Requests\UpdateBarangRequest;
 use App\Models\Barang;
+use App\Services\BarangService;
 use Illuminate\Http\Request;
 
 class BarangController extends Controller
@@ -17,6 +18,7 @@ class BarangController extends Controller
     {
         $barang = Barang::when(request('search'), fn($query) => $query->where('nama', 'like', '%' . request('search') . '%'))
             ->when(request('page'), fn($query) => $query->offset((request('page') - 1) * 10))
+            ->where('gudang_id', auth()->user()->staf->gudangKerja->id)
             ->orderBy('nama')->paginate(request('per_page', 10));
 
         return view('admin-stock.barang.index', ['barang' => $barang->toArray()]);
@@ -35,9 +37,12 @@ class BarangController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateBarangRequest $request)
+    public function store(CreateBarangRequest $request, BarangService $barangService)
     {
-        Barang::create($request->validated());
+        $barangService->tambahBarangBaru(
+            auth()->user()->staf->gudangKerja,
+            $request
+        );
 
         return redirect()
             ->route('admin-stock.barang.index')
@@ -57,6 +62,13 @@ class BarangController extends Controller
      */
     public function edit(Barang $barang)
     {
+        if (false === $barang->validateGudang())
+        {
+            return redirect()
+                ->route('admin-stock.barang.index')
+                ->withErrors('Anda tidak memiliki akses ke barang ini');
+        }
+
         $listSatuan = Barang::select('satuan')->distinct()->get()->pluck('satuan');
 
         return view('admin-stock.barang.edit', [
@@ -85,7 +97,7 @@ class BarangController extends Controller
         // delete only if there is no relation
 
         // delete only if role ADMIN_STOK
-        
+
 
         $barang->delete();
 

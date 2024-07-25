@@ -12,9 +12,14 @@ return new class extends Migration {
     {
         Schema::create('barang', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique();
-            $table->double('harga')->default(0);
+            $table->string('nama')->index();
+            $table->string('kemasan')->index();
             $table->string('satuan')->default('pcs');
+            $table->double('harga')->default(0);
+            $table->integer('jumlah_dus')->default(0);
+            $table->integer('jumlah_satuan')->default(0);
+            $table->integer('jumlah_kotak')->default(0);
+            $table->foreignId('gudang_id')->constrained('gudang');
             $table->timestamps();
         });
     }
