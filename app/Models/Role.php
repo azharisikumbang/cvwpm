@@ -43,6 +43,18 @@ class Role extends Model
         );
     }
 
+    public static function tryFromName(string $name)
+    {
+        $roles = self::all()->toArray();
+
+        foreach ($roles as $role)
+            if ($role['displayble_name'] === $name || $role['name'] === $name)
+                return self::find($role['id']);
+
+
+        return null;
+    }
+
     public function getDisplaybleNameAttribute()
     {
         return $this->getDisplaybleName();

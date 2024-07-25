@@ -13,7 +13,7 @@ class CreateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->role_id === Role::ID_ADMIN_WEB;
+        return auth()->user()->isAdminWeb();
     }
 
     /**
@@ -24,11 +24,9 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'kontak' => 'required|string|max:255',
+            'staf' => 'required|exists:staf,id',
             'username' => 'required|string|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'role_id' => ['required', Rule::in(Role::pluck('id'))]
+            'password' => 'required|string|min:8|max:255|confirmed',
         ];
     }
 
@@ -40,14 +38,17 @@ class CreateUserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama Lengkap harus diisi.',
-            'kontak.required' => 'No handphone harus diisi.',
+            'staf.required' => 'Staf harus diisi.',
+            'staf.exists' => 'Staf tidak ditemukan.',
             'username.required' => 'Username harus diisi.',
+            'username.string' => 'Username harus berupa teks.',
+            'username.max' => 'Username tidak boleh lebih dari :max karakter.',
             'username.unique' => 'Username sudah digunakan.',
             'password.required' => 'Password harus diisi.',
-            'password.min' => 'Password minimal terdiri dari 8 karakter.',
-            'role_id.required' => 'Hak akses harus diisi.',
-            'role_id.in' => 'Hak akses tidak valid.'
+            'password.string' => 'Password harus berupa teks.',
+            'password.min' => 'Password minimal :min karakter.',
+            'password.max' => 'Password tidak boleh lebih dari :max karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ];
     }
 }

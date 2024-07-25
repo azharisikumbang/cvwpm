@@ -18,13 +18,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'username',
-        'email',
         'password',
         'role_id',
+        'staf_id'
+    ];
+
+    protected $appends = [
         'jabatan',
-        'kontak',
+        'nama'
     ];
 
     /**
@@ -62,6 +64,31 @@ class User extends Authenticatable
 
     public function getJabatanAttribute(): string
     {
-        return $this->jabatan ?? $this->role->displayble_name;
+        return $this->staf ? $this->staf->jabatan : $this->role->displayble_name;
+    }
+
+    public function staf(): BelongsTo
+    {
+        return $this->belongsTo(Staf::class, 'id', 'user_id');
+    }
+
+    public function getNamaAttribute(): string
+    {
+        return $this->staf ? $this->staf->gudangKerja->nama . ' / ' . $this->staf->nama : '-';
+    }
+
+    public function gudangKerja(): Gudang
+    {
+        return $this->staf->gudangKerja;
+    }
+
+    public function cekKepemilikanGudangKerja(): bool
+    {
+        return $this->staf->cekKepemilikanGudangKerja($this->gudangKerja());
+    }
+
+    public function isAdminWeb(): bool
+    {
+        return $this->hasRole(Role::ID_ADMIN_WEB);
     }
 }

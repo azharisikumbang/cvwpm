@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminWeb;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserRequest;
 use App\Models\Role;
+use App\Models\Staf;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,16 +16,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('role')
+        $users = User::with(['role', 'staf'])
             ->when(request('search'), function ($query) {
-                $query->where('name', 'like', '%' . request('search') . '%')
-                    ->orWhere('username', 'like', '%' . request('search') . '%')
-                    ->orWhere('email', 'like', '%' . request('search') . '%');
+                $query->where('username', 'like', '%' . request('search') . '%');
             })
             ->when(request('page'), function ($query) {
                 $query->offset((request('page') - 1) * 10);
             })
-            ->orderBy('name')->paginate(request('per_page', 10));
+            ->orderBy('username')->paginate(request('per_page', 10));
 
         return view('admin-web.users.index', ['users' => $users->toArray()]);
     }
@@ -35,8 +34,12 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all()->toArray();
+        $staf = Staf::whereNull('user_id')->get()->toArray();
 
-        return view('admin-web.users.create', ['roles' => $roles]);
+        return view('admin-web.users.create', [
+            'roles' => $roles,
+            'staf' => $staf
+        ]);
     }
 
     /**
@@ -44,7 +47,19 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        $user = User::create($request->validated());
+        $staf = Staf::find($request->staf);
+        $role = Role::tryFromName($staf->jabatan);
+
+        if (!$staf || !$role)
+            return redirect()->route('admin-web.users.create')->with('error', 'Staf tidak ditemukan.');
+
+        $user = User::create(
+            $request->validated() + [
+                'role_id' => $role->id
+            ]
+        );
+
+        $staf->update(['user_id' => $user->id]);
 
         return redirect()->route('admin-web.users.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
     }

@@ -14,11 +14,16 @@
                     </svg>
                 </span>
             </div>
-            <div class="italic text-sm text-gray-400">
-                <span>Login sebagai {{ auth()->user()->username }}</span>
-                -
-                <span class="hover:text-red-800 hover:underline text-red-500 cursor-pointer"
-                    @click="window.location.reload()">muat ulang halaman</span>
+            <div class="flex items-center gap-1 bg-white rounded shadow px-2 py-1 text-sm">
+                <span class="flex  w-3 h-3 bg-green-500 rounded-full"></span>
+
+                @if(auth()->user()->staf?->gudangKerja)
+                <span>{{ auth()->user()->nama }}</span>
+                @endif
+
+                <span>/ {{ auth()->user()->jabatan }}</span>
+
+
             </div>
         </div>
     </div>

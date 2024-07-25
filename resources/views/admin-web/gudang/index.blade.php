@@ -1,11 +1,11 @@
 @extends('app')
 
-@section('title', 'Data Akun Pengguna')
+@section('title', 'Data Master Gudang')
 
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
 route('admin-web.index') => 'Panel Web Admin',
-route('admin-web.users.index') => 'Data Akun Pengguna',
+route('admin-web.gudang.index') => 'Master Gudang',
 ]])
 @endsection
 
@@ -24,7 +24,7 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
     <div class="w-full">
         <div class="flex justify-between items-center w-full mb-4">
             <div>
-                <form method="GET" action="{{ route('admin-web.users.index') }}">
+                <form method="GET" action="{{ route('admin-web.gudang.index') }}">
                     <label for="table-search" class="sr-only">Search</label>
                     <div class="relative mt-1">
                         <div
@@ -42,27 +42,34 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
                 </form>
             </div>
             <div>
-                <a href="{{ route('admin-web.users.create') }}"
+                <a href="{{ route('admin-web.gudang.create') }}"
                     class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-blue-700">Tambah
-                    Pengguna</a>
+                    Data Gudang</a>
             </div>
         </div>
         <table class="table-content">
             <thead>
                 <tr>
                     <th style="width: 24px">No</th>
-                    <th>Pemilik</th>
-                    <th>Username akun</th>
-                    <th>Hak Akses</th>
+                    <th>Gudang</th>
+                    <th>Lokasi</th>
+                    <th>PIC</th>
+                    <th>Tindakan</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($users['data'] as $user)
+                @forelse ($items['data'] as $gudang)
                 <tr>
                     <td style="text-align: center">{{ $loop->index + 1 }}</td>
-                    <td style="text-align: center">{{ $user['nama'] }}</td>
-                    <td style="text-align: center">{{ $user['username'] }}</td>
-                    <td style="text-align: center">{{ $user['role']['displayble_name'] }}</td>
+                    <td style="text-align: center">{{ $gudang['nama'] }}</td>
+                    <td style="text-align: center">{{ $gudang['lokasi'] }}</td>
+                    <td style="text-align: center">{{ $gudang['pic'] }}</td>
+                    <td>
+                        @include('components.table-action-button', [
+                        'edit' => route('admin-web.gudang.edit', ['gudang' => $gudang['id']]),
+                        'delete' => route('admin-web.gudang.destroy', ['gudang' => $gudang['id']]),
+                        ])
+                    </td>
                 </tr>
                 @empty
                 <tr>
@@ -74,7 +81,7 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
 
         <div class="flex mt-4 justify-end">
             <!-- Previous Button -->
-            <a href="{{ $users['prev_page_url'] }}"
+            <a href="{{ $items['prev_page_url'] }}"
                 class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
                 <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     fill="none" viewBox="0 0 14 10">
@@ -83,7 +90,7 @@ route('admin-web.users.index') => 'Data Akun Pengguna',
                 </svg>
                 Halaman Sebelumnya
             </a>
-            <a href="{{ $users['next_page_url'] }}"
+            <a href="{{ $items['next_page_url'] }}"
                 class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 -700">
                 Halaman Selanjutnya
                 <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
