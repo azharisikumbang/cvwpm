@@ -13,6 +13,6 @@ class StafSeeder extends Seeder
      */
     public function run(): void
     {
-
+        Staf::factory(10)->create();
     }
 }

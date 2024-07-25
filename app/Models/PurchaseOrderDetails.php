@@ -11,10 +11,7 @@ class PurchaseOrderDetails extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nomor_po',
-        'barang_id',
-        'jumlah_dus',
-        'jumlah_kotak'
+        'harga_satuan'
     ];
 
     public $incrementing = false;

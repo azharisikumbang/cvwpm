@@ -3,13 +3,47 @@
 namespace App\Services;
 
 use App\Http\Requests\CreatePurchaseOrderRequest;
+use App\Models\Gudang;
 use App\Models\PengajuanPembelian;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderDetails;
+use App\Models\RiwayatStok;
 use Illuminate\Support\Facades\DB;
 
 class PurchaseOrderService
 {
+    public function create(
+        Gudang $gudang,
+        CreatePurchaseOrderRequest $request
+    ) {
+        DB::transaction(function () use ($gudang, $request) {
+            $this->createPurchaseOrder($gudang, $request);
+        });
+    }
+
+    public function createPurchaseOrder(
+        Gudang $gudang,
+        CreatePurchaseOrderRequest $request
+    ) {
+        $purchaseOrder = $gudang->purchaseOrders()->create([
+            'nomor' => $request->nomor,
+            'tanggal' => $request->tanggal,
+            'status' => PurchaseOrder::STATUS_PENDING,
+            'staf_id' => auth()->id()
+        ]);
+
+        $purchaseOrder->riwayatStok()->saveMany(
+            array_map(function ($barang) {
+                return new RiwayatStok([
+                    'barang_id' => $barang['id'],
+                    'jumlah_dus' => $barang['jumlah_dus'],
+                    'jumlah_kotak' => $barang['jumlah_kotak'],
+                    'keterangan' => 'Pembelian',
+                ]);
+            }, $request->barang)
+        );
+    }
+
     public function createFromPermintaanPembelian(
         PengajuanPembelian $pengajuanPembelian,
         CreatePurchaseOrderRequest $request

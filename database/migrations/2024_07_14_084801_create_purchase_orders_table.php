@@ -11,9 +11,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
+            $table->id();
             $table->string('nomor');
             $table->date('tanggal');
             $table->foreignId('staf_id')->constrained('users');
+            $table->foreignId('gudang_id')->constrained('gudang');
             $table->string('status', 20);
             $table->string('supplier', 100)->nullable();
             $table->timestamps();

@@ -55,7 +55,8 @@ route('admin-stock.barang.index') => 'Data Master Barang',
                         <label class=" block mb-2 text-sm font-medium text-gray-900" for="name">Satuan </label>
                         <input
                             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                            type="text" name="satuan" required list="list-satuan" autocomplete="off">
+                            type="text" name="satuan" required list="list-satuan"
+                            placeholder="Tambahkan jika tidak ada dalam list.." autocomplete="off">
                         <datalist id="list-satuan">
                             <option value="pcs">
                             <option value="kg">
@@ -83,12 +84,14 @@ route('admin-stock.barang.index') => 'Data Master Barang',
                                     <tr class="border-b">
                                         <td class="py-2 px-2">
                                             <label for="">Kemasan</label>
-                                            <input type="text" class="px-2 py-1 border rounded"
+                                            <input type="text"
+                                                class="px-2 py-1 border rounded bg-gray-50 border border-gray-300 text-gray-900"
                                                 :name="'kemasan[' + item + '][varian]'" min="0" value="" required>
                                         </td>
                                         <td>
                                             <label for="">Harga</label>
-                                            <input type="number" class="px-2 py-1 border rounded"
+                                            <input type="number"
+                                                class="px-2 py-1 border rounded bg-gray-50 border border-gray-300 text-gray-900"
                                                 :name="'kemasan[' + item + '][harga]'" min="0" value="0" required>
                                         </td>
                                         <td class="text-right">

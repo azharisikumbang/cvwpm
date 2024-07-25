@@ -19,8 +19,7 @@ class StafFactory extends Factory
         return [
             'nama' => $this->faker->name(),
             'jabatan' => $this->faker->jobTitle(),
-            'kontak' => $this->faker->phoneNumber(),
-            'gudang_kerja' => \App\Models\Gudang::factory()
+            'kontak' => $this->faker->phoneNumber()
         ];
     }
 }

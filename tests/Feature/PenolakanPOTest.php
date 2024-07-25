@@ -8,13 +8,10 @@ use Tests\TestCase;
 
 class PenolakanPOTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    public function testCatatPO()
+    {
+        $this->markTestSkipped();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminPurchasing;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreatePurchaseOrderRequest;
+use App\Models\Barang;
 use App\Models\PengajuanPembelian;
 use App\Models\PurchaseOrder;
 use App\Services\PurchaseOrderService;
@@ -13,35 +14,41 @@ class PurchasingOrderController extends Controller
 {
     public function index()
     {
-        $purchaseOrder = PurchaseOrder::latest()->paginate(10);
+        $purchaseOrder = PurchaseOrder::where('gudang_id', auth()->user()->gudangKerja()->id)->latest()->paginate(10);
 
         return view('admin-purchasing.purchasing-orders.index', [
             'items' => $purchaseOrder->toArray()
         ]);
     }
 
-    public function create(PengajuanPembelian $pengajuanPembelian)
+    public function create()
     {
-        $pengajuanPembelian->load('details.barang');
+        $barang = Barang::getModel()->getBarangGudang()->toArray();
 
         return view('admin-purchasing.purchasing-orders.create', [
-            'data' => $pengajuanPembelian->toArray()
+            'barang' => $barang
         ]);
     }
 
     public function store(
-        PengajuanPembelian $pengajuanPembelian,
         CreatePurchaseOrderRequest $request,
-        PurchaseOrderService $service
+        PurchaseOrderService $purchaseOrderService
     ) {
-        $created = $service->createFromPermintaanPembelian($pengajuanPembelian, $request);
-
-        if (false === $created)
-            return back()->withErrors('Gagal mengajukan PO, silahkan coba kembali');
+        $purchaseOrderService->create(
+            auth()->user()->gudangKerja(),
+            $request
+        );
 
         return redirect()
-            ->route('admin-purchasing.purchasing-orders.index')
-            ->with('success', 'Pengajuan PO Berhasil, silahkan unduh dokumen PO untuk melihat lebih lanjut.')
+            ->route('admin-purchasing.purchase-orders.index')
+            ->with('success', 'Berhasil membuat purchase order.');
         ;
+    }
+
+    public function show(PurchaseOrder $purchaseOrder)
+    {
+        return view('admin-purchasing.purchasing-orders.show', [
+            'item' => $purchaseOrder->load('riwayatStok.barang')->toArray()
+        ]);
     }
 }

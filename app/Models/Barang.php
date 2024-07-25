@@ -57,4 +57,9 @@ class Barang extends Model
     {
         return $this->gudang_id === auth()->user()->staf->gudangKerja->id;
     }
+
+    public function getBarangGudang()
+    {
+        return $this->where('gudang_id', auth()->user()->staf->gudangKerja->id)->get();
+    }
 }

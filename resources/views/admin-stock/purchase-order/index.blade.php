@@ -4,7 +4,7 @@
 
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
-route('admin-purchasing.index') => 'Panel Admin Purchasing',
+route('admin-stock.index') => 'Panel Admin Stock',
 '#' => 'Riwayat PO',
 ]])
 @endsection
@@ -41,7 +41,7 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                     </div>
                 </form>
                 @if(isset($_GET['search']))
-                <a href="{{ route('admin-stock.pengajuan-pembelian.index') }}"
+                <a href="{{ route('admin-stock.purchase-order.index') }}"
                     class="ml-2 w-full h-10 mt-1 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-red-700">Reset</a>
                 @endif
             </div>
@@ -68,8 +68,10 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                     <td style="text-align: center">{{ $item['jumlah_dus'] }}</td>
                     <td style="text-align: center">{{ $item['jumlah_kotak'] }}</td>
                     <td style="text-align: center">
-                        <a href="{{ route('admin-purchasing.purchase-orders.show', $item['id']) }}"
-                            class="text-blue-500 hover:underline">Lihat Detail</a>
+                        <a href="{{ route('admin-stock.purchase-order.show', $item['id']) }}"
+                            class="text-blue-500 hover:underline">Lihat Detail</a> |
+                        <a href="{{ route('admin-stock.purchase-order.show', $item['id']) }}"
+                            class="text-blue-500 hover:underline">Catat Barang Masuk</a>
                     </td>
                 </tr>
                 @empty

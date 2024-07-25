@@ -4,86 +4,59 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class PurchaseOrder extends Model
 {
     use HasFactory;
 
-    // status po
-    const STATUS_PENDING = 'pending'; // oleh admin stok
+    const STATUS_PENDING = 'pending';
 
-    const STATUS_APPROVED = 'approved'; // oleh admin purchasing
-
-    const STATUS_REJECTED = 'rejected'; // oleh manajer
-
-    const STATU_REVISED = 'revised'; // oleh admin purchasing
-
-    // status pengajuan
-    const STATUS_DRAFT = 'draft'; // pengajuan admin stok
-
-    const STATUS_SUBMITTED = 'submitted'; // pengajuan oleh admin purchasing
-
+    const STATUS_SELESAI = 'selesai';
 
     protected $fillable = [
         'nomor',
         'tanggal',
         'status',
         'staf_id',
-        'supplier'
+        'gudang_id',
     ];
 
-    public $incrementing = false;
+    protected $appends = [
+        'jumlah_kotak',
+        'jumlah_dus',
+        'total_item'
+    ];
 
-    protected $primaryKey = 'nomor';
-
-    public function isPending(): bool
+    public function riwayatStok(): MorphMany
     {
-        return $this->status === self::STATUS_PENDING;
+        return $this->morphMany(RiwayatStok::class, 'stokable');
     }
 
-    public function isApproved(): bool
+    public function staf(): BelongsTo
     {
-        return $this->status === self::STATUS_APPROVED;
+        return $this->belongsTo(User::class, 'staf_id');
     }
 
-    public function isRejected(): bool
+    public function gudang(): BelongsTo
     {
-        return $this->status === self::STATUS_REJECTED;
+        return $this->belongsTo(Gudang::class);
     }
 
-    public function isRevised(): bool
+    public function getJumlahKotakAttribute(): int
     {
-        return $this->status === self::STATU_REVISED;
+        return $this->riwayatStok->sum('jumlah_kotak');
     }
 
-    public function isDraft(): bool
+    public function getJumlahDusAttribute(): int
     {
-        return $this->status === self::STATUS_DRAFT;
+        return $this->riwayatStok->sum('jumlah_dus');
     }
 
-    public function isSubmitted(): bool
+    public function getTotalItemAttribute(): int
     {
-        return $this->status === self::STATUS_SUBMITTED;
-    }
-
-    public function approve(): void
-    {
-        $this->update(['status' => self::STATUS_APPROVED]);
-    }
-
-    public function reject(): void
-    {
-        $this->update(['status' => self::STATUS_REJECTED]);
-    }
-
-    public function revise(): void
-    {
-        $this->update(['status' => self::STATU_REVISED]);
-    }
-
-    public function details(): HasMany
-    {
-        return $this->hasMany(PurchaseOrderDetails::class, 'nomor_po', 'nomor');
+        return $this->riwayatStok->count();
     }
 }

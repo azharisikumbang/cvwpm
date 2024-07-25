@@ -30,4 +30,9 @@ class Gudang extends Model
     {
         return $this->penanggungJawab ? sprintf("%s (%s)", $this->penanggungJawab->nama, $this->penanggungJawab->kontak) : 'Tidak ada PIC';
     }
+
+    public function purchaseOrders()
+    {
+        return $this->hasMany(PurchaseOrder::class);
+    }
 }

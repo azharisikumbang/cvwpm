@@ -29,9 +29,8 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
     </div>
     @endif
 
-    <div>
-        <form method="POST"
-            action="{{ route('admin-purchasing.purchasing-orders.store', ['pengajuanPembelian' => $data['id']]) }}">
+    <div x-data="data">
+        <form method="POST" action="{{ route('admin-purchasing.purchase-orders.store') }}">
             @csrf
 
             <div class="grid grid-cols-2 gap-4">
@@ -45,106 +44,147 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                         </svg>
                         <span class="sr-only">Info</span>
                         <div>
-                            <span class="font-medium">Informasi!</span> Tanggal dan Nomor PO akan dibuat secara otomatis
-                            dan
-                            dapat dilihat pada dokumen PO nantinya.
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 w-full">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-900" for="name">
-                                Nomor PO</label>
-                            <input
-                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                                type="text" name="tanggal" value="(dibuat otomatis)" disabled>
-                        </div>
-                        <div>
-                            <label class=" block mb-2 text-sm font-medium text-gray-900" for="name">
-                                Tanggal PO</label>
-                            <input
-                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                                type="text" name="tanggal" value="{{ date('m/d/Y') }} (hari ini)" disabled>
+                            <span class="font-medium">Informasi!</span> Halaman ini hanya mencatat riwayat PO bukan
+                            membuat PO. Riwayat PO akan memudahkan admin stok dalam mencatat barang masuk PO.
                         </div>
                     </div>
 
                     <div>
                         <label class=" block mb-2 text-sm font-medium text-gray-900" for="name">
-                            Tujuan PO / Pemasok</label>
+                            Tanggal PO</label>
                         <input
                             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                            type="text" name="supplier" required autofocus>
+                            type="date" name="tanggal" autofocus>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900" for="name">
+                            Nomor PO</label>
+                        <input
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
+                            type="text" name="nomor" autofocus>
                     </div>
                 </div>
 
                 <div>
-                    <div class="px-4">
-                        <div class="font-bold">
-                            Barang Akan PO :
+                    <div class="flex justify-between items-center pb-2 border-b">
+                        <div class="block text-sm font-medium text-gray-900">
+                            List barang yang di PO (total: <span x-text="barang_dipilih.length"></span> item)
                         </div>
-                        <span class="text-gray-600 text-sm italic">jumlah dapat diubah sesuai keperluan.</span>
+                        <div>
+                            <button type="button" x-on:click="data.modal = true"
+                                class="bg-green-500 text-white text-sm w-full px-2 py-2 rounded focus:outline-none hover:bg-green-700">Tambah
+                                Barang</button>
+                        </div>
                     </div>
                     <table class="w-full">
-                        <thead>
-                            <tr class="border-b">
-                                <th style="width: 64px" class="py-4">No</th>
-                                <th style="text-align: left">Nama Barang</th>
-                                <th>Jumlah Dus</th>
-                                <th>Jumlah Kotak</th>
-                            </tr>
-                        </thead>
                         <tbody>
-                            @forelse ($data['details'] as $item)
-                            <input type="hidden" name="barang[{{$item['id']}}][id]" value="{{ $item['id'] }}">
-                            <tr class="border-b">
-                                <td style="text-align: center">{{ $loop->index + 1 }}</td>
-                                <td class="w-96 py-4">{{
-                                    $item['barang']['nama'] }}
-                                </td>
-                                <td style="text-align: center">
-                                    <input type="number" name="barang[{{$item['id']}}][jumlah_dus]"
-                                        value="{{ $item['jumlah_dus'] }}" min="0"
-                                        class="w-20 p-2.5 border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block">
-                                </td>
-                                <td style="text-align: center">
-                                    <input type="number" name="barang[{{$item['id']}}][jumlah_kotak]"
-                                        value="{{ $item['jumlah_kotak'] }}" min="0"
-                                        class="w-20 p-2.5 border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block">
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td class="text-center text-sm text-gray-400 py-4" colspan="6">Tidak ada data.</td>
-                            </tr>
-                            @endforelse
+                            <template x-if="barang_dipilih.length > 0">
+                                <template x-for="item in barang_dipilih" :key="item.id">
+                                    <tr class="border-b">
+                                        <td class="w-96 py-4">
+                                            <span x-text="item.nama_kemasan"></span>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" :name="'barang[' + item.id + '][id]'" :value="item.id">
+                                            <input type="number" class="px-2 py-1 w-16 border rounded"
+                                                :name="'barang[' + item.id + '][jumlah_dus]'" min="0" value="0"
+                                                required>
+                                            dus
+                                        </td>
+                                        <td>
+                                            <input type="number" class="px-2 py-1 w-16 border rounded"
+                                                :name="'barang[' + item.id + '][jumlah_kotak]'" min="0" value="0"
+                                                required>
+                                            kotak
+                                        </td>
+                                        <td class="text-right">
+                                            <button type="button" x-on:click="hapusBarang(item)"
+                                                class="rounded-lg bg-red-100 text-red-500 hover:text-red-700 focus:outline-none text-sm px-2 py-1">Hapus</button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                            <template x-if="barang_dipilih.length < 1">
+                                <tr>
+                                    <td class="text-center text-sm text-gray-400 py-4" colspan="4">Tidak ada barang
+                                        dipilih.
+                                    </td>
+                                </tr>
+                            </template>
                         </tbody>
                     </table>
-                    <div class="px-4 mt-4">
-                        <strong>Total Barang: </strong>
-                        <span>{{ count($data['details']) }} item</span>
+
+                    <div>
+                        <!-- Modal -->
+                        <div x-show="data.modal" style="display: none">
+                            <div class="fixed inset-0 flex items-center justify-center">
+                                <div class="bg-white rounded-lg p-6 w-1/2 z-50">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <div>
+                                            <h2 class="text-lg font-semibold">Daftar Produk</h2>
+                                            <p class="text-sm text-gray-400">Produk dipilih dapat dilihat pada
+                                                tabel produk diajukan pembelian dan tidak tersedia lagi dilist
+                                            </p>
+                                        </div>
+
+                                        <div class="flex justify-end gap-2">
+                                            <button type="button" x-on:click="data.modal = false"
+                                                class="h-10 rounded-lg bg-gray-100 text-gray-500 hover:text-gray-700 focus:outline-none text-sm px-5 py-2.5">Selesai</button>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-x-auto max-h-80">
+                                        <table class="table-content">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: left">Nama Barang</th>
+                                                    <th style="text-align: left">Stok Tersisa</th>
+                                                    <th style="width: 64px">Pilih</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template x-for="item in barang" :key="item.id">
+                                                    <tr>
+                                                        <td>
+                                                            <span x-text="item.nama_kemasan"></span>
+                                                        </td>
+                                                        <td><span x-text="item.jumlah_text"></span></td>
+                                                        <td class="text-center">
+                                                            <button type="button" x-on:click="pilihBarang(item)"
+                                                                class="h-10 rounded-lg bg-blue-100 text-blue-500 hover:text-blue-700 focus:outline-none text-sm px-2 py-1">Pilih</button>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-500 bg-opacity-50 fixed inset-0"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="mt-8" x-data="{ modal: false }">
                 <button type="button" x-on:click="modal = true"
-                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Ajukan
-                    PO</button>
+                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Catat
+                    Riwayat PO</button>
 
                 <div x-show="modal" style="display: none">
                     <div class="fixed inset-0 flex items-center justify-center">
                         <div class="bg-white rounded-lg p-6 z-50 max-w-lg">
                             <div>
-                                <h2 class="text-lg font-semibold">Apakah anda yakin ingin mengajukan PO ?</h2>
+                                <h2 class="text-lg font-semibold">Apakah anda yakin data PO sudah sesuai ?</h2>
                                 <p class="text-sm text-gray-400">Mohon konfirmasi kembali data PO yang dibuat sebelum
-                                    mengajukan PO. Pengajuan PO akan menghasilkan nomor PO dan dokumen PO yang tidak
-                                    dapat diubah lagi.</p>
+                                    mencatat PO. Pengajuan PO akan menjadi stok patokan dalam pencatatan barang masuk
+                                    nantinya.</p>
                             </div>
 
                             <div class="flex gap-2 mt-8">
                                 <button type="submit"
-                                    class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Ajukan
-                                    PO Sekarang</button>
+                                    class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Yakin
+                                    dan Teruskan</button>
                                 <button type="button" x-on:click="modal = false"
                                     class="h-10 rounded-lg bg-gray-100 text-gray-500 hover:text-gray-700 focus:outline-none text-sm px-5 py-2.5">Kembali</button>
                             </div>
@@ -159,5 +199,35 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
 @endsection
 
 @section('script')
+<script type="text/javascript">
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('data', () => ({
+            data: {
+                modal: false
+            },
+            barang: @json($barang),
+            barang_dipilih: [],
+            pilihBarang: function (barang) {
+                // check if barang exists
+                // push to barang_dipilih
+                this.barang_dipilih.push(barang);
 
+                // remove from barang
+                const index = this.barang.indexOf(barang);
+                this.barang.splice(index, 1);
+                
+            },
+            hapusBarang: function (barang) {
+                // check if barang exists
+                // push to barang
+                this.barang.push(barang);
+
+                // remove from barang_dipilih
+                const index = this.barang_dipilih.indexOf(barang);
+                this.barang_dipilih.splice(index, 1);
+
+            }
+        }))
+    })
+</script>
 @endsection

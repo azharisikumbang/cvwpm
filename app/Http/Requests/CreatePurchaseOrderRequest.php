@@ -23,7 +23,8 @@ class CreatePurchaseOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'supplier' => ['required', 'string'],
+            'nomor' => ['required', 'string', 'unique:purchase_orders,nomor'],
+            'tanggal' => ['required', 'date'],
             'barang' => ['required', 'array'],
             'barang.*.id' => ['required', 'integer', 'exists:\App\Models\Barang,id'],
             'barang.*.jumlah_kotak' => ['required', 'integer', 'min:0'],
@@ -39,15 +40,19 @@ class CreatePurchaseOrderRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'supplier.required' => 'Kolom Tujuan PO / Pemasok harus diisi',
-            'barang.*.id.required' => 'Barang yang dimaksudan tidak valid',
-            'barang.*.id.exists' => 'Barang yang dimasukkan tidak valid',
-            'barang.*.jumlah_kotak.required' => 'Kolom Jumlah Kotak harus diisi',
-            'barang.*.jumlah_kotak.integer' => 'Kolom Jumlah Kotak harus berupa angka',
-            'barang.*.jumlah_kotak.min' => 'Kolom Jumlah Kotak minimal harus 0',
-            'barang.*.jumlah_dus.required' => 'Kolom Jumlah Dus harus diisi',
-            'barang.*.jumlah_dus.integer' => 'Kolom Jumlah Dus harus berupa angka',
-            'barang.*.jumlah_dus.min' => 'Kolom Jumlah Dus minimal harus 0',
+            'nomor.required' => 'Nomor PO wajib diisi.',
+            'nomor.unique' => 'Nomor PO sudah digunakan.',
+            'tanggal.required' => 'Tanggal PO wajib diisi.',
+            'tanggal.date' => 'Tanggal PO harus berupa tanggal.',
+            'barang.*.id.required' => 'Barang wajib diisi.',
+            'barang.*.id.integer' => 'Barang harus berupa angka.',
+            'barang.*.id.exists' => 'Barang tidak ditemukan.',
+            'barang.*.jumlah_kotak.required' => 'Jumlah kotak wajib diisi.',
+            'barang.*.jumlah_kotak.integer' => 'Jumlah kotak harus berupa angka.',
+            'barang.*.jumlah_kotak.min' => 'Jumlah kotak minimal 0.',
+            'barang.*.jumlah_dus.required' => 'Jumlah dus wajib diisi.',
+            'barang.*.jumlah_dus.integer' => 'Jumlah dus harus berupa angka.',
+            'barang.*.jumlah_dus.min' => 'Jumlah dus minimal 0.',
         ];
     }
 }
