@@ -60,8 +60,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // barang
-        Barang::factory(100)->create([
-            'gudang_id' => 1
-        ]);
+        // Barang::factory(100)->create([
+        //     'gudang_id' => 1
+        // ]);
     }
 }

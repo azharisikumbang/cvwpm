@@ -62,4 +62,20 @@ class Barang extends Model
     {
         return $this->where('gudang_id', auth()->user()->staf->gudangKerja->id)->get();
     }
+
+    public function riwayatStok()
+    {
+        return $this->hasMany(RiwayatStok::class);
+    }
+
+    public function kurangiStok(
+        int $jumlahDus,
+        int $jumlahKotak,
+        int $jumlahSatuan
+    ) {
+        $this->jumlah_dus -= $jumlahDus;
+        $this->jumlah_kotak -= $jumlahKotak;
+        $this->jumlah_satuan -= $jumlahSatuan;
+        $this->save();
+    }
 }

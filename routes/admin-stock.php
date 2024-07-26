@@ -4,8 +4,10 @@ use App\Http\Controllers\AdminStock\BarangController;
 use App\Http\Controllers\AdminStock\BarangMasukController;
 use App\Http\Controllers\AdminStock\DeliveryOrderController;
 use App\Http\Controllers\AdminStock\HomeController;
+use App\Http\Controllers\AdminStock\LaporanKartuStokController;
 use App\Http\Controllers\AdminStock\PengajuanPembelianController;
 use App\Http\Controllers\AdminStock\PurchaseOrderController;
+use App\Http\Controllers\AdminStock\SalesCanvasController;
 use App\Http\Controllers\AdminStock\TokoController;
 use App\Models\Role;
 
@@ -36,10 +38,17 @@ Route::prefix('admin-stock')
         Route::post('/delivery-order/{purchase_order}', [DeliveryOrderController::class, 'store'])->name('admin-stock.delivery-order.store');
 
 
-        // laporan kartu stok
-        Route::get('/kartu-stok', fn() => '')->name('admin-stock.kartu-stok.index');
+        // sales canvas
+        Route::post('/sales-canvas/create', [SalesCanvasController::class, 'store'])->name('admin-stock.sales-canvas.store');
+        Route::get('/sales-canvas', [SalesCanvasController::class, 'index'])->name('admin-stock.sales-canvas.index');
+        Route::get('/sales-canvas/create', [SalesCanvasController::class, 'create'])->name('admin-stock.sales-canvas.create');
+        Route::get('/sales-canvas/{salesCanvas}', [SalesCanvasController::class, 'show'])->name('admin-stock.sales-canvas.show');
 
 
         // riwayat barang masuk
         Route::get('/riwayat-barang-masuk', [BarangMasukController::class, 'index'])->name('admin-stock.riwayat-barang-masuk.index');
+
+        // laporan kartu stok
+        Route::get('/kartu-stok', [LaporanKartuStokController::class, 'index'])->name('admin-stock.kartu-stok.index');
+
     });

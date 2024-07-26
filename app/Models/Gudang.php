@@ -21,6 +21,11 @@ class Gudang extends Model
         'pic',
     ];
 
+    public function barang()
+    {
+        return $this->hasMany(Barang::class);
+    }
+
     public function penanggungJawab()
     {
         return $this->belongsTo(Staf::class, 'penanggung_jawab');
@@ -34,5 +39,18 @@ class Gudang extends Model
     public function purchaseOrders()
     {
         return $this->hasMany(PurchaseOrder::class);
+    }
+
+    public function stafs()
+    {
+        return $this->hasMany(Staf::class, 'gudang_kerja');
+    }
+
+    public function sales()
+    {
+        return $this->stafs()->where(
+            'jabatan',
+            Role::find(Role::ID_SALES)->getDisplaybleName()
+        );
     }
 }

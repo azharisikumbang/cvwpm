@@ -87,7 +87,8 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                             <td style="text-align: left">{{ $stok['barang']['nama'] }}</td>
                             <td style="text-align: center">{{ $stok['barang']['kemasan'] }}</td>
                             <td style="text-align: center">
-                                <input type="hidden" name="barang[{{ $loop->index }}][id]" value="{{ $stok['id'] }}">
+                                <input type="hidden" name="barang[{{ $loop->index }}][id]"
+                                    value="{{ $stok['barang']['id'] }}">
                                 <input type="number" name="barang[{{ $loop->index }}][jumlah_dus]" min="0"
                                     max="{{ $stok['jumlah_dus'] }}" value="0" class="px-2 py-1 w-16 border rounded"
                                     required>

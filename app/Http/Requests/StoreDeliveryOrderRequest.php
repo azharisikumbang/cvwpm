@@ -40,7 +40,7 @@ class StoreDeliveryOrderRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'delivery_order.required' => 'Nomor DO harus diisi',
+            'nomor.required' => 'Nomor DO harus diisi',
             'tanggal_penerimaan.required' => 'Tanggal penerimaan belum diisi',
             'barang.required' => 'Barang harus diisi',
             'barang.*.id.required' => 'Barang harus diisi',
