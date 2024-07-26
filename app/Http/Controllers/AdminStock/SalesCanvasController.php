@@ -16,8 +16,6 @@ class SalesCanvasController extends Controller
             return $relation->where('gudang_kerja', auth()->user()->gudangKerja()->id);
         })->paginate(10);
 
-        dd($items->toArray());
-
         return view('admin-stock.sales-canvas.index', [
             'items' => $items->toArray()
         ]);
@@ -49,7 +47,7 @@ class SalesCanvasController extends Controller
 
     public function show(SalesCanvas $salesCanvas)
     {
-        dd($salesCanvas->load('riwayatStok')->toArray());
+        $salesCanvas->load('riwayatStok.barang', 'sales')->toArray();
 
         return view('admin-stock.sales-canvas.show', [
             'item' => $salesCanvas->toArray()

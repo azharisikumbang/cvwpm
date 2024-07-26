@@ -4,9 +4,8 @@
 
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
-route('admin-stock.index') => 'Panel Admin Stock',
-route('admin-stock.sales-canvas.index') => 'Sales Canvas',
-'#' => 'Riwayat Sales Canvas',
+route('sales.index') => 'Panel Sales',
+route('sales.canvas.index') => 'Riwayat Canvas'
 ]])
 @endsection
 
@@ -51,11 +50,9 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
             <thead>
                 <tr>
                     <th style="width: 64px">No</th>
-                    <th style="text-align: left">Tanggal Sales</th>
                     <th>Nomor Surat Jalan</th>
+                    <th style="text-align: left">Tanggal Sales</th>
                     <th>Wilayah</th>
-                    <th>Sales</th>
-                    <th>Jumlah Barang</th>
                     <th>Status Canvas</th>
                     <th>Tindakan</th>
                 </tr>
@@ -67,15 +64,15 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                     <td style="text-align: left">{{ $item['nomor_surat_jalan'] }}</td>
                     <td style="text-align: center">{{ date('d/m/Y', strtotime($item['tanggal_mulai'])) }}</td>
                     <td style="text-align: center">{{ $item['wilayah'] }}</td>
-                    <td style="text-align: center">{{ $item['sales']['nama'] }}</td>
-                    <td style="text-align: center">{{ count($item['riwayat_stok']) }}</td>
                     <td style="text-align: center">{{ is_null($item['tanggal_selesai']) ? 'Berlangsung' : 'Selesai' }}
                     </td>
                     <td style="text-align: center">
-                        <a href="{{ route('admin-stock.sales-canvas.show', $item['id']) }}"
-                            class="text-blue-500 hover:underline">Lihat Detail</a> |
-                        <a href="{{ route('admin-stock.sales-canvas.show', $item['id']) }}"
-                            class="text-blue-500 hover:underline">Catat Barang Masuk</a>
+                        <a href="{{ route('sales.canvas.show', $item['id']) }}"
+                            class="text-blue-500 hover:underline">Lihat Detail</a>
+                        @if (is_null($item['tanggal_selesai']))|
+                        <a href="{{ route('sales.penjualan.index', $item['id']) }}"
+                            class="text-blue-500 hover:underline">Catat Penjualan</a>
+                        @endif
                     </td>
                 </tr>
                 @empty

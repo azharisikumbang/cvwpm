@@ -59,7 +59,7 @@ class PencatatanBarangKeluarService
 
     private function generateNomorSuratJalan(): string
     {
-        $lastSalesCanvas = SalesCanvas::whereYear('tanggal_selesai', date('Y'))->latest()->first();
+        $lastSalesCanvas = SalesCanvas::whereYear('tanggal_mulai', date('Y'))->latest()->first();
 
         if (!$lastSalesCanvas)
             return date('Y') . '/001';

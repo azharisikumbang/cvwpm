@@ -9,13 +9,19 @@
         <li>
             <a href="{{ route('admin-stock.purchase-order.index') }}"
                 class="flex items-center p-2 text-base text-white rounded-lg hover:bg-blue-700 group hover:underline">
-                <span class="ml-3" sidebar-toggle-item="">Cek Aktivitas PO</span>
+                <span class="ml-3" sidebar-toggle-item="">Aktivitas PO</span>
             </a>
         </li>
         <li>
             <a href="{{ route('admin-stock.sales-canvas.index') }}"
                 class="flex items-center p-2 text-base text-white rounded-lg hover:bg-blue-700 group hover:underline">
-                <span class="ml-3" sidebar-toggle-item="">Cek Aktivitas Sales</span>
+                <span class="ml-3" sidebar-toggle-item="">Aktivitas Sales</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin-stock.sales-canvas.create') }}"
+                class="flex items-center p-2 text-base text-white rounded-lg hover:bg-blue-700 group hover:underline">
+                <span class="ml-3" sidebar-toggle-item="">Buat Surat Jalan Canvas</span>
             </a>
         </li>
         {{-- <li>

@@ -22,11 +22,13 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
     </div>
     @endsession
 
+    @if(is_null($item['tanggal_selesai']))
     <div class="my-8">
-        <a href="{{ route('admin-stock.sales-canvas.edit', $item['id']) }}"
+        <a href="{{ route('sales.penjualan.index') }}"
             class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-blue-700">Catat
-            Barang Sisa Canvas</a>
+            Penjualan</a>
     </div>
+    @endif
 
     <div class="w-full">
         <table class="w-full mb-4 border-b border-t py-2">
@@ -53,14 +55,6 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                 <td>
                     : {{ is_null($item['tanggal_selesai']) ? 'Berlangsung' : date('d/m/Y',
                     strtotime($item['tanggal_selesai'])) . ' (Selesai)' }}
-                </td>
-            </tr>
-            <tr>
-                <td class="py-2">
-                    Sales
-                </td>
-                <td>
-                    : {{ $item['sales']['nama'] }} / {{ $item['sales']['kontak'] }}
                 </td>
             </tr>
             <tr>
