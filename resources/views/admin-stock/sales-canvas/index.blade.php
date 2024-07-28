@@ -70,8 +70,12 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                 @forelse ($items['data'] as $item)
                 <tr>
                     <td style="text-align: center">{{ $loop->index + 1 }}</td>
-                    <td style="text-align: left">{{ $item['nomor_surat_jalan'] }}</td>
-                    <td style="text-align: center">{{ date('d/m/Y', strtotime($item['tanggal_mulai'])) }}</td>
+                    <td style="text-align: left">{{ date('d/m/Y', strtotime($item['tanggal_mulai'])) }}</td>
+                    <td style="text-align: center">
+                        <a class="text-blue-500 hover:underline"
+                            href="{{ route('admin-stock.sales-canvas.download', $item['id']) }}" class="text-blue-500"
+                            target="_blank">{{ $item['nomor_surat_jalan'] }}</a>
+                    </td>
                     <td style="text-align: center">{{ $item['wilayah'] }}</td>
                     <td style="text-align: center">{{ $item['sales']['nama'] }}</td>
                     <td style="text-align: center">{{ count($item['riwayat_stok']) }}</td>

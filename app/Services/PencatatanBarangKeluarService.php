@@ -48,7 +48,9 @@ class PencatatanBarangKeluarService
 
     public function buatSuratJalanCanvas(SalesCanvas $salesCanvas)
     {
-        $pdf = PDF::loadView('export.pdf.surat-jalan-canvas', ['canvas' => $salesCanvas]);
+        $salesCanvas->load('riwayatStok.barang', 'sales');
+
+        $pdf = PDF::loadView('export.pdf.surat-jalan-canvas', ['canvas' => $salesCanvas->toArray()]);
         $pdf->save(storage_path('app/public/surat-jalan-canvas/' . $salesCanvas->surat_jalan_file));
     }
 

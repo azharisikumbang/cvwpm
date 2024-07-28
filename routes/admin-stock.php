@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminStock\PindahGudangController;
 use App\Http\Controllers\AdminStock\PurchaseOrderController;
 use App\Http\Controllers\AdminStock\SalesCanvasController;
 use App\Http\Controllers\AdminStock\TokoController;
+use App\Http\Controllers\DownloadSuratJalanCanvasController;
 use App\Models\Role;
 
 
@@ -47,6 +48,7 @@ Route::prefix('admin-stock')
         Route::get('/sales-canvas/{salesCanvas}', [SalesCanvasController::class, 'show'])->name('admin-stock.sales-canvas.show');
         Route::get('/sales-canvas/{salesCanvas}/edit', [SalesCanvasController::class, 'edit'])->name('admin-stock.sales-canvas.edit');
         Route::put('/sales-canvas/{salesCanvas}/done', [MarkSalesCanvasDoneController::class, '__invoke'])->name('admin-stock.sales-canvas.done');
+        Route::get('/sales-canvas/{salesCanvas}/download', [DownloadSuratJalanCanvasController::class, '__invoke'])->name('admin-stock.sales-canvas.download');
 
 
         // riwayat barang masuk
