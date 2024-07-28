@@ -17,6 +17,7 @@ class BarangFactory extends Factory
     public function definition(): array
     {
         return [
+            'kode_barang' => strtoupper($this->faker->unique()->word()),
             'nama' => $this->faker->word,
             'kemasan' => $this->faker->randomElement(['10gr', '20gr', '40gr', '40gr', '50gr', '100gr', '200gr', '500gr', '1kg', '5kg', '10kg', '20kg', '25kg', '50kg', '100kg', '200kg', '500kg', '1ton']),
             'harga' => $this->faker->randomFloat(2, 1000, 100_000),
@@ -24,6 +25,8 @@ class BarangFactory extends Factory
             'jumlah_dus' => 0,
             'jumlah_satuan' => 0,
             'jumlah_kotak' => 0,
+            'satuan_per_dus' => $this->faker->numberBetween(10, 100),
+            'satuan_per_kotak' => $this->faker->numberBetween(1, 50)
         ];
     }
 }

@@ -19,24 +19,27 @@ class BarangMasukService
             'purchase_order_id' => $purchaseOrder->id,
         ]);
 
-        foreach ($data['barang'] as $barang)
-        {
-            $barangModel = Barang::findOrFail($barang['id']);
+        $requestListBarang = collect($data['barang'])->keyBy('id');
 
-            $barangModel->update([
-                'jumlah_dus' => $barangModel->jumlah_dus + $barang['jumlah_dus'],
-                'jumlah_satuan' => $barangModel->jumlah_satuan + $barang['jumlah_satuan'],
-                'jumlah_kotak' => $barangModel->jumlah_kotak + $barang['jumlah_kotak'],
-            ]);
+        $listBarang = Barang::findMany(
+            $requestListBarang->pluck('id')->toArray()
+        );
+
+        $listBarang->each(function (Barang $barang) use ($requestListBarang, $deliveryOrder) {
+            $barang->tambahStok(
+                jumlahDus: $requestListBarang[$barang->id]['jumlah_dus'],
+                jumlahKotak: $requestListBarang[$barang->id]['jumlah_kotak'],
+                jumlahSatuan: $requestListBarang[$barang->id]['jumlah_satuan']
+            );
 
             RiwayatStok::create([
                 'stokable_id' => $deliveryOrder->id,
                 'stokable_type' => DeliveryOrder::class,
-                'barang_id' => $barangModel->id,
-                'jumlah_dus' => $barang['jumlah_dus'],
-                'jumlah_satuan' => $barang['jumlah_satuan'],
-                'jumlah_kotak' => $barang['jumlah_kotak'],
+                'barang_id' => $barang->id,
+                'jumlah_dus' => $requestListBarang[$barang->id]['jumlah_dus'],
+                'jumlah_satuan' => $requestListBarang[$barang->id]['jumlah_satuan'],
+                'jumlah_kotak' => $requestListBarang[$barang->id]['jumlah_kotak'],
             ]);
-        }
+        });
     }
 }
