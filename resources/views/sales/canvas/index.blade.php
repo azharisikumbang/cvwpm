@@ -69,7 +69,7 @@ route('sales.canvas.index') => 'Riwayat Canvas'
                     <td style="text-align: center">
                         <a href="{{ route('sales.canvas.show', $item['id']) }}"
                             class="text-blue-500 hover:underline">Lihat Detail</a>
-                        @if (is_null($item['tanggal_selesai']))|
+                        @if (false === $item['is_done'])|
                         <a href="{{ route('sales.penjualan.index', $item['id']) }}"
                             class="text-blue-500 hover:underline">Catat Penjualan</a>
                         @endif

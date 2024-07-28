@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Sales;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePenjualanCanvasRequest;
 use App\Models\SalesCanvas;
+use App\Services\PenjualanService;
 use Illuminate\Http\Request;
 
 class PenjualanController extends Controller
@@ -26,11 +27,11 @@ class PenjualanController extends Controller
                 'jumlah_satuan' => $riwayat->jumlah_satuan,
                 'jumlah_dus' => $riwayat->jumlah_dus,
                 'jumlah_kotak' => $riwayat->jumlah_kotak,
-                'harga_satuan' => $riwayat->barang->harga,
+                'harga_satuan' => $riwayat->barang->harga_rupiah,
                 'gudang_id' => $riwayat->barang->gudang_id,
                 'satuan' => $riwayat->barang->satuan,
                 'nama_kemasan' => $riwayat->barang->nama_kemasan,
-                'jumlah_text' => $riwayat->barang->jumlah_text,
+                'jumlah_text' => sprintf("%s dus, %s kotak, %s %s", $riwayat->jumlah_dus, $riwayat->jumlah_kotak, $riwayat->jumlah_satuan, $riwayat->barang->satuan),
             ];
         });
 
@@ -40,10 +41,18 @@ class PenjualanController extends Controller
         ]);
     }
 
-    public function store(StorePenjualanCanvasRequest $request)
-    {
+    public function store(
+        StorePenjualanCanvasRequest $request,
+        PenjualanService $penjualanService
+    ) {
+        $canvas = SalesCanvas::find($request->canvas);
 
+        $penjualanService->catatSales(
+            auth()->user()->staf,
+            $canvas,
+            $request
+        );
 
-        return redirect()->route('sales.penjualan.index');
+        return redirect()->route('sales.canvas.show', $canvas->id);
     }
 }

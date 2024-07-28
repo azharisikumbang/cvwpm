@@ -35,7 +35,7 @@ class PencatatanBarangKeluarCanvasTest extends TestCase
 
         $satuanPerDus = 100;
         $satuanPerKotak = 10;
-        $listBarang = Barang::factory()->createMany([
+        Barang::factory()->createMany([
             [
                 'gudang_id' => 1,
                 'jumlah_dus' => 100,

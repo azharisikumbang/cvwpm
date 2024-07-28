@@ -22,7 +22,7 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
     </div>
     @endsession
 
-    @if(is_null($item['tanggal_selesai']))
+    @if(false === $item['is_done'])
     <div class="my-8">
         <a href="{{ route('sales.penjualan.index') }}"
             class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-blue-700">Catat
@@ -85,7 +85,7 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                     @forelse ($item['riwayat_stok'] as $stok)
                     <tr>
                         <td style="text-align: center">{{ $loop->index + 1 }}</td>
-                        <td style="text-align: center">{{ $stok['barang']['nama_kemasan'] }}</td>
+                        <td style="text-align: left">{{ $stok['barang']['nama_kemasan'] }}</td>
                         <td style="text-align: center">{{ $stok['jumlah_dus'] }}</td>
                         <td style="text-align: center">{{ $stok['jumlah_kotak'] }}</td>
                         <td style="text-align: center">{{ $stok['jumlah_satuan'] }}</td>
@@ -100,6 +100,46 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
             </table>
         </div>
 
+
+        <div class="mt-8">
+            <div class="font-semibold text-lg pb-2">Riwayat Penjualan</div>
+
+            <table class="table-content">
+                <thead>
+                    <tr>
+                        <th style="width: 64px">No</th>
+                        <th style="text-align: left">Tanggal</th>
+                        <th style="text-align: left">Toko</th>
+                        <th style="text-align: left">Nama Barang</th>
+                        <th>Jumlah Dus</th>
+                        <th>Jumlah Kotak</th>
+                        <th>Jumlah Satuan</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($item['penjualan'] as $penjualan)
+                    @foreach ($penjualan['riwayat_stok'] as $stok)
+                    <tr>
+                        <td style="text-align: center">{{ $loop->index + 1 }}</td>
+                        <td style="text-align: left">{{ date('d/m/Y', strtotime($penjualan['tanggal_transaksi'])) }}
+                        </td>
+                        <td>{{ $penjualan['nama_toko'] }}</td>
+                        <td>{{ $stok['barang']['nama_kemasan'] }}</td>
+                        <td style="text-align: center">{{ $stok['jumlah_dus'] }}</td>
+                        <td style="text-align: center">{{ $stok['jumlah_kotak'] }}</td>
+                        <td style="text-align: center">{{ $stok['jumlah_satuan'] }}</td>
+                        <td style="text-align: center">{{ $stok['keterangan'] }}</td>
+                    </tr>
+                    @endforeach
+                    @empty
+                    <tr>
+                        <td class="text-center" colspan="6">Tidak ada data.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection

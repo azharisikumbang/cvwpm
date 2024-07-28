@@ -47,7 +47,7 @@ class SalesCanvasController extends Controller
 
     public function show(SalesCanvas $salesCanvas)
     {
-        $salesCanvas->load('riwayatStok.barang', 'sales')->toArray();
+        $salesCanvas->load('riwayatStok.barang', 'sales', 'penjualan.riwayatStok.barang')->toArray();
 
         return view('admin-stock.sales-canvas.show', [
             'item' => $salesCanvas->toArray()

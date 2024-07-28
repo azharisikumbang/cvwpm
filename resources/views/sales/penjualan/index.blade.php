@@ -33,6 +33,8 @@ route('sales.index') => 'Panel Sales',
         <form method="POST" action="{{ route('sales.penjualan.store') }}">
             @csrf
 
+            <input type="hidden" name="canvas" value="{{ $item['id'] }}">
+
             <div class="grid grid-cols-3 gap-4">
                 <div class="space-y-4 md:space-y-6">
                     <div>
@@ -48,7 +50,7 @@ route('sales.index') => 'Panel Sales',
                             Tanggal Penjualan</label>
                         <input
                             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                            type="date" name="tanggal_penjualan" value="{{ date('Y-m-d') }}" required>
+                            type="date" name="tanggal_transaksi" value="{{ date('Y-m-d') }}" required>
                     </div>
 
 
@@ -57,13 +59,13 @@ route('sales.index') => 'Panel Sales',
                             Nama Toko</label>
                         <input
                             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                            type="text" name="tanggal_mulai" required autofocus>
+                            type="text" name="nama_toko" required autofocus>
                     </div>
 
                     <div>
                         <label class="block mb-2 text-sm font-medium text-gray-900" for="name">
                             Alamat Toko</label>
-                        <textarea name="alamat"
+                        <textarea name="alamat_toko"
                             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "></textarea>
                     </div>
                 </div>
@@ -170,7 +172,7 @@ route('sales.index') => 'Panel Sales',
                                                             <span x-text="item.nama_kemasan"></span>
                                                         </td>
                                                         <td><span x-text="item.jumlah_text"></span></td>
-                                                        <td><span x-text="item.satuan"></span></td>
+                                                        <td><span x-text="item.harga_satuan"></span></td>
                                                         <td class="text-center">
                                                             <button type="button" x-on:click="pilihBarang(item)"
                                                                 class="h-10 rounded-lg bg-blue-100 text-blue-500 hover:text-blue-700 focus:outline-none text-sm px-2 py-1">Pilih</button>
@@ -186,6 +188,12 @@ route('sales.index') => 'Panel Sales',
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="mt-8">
+                <button type="submit"
+                    class="text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Simpan
+                    Penjualan</button>
             </div>
         </form>
     </div>
