@@ -29,6 +29,7 @@ class Barang extends Model
         'harga_rupiah',
         'nama_kemasan',
         'jumlah_text',
+        'jumlah_satuan_bukan_dus_kotak'
     ];
 
     public function getHargaRupiahAttribute()
@@ -48,7 +49,7 @@ class Barang extends Model
 
     public function getJumlahTextAttribute()
     {
-        return $this->jumlah_dus . ' dus, ' . $this->jumlah_kotak . ' kotak, ' . $this->jumlah_satuan . ' ' . $this->satuan;
+        return $this->jumlah_dus . ' dus, ' . $this->jumlah_kotak . ' kotak, ' . $this->jumlah_satuan_bukan_dus_kotak . ' ' . $this->satuan;
     }
 
     public function gudang()
@@ -95,5 +96,12 @@ class Barang extends Model
         $this->jumlah_satuan += $pcsMasuk + $jumlahSatuan;
 
         $this->save();
+    }
+
+    public function getJumlahSatuanBukanDusKotakAttribute()
+    {
+        $pcs = $this->jumlah_satuan;
+
+        return $pcs - ($this->jumlah_dus * $this->satuan_per_dus + $this->jumlah_kotak * $this->satuan_per_kotak);
     }
 }
