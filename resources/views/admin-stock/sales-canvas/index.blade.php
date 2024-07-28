@@ -46,6 +46,12 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                     class="ml-2 w-full h-10 mt-1 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-red-700">Reset</a>
                 @endif
             </div>
+
+            <div>
+                <a href="{{ route('admin-stock.sales-canvas.create') }}"
+                    class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-blue-700">Buat
+                    Surat Jalan Canvas</a>
+            </div>
         </div>
         <table class="table-content">
             <thead>
