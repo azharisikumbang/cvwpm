@@ -4,8 +4,9 @@
 
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
-route('admin-purchasing.index') => 'Panel Admin Purchasing',
-'#' => 'Riwayat PO',
+route('admin-stock.index') => 'Panel Admin Stock',
+route('admin-stock.purchase-order.index') => 'Riwayat PO',
+'#' => 'Riwayat Penerimaan Barang Masuk',
 ]])
 @endsection
 
@@ -21,11 +22,13 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
     </div>
     @endsession
 
+    @if(false === $item['is_done'])
     <div class="my-8">
         <a href="{{ route('admin-stock.purchase-order.edit', $item['id']) }}"
             class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-blue-700">Catat
             Penerimaan Barang</a>
     </div>
+    @endif
 
     <div class="w-full">
         <table class="w-full mb-4">
@@ -37,12 +40,23 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                     : {{ $item['nomor'] }}
                 </td>
             </tr>
-            <tr>
+            <tr class="border-b">
                 <td class="py-2">
                     Tanggal PO
                 </td>
                 <td>
                     : {{ $item['tanggal'] }}
+                </td>
+            </tr>
+            <tr class="border-b">
+                <td style="width: 200px" class="py-2">
+                    Status PO
+                </td>
+                <td>
+                    : <span
+                        class="px-2 py-1 text-sm rounded bg-{{ $item['is_done'] ? 'green' : 'yellow' }}-500 text-white">{{
+                        $item['is_done'] ? 'Lunas' :
+                        'Ongoing' }}</span>
                 </td>
             </tr>
         </table>

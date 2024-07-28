@@ -59,7 +59,7 @@ class PenerimaanBarangPOTest extends TestCase
         $response->assertSessionDoesntHaveErrors();
         $response->assertSessionHas('success');
 
-        $requestBarang->each(function ($barang, $index) use ($barangRandom) {
+        $requestBarang->each(function ($barang, $index) use ($barangRandom, $request, $po) {
             // jumlah dus * pcs per kotak + jumlah kotak + pcs per kotak
             $masukPcsPerDus = $barang['jumlah_dus'] * $barangRandom[$index]->satuan_per_dus;
             $masukPcsPerKotak = $barang['jumlah_kotak'] * $barangRandom[$index]->satuan_per_kotak;
@@ -80,6 +80,18 @@ class PenerimaanBarangPOTest extends TestCase
                 'jumlah_kotak' => $barang['jumlah_kotak'],
                 'jumlah_satuan' => $barang['jumlah_satuan']
             ]);
+
+            $this->assertDatabaseHas('delivery_orders', [
+                'nomor' => $request['nomor'],
+                'tanggal_penerimaan' => $request['tanggal_penerimaan'],
+                'purchase_order_id' => $po->id,
+                'status' => DeliveryOrder::STATUS_ALL
+            ]);
         });
+    }
+
+    public function testTestBarangMasukDOTapiTidakSemua()
+    {
+
     }
 }

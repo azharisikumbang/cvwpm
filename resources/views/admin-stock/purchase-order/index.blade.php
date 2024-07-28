@@ -55,6 +55,7 @@ route('admin-stock.index') => 'Panel Admin Stock',
                     <th>Total Barang</th>
                     <th>Total Dus</th>
                     <th>Total Kotak</th>
+                    <th>Status</th>
                     <th>Tindakan</th>
                 </tr>
             </thead>
@@ -68,10 +69,18 @@ route('admin-stock.index') => 'Panel Admin Stock',
                     <td style="text-align: center">{{ $item['jumlah_dus'] }}</td>
                     <td style="text-align: center">{{ $item['jumlah_kotak'] }}</td>
                     <td style="text-align: center">
+                        <span
+                            class="px-2 py-1 text-sm rounded bg-{{ $item['is_done'] ? 'green' : 'yellow' }}-500 text-white">{{
+                            $item['is_done'] ? 'Lunas' :
+                            'Ongoing' }}</span>
+                    </td>
+                    <td style="text-align: center">
                         <a href="{{ route('admin-stock.purchase-order.show', $item['id']) }}"
-                            class="text-blue-500 hover:underline">Lihat Detail</a> |
+                            class="text-blue-500 hover:underline">Lihat Detail</a>
+                        @if(false === $item['is_done']) |
                         <a href="{{ route('admin-stock.purchase-order.show', $item['id']) }}"
                             class="text-blue-500 hover:underline">Catat Barang Masuk</a>
+                        @endif
                     </td>
                 </tr>
                 @empty

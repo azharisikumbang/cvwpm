@@ -55,6 +55,7 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                     <th>Total Barang</th>
                     <th>Total Dus</th>
                     <th>Total Kotak</th>
+                    <th>Status PO</th>
                     <th>Tindakan</th>
                 </tr>
             </thead>
@@ -67,6 +68,12 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                     <td style="text-align: center">{{ $item['total_item'] }}</td>
                     <td style="text-align: center">{{ $item['jumlah_dus'] }}</td>
                     <td style="text-align: center">{{ $item['jumlah_kotak'] }}</td>
+                    <td style="text-align: center">
+                        <span
+                            class="px-2 py-1 text-sm rounded bg-{{ $item['is_done'] ? 'green' : 'yellow' }}-500 text-white">{{
+                            $item['is_done'] ? 'Lunas' :
+                            'Ongoing' }}</span>
+                    </td>
                     <td style="text-align: center">
                         <a href="{{ route('admin-purchasing.purchase-orders.show', $item['id']) }}"
                             class="text-blue-500 hover:underline">Lihat Detail</a>

@@ -1,6 +1,15 @@
 import axios from "axios";
 import Alpine from "alpinejs";
 
+// window.addEventListener("DOMContentLoaded", loaderFunc);
+
+// function loaderFunc() {
+//     document.getElementById("loader").style.display = "block";
+//     setTimeout(() => {
+//         document.getElementById("loader").style.display = "none";
+//     }, 100);
+// }
+
 window.axios = axios;
 window.Alpine = Alpine;
 

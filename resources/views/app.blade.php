@@ -31,11 +31,16 @@
     <div class="
         bg-red-100 bg-green-100 bg-yellow-100
         bg-red-200 bg-green-200 bg-yellow-200
+        bg-red-500 bg-green-500 bg-yellow-500
 
         
         text-red-100 text-green-100 text-yellow-100
         text-red-200 text-green-200 text-yellow-200
     " style="display:none"></div>
+
+    <div id="loader">
+        <div></div>
+    </div>
     @yield('script')
 </body>
 

@@ -12,9 +12,9 @@ class PurchaseOrder extends Model
 {
     use HasFactory;
 
-    const STATUS_PENDING = 'pending';
+    const STATUS_PENDING = 'Pending';
 
-    const STATUS_SELESAI = 'selesai';
+    const STATUS_SELESAI = 'Lunas';
 
     protected $fillable = [
         'nomor',
@@ -27,12 +27,15 @@ class PurchaseOrder extends Model
     protected $appends = [
         'jumlah_kotak',
         'jumlah_dus',
-        'total_item'
+        'total_item',
+        'is_done'
     ];
 
     public function riwayatStok(): MorphMany
     {
-        return $this->morphMany(RiwayatStok::class, 'stokable');
+        return $this
+            ->morphMany(RiwayatStok::class, 'stokable')
+            ->orderBy('barang_id');
     }
 
     public function staf(): BelongsTo
@@ -63,5 +66,25 @@ class PurchaseOrder extends Model
     public function getTotalItemAttribute(): int
     {
         return $this->riwayatStok->count();
+    }
+
+    public function markAsComplete()
+    {
+        $this->status = self::STATUS_SELESAI;
+        $this->save();
+    }
+
+    public function getIsDoneAttribute()
+    {
+        if ($this->status == self::STATUS_SELESAI)
+            return true;
+
+        $totalPO = $this->riwayatStok->sum('jumlah_dus') + $this->riwayatStok->sum('jumlah_kotak');
+
+        $totalDO = $this->deliveryOrders->sum(function (DeliveryOrder $deliveryOrder) {
+            return $deliveryOrder->riwayatStok->sum('jumlah_dus');
+        });
+
+        return $totalDO >= $totalPO;
     }
 }

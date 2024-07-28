@@ -10,6 +10,10 @@ class DeliveryOrder extends Model
 {
     use HasFactory;
 
+    const STATUS_ALL = 'DONE';
+
+    const STATUS_PARTIAL = 'PARTIAL';
+
     protected $fillable = [
         'nomor',
         'tanggal_penerimaan',
@@ -24,5 +28,11 @@ class DeliveryOrder extends Model
     public function riwayatStok(): MorphMany
     {
         return $this->morphMany(RiwayatStok::class, 'stokable');
+    }
+
+    public function markAsComplete()
+    {
+        $this->status = self::STATUS_ALL;
+        $this->save();
     }
 }

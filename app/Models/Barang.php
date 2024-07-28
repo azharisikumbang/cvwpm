@@ -64,7 +64,7 @@ class Barang extends Model
 
     public function getBarangGudang()
     {
-        return $this->where('gudang_id', auth()->user()->staf->gudangKerja->id)->get();
+        return $this->where('gudang_id', auth()->user()->staf->gudangKerja->id)->latest()->get();
     }
 
     public function riwayatStok()

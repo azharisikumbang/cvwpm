@@ -27,6 +27,8 @@ class PurchaseOrderController extends Controller
 
     public function edit(PurchaseOrder $purchaseOrder)
     {
+        abort_if($purchaseOrder->is_done, 404);
+
         return view('admin-stock.purchase-order.edit', [
             'item' => $purchaseOrder->load('riwayatStok.barang')->toArray()
         ]);

@@ -21,11 +21,19 @@ class BarangMasukService
 
         $requestListBarang = collect($data['barang'])->keyBy('id');
 
+
         $listBarang = Barang::findMany(
-            $requestListBarang->pluck('id')->toArray()
+            $requestListBarang->select('id')->toArray()
         );
 
-        $listBarang->each(function (Barang $barang) use ($requestListBarang, $deliveryOrder) {
+        // dd($requestListBarang, $listBarang->toArray());
+
+        $purchaseOrder->load('riwayatStok');
+        $listBarangPO = $purchaseOrder->riwayatStok->select('barang_id', 'jumlah_dus', 'jumlah_kotak', 'jumlah_satuan')->keyBy('barang_id');
+
+        $poLunas = true;
+        /** @var Barang $barang */
+        $listBarang->map(function (Barang $barang) use ($requestListBarang, $deliveryOrder, $listBarangPO, &$poLunas) {
             $barang->tambahStok(
                 jumlahDus: $requestListBarang[$barang->id]['jumlah_dus'],
                 jumlahKotak: $requestListBarang[$barang->id]['jumlah_kotak'],
@@ -40,6 +48,22 @@ class BarangMasukService
                 'jumlah_satuan' => $requestListBarang[$barang->id]['jumlah_satuan'],
                 'jumlah_kotak' => $requestListBarang[$barang->id]['jumlah_kotak'],
             ]);
+
+            if ($this->cekStatusJumlahPOdanDO($listBarangPO, $requestListBarang, $barang))
+                $poLunas = false;
         });
+
+        if ($poLunas)
+        {
+            $purchaseOrder->markAsComplete();
+            $deliveryOrder->markAsComplete();
+        }
+    }
+
+    private function cekStatusJumlahPOdanDO($po, $do, Barang $barang): bool
+    {
+        return $po[$barang->id]['jumlah_dus'] != ($do[$barang->id]['jumlah_dus'])
+            || $po[$barang->id]['jumlah_kotak'] != $do[$barang->id]['jumlah_kotak']
+            || $po[$barang->id]['jumlah_satuan'] != $do[$barang->id]['jumlah_satuan'];
     }
 }
