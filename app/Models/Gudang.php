@@ -27,7 +27,12 @@ class Gudang extends Model
         parent::boot();
 
         static::creating(function ($gudang) {
-            $gudang->kode_gudang = trim(strtoupper($gudang->kode_gudang));
+            $gudang->kode_gudang = str_replace
+            (
+                " ",
+                "_",
+                trim(strtoupper($gudang->kode_gudang))
+            );
         });
     }
 

@@ -105,64 +105,66 @@ class ManajemenBarangTest extends TestCase
     }
 
     // fitur
-    public function test_tambah_data_barang_baru()
+    public function testTambahDataBarangBaru()
     {
         $user = $this->asAdminStock();
-        $gudang = Gudang::create([
-            'nama' => 'Gudang Padang',
-            'lokasi' => 'Padang',
-        ]);
+        [$gudang, $staf] = $this->setUpGudangAndStaf($user);
 
-        Staf::factory()->create([
-            'jabatan' => 'Admin Stock',
-            'user_id' => $user->id,
-            'gudang_kerja' => $gudang->id
-        ]);
-
-        $response = $this->post('/admin-stock/barang', [
+        $request = [
             'nama' => 'Barang Baru',
             'kemasan' => [
-                ['varian' => '10gr', 'harga' => 10000],
-                ['varian' => '20gr', 'harga' => 20000],
-                ['varian' => '30gr', 'harga' => 30000]
+                ['varian' => '10gr', 'harga' => 10000, 'satuan_per_dus' => 100, 'satuan_per_kotak' => 10],
+                ['varian' => '20gr', 'harga' => 20000, 'satuan_per_dus' => 90, 'satuan_per_kotak' => 9],
+                ['varian' => '30gr', 'harga' => 30000, 'satuan_per_dus' => 80, 'satuan_per_kotak' => 8]
             ],
             'satuan' => 'pcs'
-        ]);
+        ];
+
+        $response = $this->post('/admin-stock/barang', $request);
 
         $response->assertStatus(Response::HTTP_FOUND);
         $response->assertRedirect('/admin-stock/barang');
 
         $this->assertDatabaseHas('barang', [
-            'nama' => 'Barang Baru',
-            'satuan' => 'pcs',
             'gudang_id' => $gudang->id,
-            'jumlah_dus' => 0,
-            'jumlah_satuan' => 0,
+            'kode_barang' => 'PDG-BBT-001',
+            'nama' => 'Barang Baru',
             'harga' => 10000,
+            'kemasan' => '10gr',
+            'satuan' => 'pcs',
+            'satuan_per_dus' => 100,
+            'satuan_per_kotak' => 10,
+            'jumlah_dus' => 0,
+            'jumlah_satuan' => 0,
             'jumlah_kotak' => 0,
-            'kemasan' => '10gr'
         ]);
 
         $this->assertDatabaseHas('barang', [
-            'nama' => 'Barang Baru',
-            'satuan' => 'pcs',
             'gudang_id' => $gudang->id,
-            'jumlah_dus' => 0,
-            'jumlah_satuan' => 0,
+            'kode_barang' => 'PDG-BBT-002',
+            'nama' => 'Barang Baru',
             'harga' => 20000,
+            'kemasan' => '20gr',
+            'satuan' => 'pcs',
+            'satuan_per_dus' => 90,
+            'satuan_per_kotak' => 9,
+            'jumlah_dus' => 0,
+            'jumlah_satuan' => 0,
             'jumlah_kotak' => 0,
-            'kemasan' => '20gr'
         ]);
 
         $this->assertDatabaseHas('barang', [
-            'nama' => 'Barang Baru',
-            'satuan' => 'pcs',
             'gudang_id' => $gudang->id,
+            'kode_barang' => 'PDG-BBT-003',
+            'nama' => 'Barang Baru',
+            'harga' => 30000,
+            'kemasan' => '30gr',
+            'satuan' => 'pcs',
+            'satuan_per_dus' => 80,
+            'satuan_per_kotak' => 8,
             'jumlah_dus' => 0,
             'jumlah_satuan' => 0,
-            'harga' => 30000,
             'jumlah_kotak' => 0,
-            'kemasan' => '30gr'
         ]);
     }
 

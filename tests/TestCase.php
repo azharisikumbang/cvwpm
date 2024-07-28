@@ -2,7 +2,9 @@
 
 namespace Tests;
 
+use App\Models\Gudang;
 use App\Models\Role;
+use App\Models\Staf;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -48,9 +50,24 @@ abstract class TestCase extends BaseTestCase
 
         return $user;
     }
-
     public function asGuest()
     {
         $this->assertGuest();
+    }
+    public function setUpGudangAndStaf(User $user)
+    {
+        $gudang = Gudang::factory()->create([
+            'kode_gudang' => 'PDG',
+            'lokasi' => 'Padang',
+            'nama' => 'Gudang Padang'
+        ]);
+
+        $staf = Staf::factory()->create([
+            'jabatan' => 'Admin Stock',
+            'user_id' => $user->id,
+            'gudang_kerja' => $gudang->id
+        ]);
+
+        return [$gudang, $staf];
     }
 }

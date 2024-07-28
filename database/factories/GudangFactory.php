@@ -17,6 +17,7 @@ class GudangFactory extends Factory
     public function definition(): array
     {
         return [
+            'kode_gudang' => strtoupper($this->faker->unique()->word()),
             'nama' => $this->faker->unique()->word(),
             'lokasi' => $this->faker->optional()->word(),
         ];
