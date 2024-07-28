@@ -15,6 +15,7 @@ class PengelolaanDataGudangTest extends TestCase
         $this->asAdminWeb();
 
         $request = [
+            'kode_gudang' => 'PDG',
             'nama' => 'Gudang Padang',
             'lokasi' => 'Padang',
             'penanggung_jawab' => null
@@ -27,6 +28,7 @@ class PengelolaanDataGudangTest extends TestCase
         $response->assertSessionDoesntHaveErrors();
 
         $this->assertDatabaseHas('gudang', [
+            'kode_gudang' => $request['kode_gudang'],
             'nama' => $request['nama'],
             'lokasi' => $request['lokasi'],
             'penanggung_jawab' => $request['penanggung_jawab']

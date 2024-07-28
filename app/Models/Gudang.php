@@ -12,6 +12,7 @@ class Gudang extends Model
     protected $table = 'gudang';
 
     protected $fillable = [
+        'kode_gudang',
         'nama',
         'lokasi',
         'penanggung_jawab',
