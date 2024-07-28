@@ -9,7 +9,7 @@ use App\Models\DeliveryOrder;
 use App\Models\RiwayatStok;
 use Illuminate\Http\Request;
 
-class LaporanKartuStokController extends Controller
+class KartuStokController extends Controller
 {
     public function index(IndexLaporanKartuStokRequest $request)
     {
@@ -34,8 +34,20 @@ class LaporanKartuStokController extends Controller
             ->get();
 
 
-        return view('laporan-kartu-stok.index', [
+        return view('admin-stock.kartu-stok.index', [
             'items' => $items->toArray(),
+        ]);
+    }
+
+    public function create()
+    {
+        return view('admin-stock.kartu-stok.create', [
+            'listBarang' => Barang::query()
+                ->select('id', 'nama', 'kemasan')
+                ->where('gudang_id', auth()->user()->staf->gudangKerja->id)
+                ->orderBy('nama')
+                ->get()
+                ->toArray(),
         ]);
     }
 }

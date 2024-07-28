@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LaporanFakturPenjualanCanvasController;
+use App\Http\Controllers\LaporanKartuStokController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +24,15 @@ Route::prefix('user')
         Route::get('/password', [ChangePasswordController::class, 'index'])->name('user.password.index');
         Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');
     });
+
+// authenticated
+Route::prefix('laporan')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('kartu-stok/{barang}', [LaporanKartuStokController::class, 'show'])->name('laporan.kartu-stok.show');
+        Route::get('faktur-penjualan/{penjualan}', [LaporanFakturPenjualanCanvasController::class, 'show'])->name('laporan.faktur-penjualan.show');
+    });
+
 
 // role based routes
 require __DIR__ . '/admin-web.php';

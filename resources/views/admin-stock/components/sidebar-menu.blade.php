@@ -19,9 +19,21 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('admin-stock.pindah-gudang.index') }}"
+                class="flex items-center p-2 text-base text-white rounded-lg hover:bg-blue-700 group hover:underline">
+                <span class="ml-3" sidebar-toggle-item="">Aktivitas Pindah Gudang</span>
+            </a>
+        </li>
+        <li>
             <a href="{{ route('admin-stock.sales-canvas.create') }}"
                 class="flex items-center p-2 text-base text-white rounded-lg hover:bg-blue-700 group hover:underline">
                 <span class="ml-3" sidebar-toggle-item="">Buat Surat Jalan Canvas</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin-stock.pindah-gudang.create') }}"
+                class="flex items-center p-2 text-base text-white rounded-lg hover:bg-blue-700 group hover:underline">
+                <span class="ml-3" sidebar-toggle-item="">Buat Surat Pindah Gudang</span>
             </a>
         </li>
         {{-- <li>

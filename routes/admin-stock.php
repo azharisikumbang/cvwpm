@@ -4,8 +4,9 @@ use App\Http\Controllers\AdminStock\BarangController;
 use App\Http\Controllers\AdminStock\BarangMasukController;
 use App\Http\Controllers\AdminStock\DeliveryOrderController;
 use App\Http\Controllers\AdminStock\HomeController;
-use App\Http\Controllers\AdminStock\LaporanKartuStokController;
+use App\Http\Controllers\AdminStock\KartuStokController;
 use App\Http\Controllers\AdminStock\PengajuanPembelianController;
+use App\Http\Controllers\AdminStock\PindahGudangController;
 use App\Http\Controllers\AdminStock\PurchaseOrderController;
 use App\Http\Controllers\AdminStock\SalesCanvasController;
 use App\Http\Controllers\AdminStock\TokoController;
@@ -49,7 +50,11 @@ Route::prefix('admin-stock')
         // riwayat barang masuk
         Route::get('/riwayat-barang-masuk', [BarangMasukController::class, 'index'])->name('admin-stock.riwayat-barang-masuk.index');
 
+        // pindah gudang
+        Route::resource('/pindah-gudang', PindahGudangController::class)->names('admin-stock.pindah-gudang');
+
         // laporan kartu stok
-        Route::get('/kartu-stok', [LaporanKartuStokController::class, 'index'])->name('admin-stock.kartu-stok.index');
+        Route::get('/kartu-stok', [KartuStokController::class, 'index'])->name('admin-stock.kartu-stok.index');
+        Route::get('/kartu-stok/create', [KartuStokController::class, 'create'])->name('admin-stock.kartu-stok.create');
 
     });
