@@ -14,9 +14,9 @@ class GudangSeeder extends Seeder
     public function run(): void
     {
         Gudang::factory()->createMany([
-            ['nama' => 'Gudang Padang', 'lokasi' => 'Padang'],
-            ['nama' => 'Gudang Solok', 'lokasi' => 'Solok'],
-            ['nama' => 'Gudang Dharmasraya', 'lokasi' => 'Dharmasraya'],
+            ['nama' => 'Gudang Padang', 'lokasi' => 'Padang', 'kode_gudang' => 'PDG'],
+            ['nama' => 'Gudang Solok', 'lokasi' => 'Solok', 'kode_gudang' => 'SLK'],
+            ['nama' => 'Gudang Dharmasraya', 'lokasi' => 'Dharmasraya', 'kode_gudang' => 'DSR'],
         ]);
     }
 }
