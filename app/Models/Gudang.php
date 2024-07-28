@@ -22,6 +22,15 @@ class Gudang extends Model
         'pic',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($gudang) {
+            $gudang->kode_gudang = trim(strtoupper($gudang->kode_gudang));
+        });
+    }
+
     public function barang()
     {
         return $this->hasMany(Barang::class);
