@@ -12,7 +12,7 @@ class SalesCanvasController extends Controller
 {
     public function index()
     {
-        $items = SalesCanvas::with('sales', 'riwayatStok')->whereRelation('sales', function ($relation) {
+        $items = SalesCanvas::with('sales', 'riwayatStok', 'penjualan')->whereRelation('sales', function ($relation) {
             return $relation->where('gudang_kerja', auth()->user()->gudangKerja()->id);
         })->paginate(10);
 

@@ -79,9 +79,11 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                     </td>
                     <td style="text-align: center">
                         <a href="{{ route('admin-stock.sales-canvas.show', $item['id']) }}"
-                            class="text-blue-500 hover:underline">Lihat Detail</a> |
+                            class="text-blue-500 hover:underline">Lihat Detail</a>
+                        @if(false === $item['is_done']) |
                         <a href="{{ route('admin-stock.sales-canvas.show', $item['id']) }}"
                             class="text-blue-500 hover:underline">Catat Barang Masuk</a>
+                        @endif
                     </td>
                 </tr>
                 @empty

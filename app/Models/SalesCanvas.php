@@ -21,7 +21,9 @@ class SalesCanvas extends Model
     ];
 
     protected $appends = [
-        'is_done'
+        'is_done',
+        'terjual_dus',
+        'terjual_kotak',
     ];
 
     public function sales()
@@ -42,5 +44,34 @@ class SalesCanvas extends Model
     public function getIsDoneAttribute()
     {
         return !is_null($this->tanggal_selesai);
+    }
+
+    public function getTerjualDusAttribute()
+    {
+        return 0; // TODO: Implement this
+
+        $penjualan = $this->penjualan;
+
+        return $penjualan ? $penjualan->sum(function (Penjualan $penjualan) {
+            return $penjualan->getTerjualDus();
+        }) : 0;
+    }
+
+    public function getTerjualKotakAttribute()
+    {
+        return 0; // TODO: Implement this
+
+        $penjualan = $this->penjualan;
+
+        return $penjualan ? $penjualan->sum(function (Penjualan $penjualan) {
+            return $penjualan->getTerjualKotak();
+        }) : 0;
+    }
+
+    public function markAsDone()
+    {
+        $this->update([
+            'tanggal_selesai' => now()
+        ]);
     }
 }

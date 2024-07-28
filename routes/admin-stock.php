@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminStock\BarangMasukController;
 use App\Http\Controllers\AdminStock\DeliveryOrderController;
 use App\Http\Controllers\AdminStock\HomeController;
 use App\Http\Controllers\AdminStock\KartuStokController;
+use App\Http\Controllers\AdminStock\MarkSalesCanvasDoneController;
 use App\Http\Controllers\AdminStock\PengajuanPembelianController;
 use App\Http\Controllers\AdminStock\PindahGudangController;
 use App\Http\Controllers\AdminStock\PurchaseOrderController;
@@ -45,6 +46,7 @@ Route::prefix('admin-stock')
         Route::get('/sales-canvas/create', [SalesCanvasController::class, 'create'])->name('admin-stock.sales-canvas.create');
         Route::get('/sales-canvas/{salesCanvas}', [SalesCanvasController::class, 'show'])->name('admin-stock.sales-canvas.show');
         Route::get('/sales-canvas/{salesCanvas}/edit', [SalesCanvasController::class, 'edit'])->name('admin-stock.sales-canvas.edit');
+        Route::put('/sales-canvas/{salesCanvas}/done', [MarkSalesCanvasDoneController::class, '__invoke'])->name('admin-stock.sales-canvas.done');
 
 
         // riwayat barang masuk

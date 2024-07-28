@@ -22,11 +22,46 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
     </div>
     @endsession
 
-    <div class="my-8">
-        <a href="{{ route('admin-stock.sales-canvas.edit', $item['id']) }}"
-            class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-blue-700">Catat
-            Barang Sisa Canvas</a>
+    @if ($errors->any())
+    <div class="sm:max-w-md w-full">
+        @foreach ($errors->all() as $error)
+        <x-alert color="yellow" :message="$error" />
+        @endforeach
     </div>
+    @endif
+
+    @if (false === $item['is_done'])
+    <div class="my-8" x-data="{ modal: false }">
+        <button type="button" x-on:click="modal = true"
+            class="text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-blue-700">Selesaikan
+            Canvas</button>
+
+        <div x-show="modal" style="display: none">
+            <div class="fixed inset-0 flex items-center justify-center">
+                <div class="bg-white rounded-lg p-6 z-50 max-w-lg">
+                    <div>
+                        <h2 class="text-lg font-semibold">Apakah anda yakin bahwa aktivitas sales telah usai ?</h2>
+                        <p class="text-sm text-gray-400">Penyelesaian sales akan mempengaruhi sisa stok berdasarkan sisa
+                            canvas. Sales juga tidak akan dapat lagi mencatat penjualan.</p>
+                    </div>
+
+                    <form action="{{ route('admin-stock.sales-canvas.done', $item['id']) }}" method="post">
+                        @csrf
+                        @method('PUT')
+                        <div class="flex gap-2 mt-8">
+                            <button type="submit"
+                                class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Yakin
+                                dan Teruskan</button>
+                            <button type="button" x-on:click="modal = false"
+                                class="h-10 rounded-lg bg-gray-100 text-gray-500 hover:text-gray-700 focus:outline-none text-sm px-5 py-2.5">Kembali</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="bg-gray-500 bg-opacity-50 fixed inset-0"></div>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <div class="w-full">
         <table class="w-full mb-4 border-b border-t py-2">
@@ -92,7 +127,8 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                     <tr>
                         <td style="text-align: center">{{ $loop->index + 1 }}</td>
                         <td style="text-align: center">{{ $stok['barang']['nama_kemasan'] }}</td>
-                        <td style="text-align: center">{{ $stok['jumlah_dus'] }}</td>
+                        <td style="text-align: center">{{ $stok['jumlah_dus'] }}
+                        </td>
                         <td style="text-align: center">{{ $stok['jumlah_kotak'] }}</td>
                         <td style="text-align: center">{{ $stok['jumlah_satuan'] }}</td>
                         <td style="text-align: center">{{ $stok['keterangan'] }}</td>

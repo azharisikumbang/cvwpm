@@ -6,6 +6,7 @@ use App\Models\Barang;
 use App\Models\DeliveryOrder;
 use App\Models\PurchaseOrder;
 use App\Models\RiwayatStok;
+use App\Models\SalesCanvas;
 
 class BarangMasukService
 {
@@ -58,6 +59,45 @@ class BarangMasukService
             $purchaseOrder->markAsComplete();
             $deliveryOrder->markAsComplete();
         }
+    }
+
+    public function catatSisaCanvas(SalesCanvas $canvas)
+    {
+        if ($canvas->is_done)
+            return;
+
+        // sisa canvas adalah barang yang tidak terjual
+        // didapatkan dari jumlah barang yang dijual - jumlah barang yang ada di muatan
+
+        $canvas->load('penjualan.riwayatStok.barang', 'riwayatStok.barang');
+
+        $canvas->riwayatStok->map(function (RiwayatStok $riwayatStok) use ($canvas) {
+            $barang = $riwayatStok->barang;
+
+            $jumlahTerjualDus = $canvas->penjualan->sum(function ($penjualan) use ($barang) {
+                return $penjualan->riwayatStok->where('barang_id', $barang->id)->sum('jumlah_dus');
+            });
+
+            $jumlahTerjualKotak = $canvas->penjualan->sum(function ($penjualan) use ($barang) {
+                return $penjualan->riwayatStok->where('barang_id', $barang->id)->sum('jumlah_kotak');
+            });
+
+            $jumlahTerjualSatuan = $canvas->penjualan->sum(function ($penjualan) use ($barang) {
+                return $penjualan->riwayatStok->where('barang_id', $barang->id)->sum('jumlah_satuan');
+            });
+
+            $sisaDus = $riwayatStok->jumlah_dus - $jumlahTerjualDus;
+            $sisaKotak = $riwayatStok->jumlah_kotak - $jumlahTerjualKotak;
+            $sisaSatuan = $riwayatStok->jumlah_satuan - $jumlahTerjualSatuan;
+
+            $barang->tambahStok(
+                jumlahDus: $sisaDus,
+                jumlahKotak: $sisaKotak,
+                jumlahSatuan: $sisaSatuan
+            );
+        });
+
+        $canvas->markAsDone();
     }
 
     private function cekStatusJumlahPOdanDO($po, $do, Barang $barang): bool

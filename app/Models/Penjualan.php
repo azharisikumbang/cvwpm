@@ -36,4 +36,14 @@ class Penjualan extends Model
     {
         return $this->belongsTo(SalesCanvas::class, 'sales_canvas_id');
     }
+
+    public function getTerjualDus()
+    {
+        return $this->riwayatStok->sum('jumlah_dus');
+    }
+
+    public function getTerjualKotak()
+    {
+        return $this->riwayatStok->sum('jumlah_kotak');
+    }
 }
