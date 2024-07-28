@@ -19,7 +19,7 @@ class BarangController extends Controller
         $barang = Barang::when(request('search'), fn($query) => $query->where('nama', 'like', '%' . request('search') . '%'))
             ->when(request('page'), fn($query) => $query->offset((request('page') - 1) * 10))
             ->where('gudang_id', auth()->user()->staf->gudangKerja->id)
-            ->orderBy('nama')->paginate(request('per_page', 10));
+            ->orderBy('kode_barang')->paginate(request('per_page', 10));
 
         return view('admin-stock.barang.index', ['barang' => $barang->toArray()]);
     }
@@ -27,11 +27,15 @@ class BarangController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
+    public function create(
+        BarangService $barangService
+    ) {
         $listSatuan = Barang::select('satuan')->distinct()->get()->pluck('satuan');
 
-        return view('admin-stock.barang.create', ['listSatuan' => $listSatuan->toArray()]);
+        return view('admin-stock.barang.create', [
+            'listSatuan' => $listSatuan->toArray(),
+            'kodeBarang' => $barangService->generateKodeBarang(auth()->user()->staf->gudangKerja),
+        ]);
     }
 
     /**

@@ -33,8 +33,10 @@ class BarangService
         return Barang::insert($listBarang);
     }
 
-    private function generateKodeBarang(Gudang $gudang, $start = 1): string
+    public function generateKodeBarang(Gudang $gudang, $start = 0): string
     {
+        $start = $start < 1 ? $this->getNomorBarangTerakhir($gudang) : $start;
+
         return sprintf("%s-%s-%03d", $gudang->kode_gudang, self::PREFIX_KODE_BARANG, $start);
     }
 
