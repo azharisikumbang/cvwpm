@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Barang;
 use App\Models\Gudang;
+use App\Models\SalesCanvas;
 use App\Models\Staf;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -26,10 +28,32 @@ class PencatatanBarangKeluarCanvasTest extends TestCase
 
     public function testPencatatanTersimpanPadaBasisData()
     {
-        $this->asAdminStock();
-        $this->createDataGudangDanBarang();
+        $adminStok = $this->asAdminStock();
+        $this->setUpGudangAndStaf($adminStok);
 
         $sales = Staf::factory()->create(['nama' => 'Sales 1', 'gudang_kerja' => 1]);
+
+        $satuanPerDus = 100;
+        $satuanPerKotak = 10;
+        $listBarang = Barang::factory()->createMany([
+            [
+                'gudang_id' => 1,
+                'jumlah_dus' => 100,
+                'jumlah_kotak' => 30,
+                'satuan_per_dus' => $satuanPerDus,
+                'satuan_per_kotak' => $satuanPerKotak,
+                'jumlah_satuan' => ($satuanPerDus * 100) + ($satuanPerKotak * 30),
+            ],
+            [
+                'gudang_id' => 1,
+                'jumlah_dus' => 50,
+                'jumlah_kotak' => 50,
+                'satuan_per_dus' => $satuanPerDus,
+                'satuan_per_kotak' => $satuanPerKotak,
+                'jumlah_satuan' => ($satuanPerDus * 50) + ($satuanPerKotak * 50),
+            ],
+        ]);
+
 
         $request = [
             'sales' => $sales->id,
@@ -38,17 +62,15 @@ class PencatatanBarangKeluarCanvasTest extends TestCase
             'barang' => [
                 [
                     'id' => 1,
-                    'jumlah_dus' => 10,
-                    'jumlah_kotak' => 0,
+                    'jumlah_dus' => 50,
+                    'jumlah_kotak' => 10,
                     'jumlah_satuan' => 0,
-                    'keterangan' => 'Barang 1'
                 ],
                 [
                     'id' => 2,
-                    'jumlah_dus' => 0,
-                    'jumlah_kotak' => 10,
-                    'jumlah_satuan' => 0,
-                    'keterangan' => null
+                    'jumlah_dus' => 10,
+                    'jumlah_kotak' => 5,
+                    'jumlah_satuan' => 0
                 ]
             ]
         ];
@@ -68,39 +90,38 @@ class PencatatanBarangKeluarCanvasTest extends TestCase
 
         $this->assertDatabaseHas('riwayat_stok', [
             'barang_id' => 1,
-            'jumlah_dus' => 10,
-            'jumlah_kotak' => 0,
+            'jumlah_dus' => 50,
+            'jumlah_kotak' => 10,
             'jumlah_satuan' => 0,
-            'keterangan' => 'Barang 1',
             'stokable_id' => 1,
-            'stokable_type' => 'App\Models\SalesCanvas',
+            'stokable_type' => SalesCanvas::class,
         ]);
 
         $this->assertDatabaseHas('riwayat_stok', [
             'barang_id' => 2,
-            'jumlah_dus' => 0,
-            'jumlah_kotak' => 10,
+            'jumlah_dus' => 10,
+            'jumlah_kotak' => 5,
             'jumlah_satuan' => 0,
-            'keterangan' => null,
             'stokable_id' => 1,
-            'stokable_type' => 'App\Models\SalesCanvas',
+            'stokable_type' => SalesCanvas::class,
         ]);
 
         $this->assertDatabaseHas('barang', [
             'id' => 1,
             'gudang_id' => 1,
-            'jumlah_dus' => 90, // 100 - 10
-            'jumlah_kotak' => 100,
-            'jumlah_satuan' => 100,
+            'jumlah_dus' => 50, // 100 - 50
+            'jumlah_kotak' => 20,
+            'jumlah_satuan' => 10_300 - ($satuanPerDus * 50 + $satuanPerKotak * 10), // saldo - stok keluar
         ]);
 
         $this->assertDatabaseHas('barang', [
             'id' => 2,
             'gudang_id' => 1,
-            'jumlah_dus' => 100,
-            'jumlah_kotak' => 90, // 100 - 10
-            'jumlah_satuan' => 100,
+            'jumlah_dus' => 50 - 10, // saldo - keluar
+            'jumlah_kotak' => 50 - 5, // saldo - keluar
+            'jumlah_satuan' => 5_500 - ($satuanPerDus * 10 + $satuanPerKotak * 5), // saldo - stok keluar
         ]);
+
 
         // check berkas surat jalan disimpan
         $this->assertFileExists(storage_path('app/public/surat-jalan-canvas/' . md5('2024/001') . '.pdf'));

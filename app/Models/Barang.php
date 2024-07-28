@@ -75,11 +75,16 @@ class Barang extends Model
     public function kurangiStok(
         int $jumlahDus,
         int $jumlahKotak,
-        int $jumlahSatuan
+        int $jumlahSatuan = 0
     ) {
+        $pcsKeluar = $jumlahDus * $this->satuan_per_dus + $jumlahKotak * $this->satuan_per_kotak + $jumlahSatuan;
+        if ($pcsKeluar > $this->jumlah_satuan)
+            return false;
+
         $this->jumlah_dus -= $jumlahDus;
         $this->jumlah_kotak -= $jumlahKotak;
-        $this->jumlah_satuan -= $jumlahSatuan;
+
+        $this->jumlah_satuan -= $pcsKeluar;
         $this->save();
     }
 
