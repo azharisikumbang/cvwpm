@@ -113,6 +113,9 @@
 
     <table width="100%" style="text-align:center; margin-top: 40px">
         <tr>
+            <?php 
+        // TODO: ganti nama kota nya sesuai kota asal gudang
+            ?>
             <td>Padang, {{ format_tanggal_indonesia($canvas['tanggal_mulai']) }}</td>
             <td style="width: 240px;"></td>
             <td style="width: 200px;">Sales</td>
