@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Http\Requests\StorePindahGudangTujuanRequest;
 use App\Models\Barang;
 use App\Models\DeliveryOrder;
+use App\Models\PindahGudang;
 use App\Models\PurchaseOrder;
 use App\Models\RiwayatStok;
 use App\Models\SalesCanvas;
+use Illuminate\Support\Facades\DB;
 
 class BarangMasukService
 {
@@ -98,6 +101,73 @@ class BarangMasukService
         });
 
         $canvas->markAsDone();
+    }
+
+    public function catatBarangMasukPindahGudangOtomatis(
+        PindahGudang $pindahGudang,
+        StorePindahGudangTujuanRequest $request,
+        BarangService $barangService
+    ) {
+        DB::transaction(function () use ($pindahGudang, $request, $barangService) {
+            $pindahGudang->load('riwayatStok.barang', 'gudangTujuan');
+
+            $tanggalPenyelesaian = now();
+            $pindahGudang->update([
+                'tanggal_penyelesaian' => $tanggalPenyelesaian,
+            ]);
+            $pindahGudangMasuk = PindahGudang::create([
+                'gudang_asal_id' => $pindahGudang->gudang_asal_id,
+                'gudang_tujuan_id' => $pindahGudang->gudang_tujuan_id,
+                'tanggal_pemindahan' => $pindahGudang->tanggal_pemindahan,
+                'tanggal_penyelesaian' => $tanggalPenyelesaian,
+                'nomor_surat_jalan' => $pindahGudang->nomor_surat_jalan,
+                'jenis_pindah_gudang' => PindahGudang::PINDAH_MASUK,
+                'surat_jalan_file' => $pindahGudang->surat_jalan_file,
+            ]);
+
+            $listBarang = $pindahGudang->riwayatStok;
+            foreach ($listBarang as $riwayatStok)
+            {
+                // cek apakah barang dengan nama dan kemasan yang sama sudah ada
+                /** @var Barang $barangTujuan */
+                $barangAsal = $riwayatStok->barang;
+                $barangTujuan = Barang::where('gudang_id', $pindahGudang->gudang_tujuan_id)
+                    ->where('nama', $barangAsal->nama)
+                    ->where('kemasan', $barangAsal->kemasan)
+                    ->firstOrCreate([
+                        'kode_barang' => $barangService->generateKodeBarang($pindahGudang->gudangTujuan),
+                        'gudang_id' => $pindahGudang->gudang_tujuan_id,
+                        'nama' => $barangAsal->nama,
+                        'kemasan' => $barangAsal->kemasan,
+                        'jumlah_dus' => 0,
+                        'jumlah_kotak' => 0,
+                        'jumlah_satuan' => 0,
+                        'satuan_per_dus' => $barangAsal->satuan_per_dus,
+                        'satuan_per_kotak' => $barangAsal->satuan_per_kotak,
+                        'harga' => $barangAsal->harga,
+                    ]);
+
+                // catat riwayat stok barang masuk
+                RiwayatStok::create([
+                    'stokable_id' => $pindahGudangMasuk->id,
+                    'stokable_type' => PindahGudang::class,
+                    'barang_id' => $barangTujuan->id,
+                    'jumlah_dus' => $riwayatStok->jumlah_dus,
+                    'jumlah_satuan' => $riwayatStok->jumlah_satuan,
+                    'jumlah_kotak' => $riwayatStok->jumlah_kotak,
+                ]);
+
+                // tambahkan stok barang
+                $barangTujuan->tambahStok(
+                    jumlahDus: $riwayatStok->jumlah_dus,
+                    jumlahKotak: $riwayatStok->jumlah_kotak,
+                    jumlahSatuan: $riwayatStok->jumlah_satuan
+                );
+
+            }
+
+            return $pindahGudangMasuk;
+        });
     }
 
     private function cekStatusJumlahPOdanDO($po, $do, Barang $barang): bool

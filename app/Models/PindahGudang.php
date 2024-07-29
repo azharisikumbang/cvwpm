@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class PindahGudang extends Model
@@ -29,7 +30,7 @@ class PindahGudang extends Model
     protected $appends = [
         'is_done',
         'kode_nama',
-        'rute'
+        'rute',
     ];
 
     public function gudangAsal()
@@ -45,6 +46,11 @@ class PindahGudang extends Model
     public function riwayatStok(): MorphMany
     {
         return $this->morphMany(RiwayatStok::class, 'stokable');
+    }
+
+    public function penerimaan(): HasMany
+    {
+        return $this->hasMany(PindahGudang::class, 'nomor_surat_jalan', 'nomor_surat_jalan')->where('jenis_pindah_gudang', self::PINDAH_MASUK);
     }
 
     public function getIsDoneAttribute()

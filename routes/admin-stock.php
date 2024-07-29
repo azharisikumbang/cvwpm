@@ -58,8 +58,14 @@ Route::prefix('admin-stock')
 
         // pindah gudang
         Route::resource('/pindah-gudang', PindahGudangController::class)->names('admin-stock.pindah-gudang');
-        Route::get('/pindah-gudang-tujuan', [PindahGudangTujuanController::class, 'index'])->name('admin-stock.pindah-gudang-tujuan.index');
         Route::get('/pindah-gudang/{pindah_gudang}/download', [DownloadSuratPindahGudangController::class, '__invoke'])->name('admin-stock.pindah-gudang.download');
+
+        // pindah gudang tujuan
+        Route::get('/pindah-gudang-tujuan', [PindahGudangTujuanController::class, 'index'])->name('admin-stock.pindah-gudang-tujuan.index');
+        Route::get('/pindah-gudang-tujuan/{pindah_gudang}', [PindahGudangTujuanController::class, 'show'])->name('admin-stock.pindah-gudang-tujuan.show');
+        Route::get('/pindah-gudang-tujuan/{pindah_gudang}/edit', [PindahGudangTujuanController::class, 'edit'])->name('admin-stock.pindah-gudang-tujuan.edit');
+        Route::put('/pindah-gudang-tujuan/{pindah_gudang}', [PindahGudangTujuanController::class, 'update'])->name('admin-stock.pindah-gudang-tujuan.update');
+        Route::post('/pindah-gudang-tujuan/{pindah_gudang}/barang-masuk', [PindahGudangTujuanController::class, 'store'])->name('admin-stock.pindah-gudang-tujuan.store');
 
         // laporan kartu stok
         Route::get('/kartu-stok', [KartuStokController::class, 'index'])->name('admin-stock.kartu-stok.index');

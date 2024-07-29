@@ -58,69 +58,14 @@ class PindahGudangController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show(PindahGudang $pindahGudang)
     {
-        // $item = PindahGudang::make([
+        abort_if(
+            $pindahGudang->gudang_asal_id !== auth()->user()->staf->gudangKerja->id,
+            403,
+        );
 
-        // ]);
-
-        $item = collect([
-            'id' => 1,
-            'gudang_id' => 1,
-            'tanggal_pemindahan' => '2024/07/26',
-            'tanggal_penyelesaian' => '2024/07/27',
-            'nomor' => 'PG/001',
-            'jenis_pindah_gudang' => 'KELUAR',
-            'status' => 'PENDING',
-            'jumlah_kotak' => 0,
-            'jumlah_dus' => 80,
-            'gudang_asal' => [
-                'id' => 1,
-                'nama' => 'Gudang Padang',
-                'lokasi' => 'Padang',
-                'penanggung_jawab' => [
-                    'id' => 1,
-                    'nama' => 'Azhari',
-                    'kontak' => '081234567890',
-                    'jabatan' => 'Admin Stock'
-                ]
-            ],
-            'gudang_tujuan' => [
-                'id' => 2,
-                'nama' => 'Gudang Solok',
-                'lokasi' => 'Solok',
-                'penanggung_jawab' => null
-            ],
-            'riwayat_stok' => [
-                [
-                    'barang_id' => 1,
-                    'jumlah_dus' => 50,
-                    'jumlah_kotak' => 0,
-                    'jumlah_satuan' => 0,
-                    'satuan' => 'kotak',
-                    'keterangan' => 'Gudang Padang',
-                    'barang' => [
-                        'nama' => 'Kol Giga F1',
-                        'kemasan' => '15gr',
-                        'harga' => 1000,
-                    ],
-                ],
-                [
-                    'barang_id' => 1,
-                    'jumlah_dus' => 30,
-                    'jumlah_kotak' => 0,
-                    'jumlah_satuan' => 0,
-                    'keterangan' => 'Gudang Padang',
-                    'satuan' => 'kotak',
-                    'barang' => [
-                        'nama' => 'Kol Giga F1',
-                        'kemasan' => '10gr',
-                        'harga' => 1000,
-                    ],
-                ]
-            ],
-
-        ]);
+        $item = $pindahGudang->load('gudangTujuan.penanggungJawab', 'riwayatStok.barang');
 
         return view('admin-stock.pindah-gudang.show', [
             'item' => $item->toArray()
