@@ -115,7 +115,7 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                 <thead>
                     <tr>
                         <th style="width: 64px">No</th>
-                        <th style="text-align: left">Nama Barang PO</th>
+                        <th style="text-align: left">Nama Barang</th>
                         <th>Kemasan</th>
                         <th>Dus</th>
                         <th>Kotak</th>
