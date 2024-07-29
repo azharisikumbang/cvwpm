@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\AdminStock;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePindahGudangRequest;
 use App\Models\Gudang;
 use App\Models\PindahGudang;
+use App\Services\PencatatanBarangKeluarService;
 use Illuminate\Http\Request;
 
 class PindahGudangController extends Controller
@@ -33,9 +35,20 @@ class PindahGudangController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store($request)
-    {
-        //
+    public function store(
+        StorePindahGudangRequest $request,
+        PencatatanBarangKeluarService $pencatatanBarangKeluarService
+    ) {
+        $gudangAsal = auth()->user()->staf->gudangKerja;
+
+        $pindahGudang = $pencatatanBarangKeluarService->catatBarangKeluarPindahGudang(
+            $gudangAsal,
+            $request
+        );
+
+        $pencatatanBarangKeluarService->simpanSuratJalanPindahGudang($pindahGudang);
+
+        return redirect()->route('admin-stock.pindah-gudang.show', $pindahGudang->id);
     }
 
     /**
