@@ -30,7 +30,7 @@ route('admin-stock.index') => 'Panel Admin Stock',
     @endif
 
     <div x-data="data">
-        <form method="POST" action="{{ route('admin-stock.sales-canvas.store') }}">
+        <form method="POST" action="{{ route('admin-stock.pindah-gudang.store') }}">
             @csrf
 
             <div class="grid grid-cols-3 gap-4">
@@ -59,7 +59,7 @@ route('admin-stock.index') => 'Panel Admin Stock',
 
                     <div>
                         <label class=" block mb-2 text-sm font-medium text-gray-900" for="name">
-                            Tanggal Pindah Gudang</label>
+                            Tanggal Mulai Pindah Gudang</label>
                         <input
                             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                             type="date" name="tanggal_pemindahan" required>
@@ -68,9 +68,9 @@ route('admin-stock.index') => 'Panel Admin Stock',
                     <div>
                         <label class="block mb-2 text-sm font-medium text-gray-900" for="name">
                             Gudang Tujuan</label>
-                        <select name="sales" required
+                        <select name="gudang_tujuan" required
                             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ">
-                            <option value disabled selected>-- Pilih Sales --</option>
+                            <option value disabled selected>-- Pilih Gudang Tujuan --</option>
                             @foreach ($listGudangTujuan as $item)
                             <option value="{{ $item['id'] }}">{{ $item['nama'] }} / {{ $item['pic'] }}</option>
                             @endforeach
