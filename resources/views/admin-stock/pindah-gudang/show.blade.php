@@ -103,43 +103,27 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
         <div class="mt-8">
             <div class="pb-2 border-b-2 mb-4">
                 <div class="font-semibold text-lg">Riwayat Penerimaan Barang di Tujuan</div>
-                <p>Jumlah Penerimaan: {{ count([1]) }} kali</p>
+                <p>Jumlah Penerimaan: {{ count($item['penerimaan']) }} kali</p>
             </div>
 
-            @foreach ([] as $deliveryOrder)
-            <table class="w-full mb-4 mt-4">
-                <tr class="border-b">
-                    <td style="width: 200px" class="py-2">
-                        Nomor DO
-                    </td>
-                    <td>
-                        : {{ $deliveryOrder['nomor'] }}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="py-2">
-                        Tanggal Penerimaan
-                    </td>
-                    <td>
-                        : {{ $deliveryOrder['tanggal_penerimaan'] }}
-                    </td>
-                </tr>
-            </table>
-
+            @foreach ($item['penerimaan'] as $barangMasuk)
             <table class="table-content">
                 <thead>
                     <tr>
                         <th style="width: 64px">No</th>
-                        <th style="text-align: left">Nama Barang PO</th>
+                        <th style="text-align: left">Tanggal</th>
+                        <th style="text-align: left">Nama Barang</th>
                         <th>Kemasan</th>
                         <th>Dus</th>
                         <th>Kotak</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($deliveryOrder['riwayat_stok'] as $stok)
+                    @forelse ($barangMasuk['riwayat_stok'] as $stok)
                     <tr>
                         <td style="text-align: center">{{ $loop->index + 1 }}</td>
+                        <td style="text-align: left">{{ date('d/m/Y', strtotime($item['tanggal_penyelesaian']))
+                            }}</td>
                         <td style="text-align: left">{{ $stok['barang']['nama'] }}</td>
                         <td style="text-align: center">{{ $stok['barang']['kemasan'] }}</td>
                         <td style="text-align: center">{{ $stok['jumlah_dus'] }}</td>
@@ -153,47 +137,6 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                 </tbody>
             </table>
             @endforeach
-
-            <table class="table-content">
-                <thead>
-                    <tr>
-                        <th style="width: 64px">No</th>
-                        <th style="text-align: left">Nama Barang PO</th>
-                        <th>Kemasan</th>
-                        <th>Dus</th>
-                        <th>Kotak</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="text-align: center">1</td>
-                        <td style="text-align: left">Kol Giga F1</td>
-                        <td style="text-align: center">15gr</td>
-                        <td style="text-align: center">50</td>
-                        <td style="text-align: center">0</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center">2</td>
-                        <td style="text-align: left">Kol Giga F1</td>
-                        <td style="text-align: center">10gr</td>
-                        <td style="text-align: center">30</td>
-                        <td style="text-align: center">0</td>
-                    </tr>
-                </tbody>
-                <tfoot class="font-semibold">
-                    <tr>
-                        <td colspan="3">
-                            Total
-                        </td>
-                        <td class="text-center">
-                            80 dus
-                        </td>
-                        <td class="text-center">
-                            0 kotak
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
         </div>
     </div>
 </div>

@@ -16,7 +16,11 @@ class PindahGudangController extends Controller
      */
     public function index()
     {
-        $items = PindahGudang::with('gudangTujuan')->where('gudang_asal_id', auth()->user()->staf->gudangKerja->id)->latest()->paginate(10);
+        $items = PindahGudang::with('gudangTujuan')
+            ->where('gudang_asal_id', auth()->user()->staf->gudangKerja->id)
+            ->where('jenis_pindah_gudang', PindahGudang::PINDAH_KELUAR)
+            ->latest()
+            ->paginate(10);
 
         return view('admin-stock.pindah-gudang.index', [
             'items' => $items->toArray()
@@ -65,7 +69,7 @@ class PindahGudangController extends Controller
             403,
         );
 
-        $item = $pindahGudang->load('gudangTujuan.penanggungJawab', 'riwayatStok.barang');
+        $item = $pindahGudang->load('gudangAsal', 'gudangTujuan', 'riwayatStok.barang', 'penerimaan.riwayatStok.barang');
 
         return view('admin-stock.pindah-gudang.show', [
             'item' => $item->toArray()
