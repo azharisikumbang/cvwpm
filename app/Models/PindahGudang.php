@@ -26,14 +26,20 @@ class PindahGudang extends Model
         'surat_jalan_file',
     ];
 
+    protected $appends = [
+        'is_done',
+        'kode_nama',
+        'rute'
+    ];
+
     public function gudangAsal()
     {
-        return $this->belongsTo(Gudang::class, 'gudang_asal');
+        return $this->belongsTo(Gudang::class, 'gudang_asal_id');
     }
 
     public function gudangTujuan()
     {
-        return $this->belongsTo(Gudang::class, 'gudang_tujuan');
+        return $this->belongsTo(Gudang::class, 'gudang_tujuan_id');
     }
 
     public function riwayatStok(): MorphMany
@@ -41,5 +47,20 @@ class PindahGudang extends Model
         return $this->morphMany(RiwayatStok::class, 'stokable');
     }
 
+    public function getIsDoneAttribute()
+    {
+        return !is_null($this->tanggal_penyelesaian);
+    }
 
+    public function getKodeNamaAttribute()
+    {
+        $gudang = $this->gudangAsal;
+
+        return sprintf('%s (%s)', $gudang->nama, $gudang->kode_gudang);
+    }
+
+    public function getRuteAttribute()
+    {
+        return sprintf('%s -> %s', $this->gudangAsal->nama, $this->gudangTujuan->nama);
+    }
 }

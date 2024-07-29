@@ -6,7 +6,6 @@ use App\Models\Barang;
 use App\Models\Gudang;
 use App\Models\PindahGudang;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PencatatanBarangKeluarPindahGudangTest extends TestCase

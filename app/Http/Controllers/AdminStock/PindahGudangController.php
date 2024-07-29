@@ -16,7 +16,11 @@ class PindahGudangController extends Controller
      */
     public function index()
     {
-        //
+        $items = PindahGudang::with('gudangTujuan')->where('gudang_asal_id', auth()->user()->staf->gudangKerja->id)->latest()->paginate(10);
+
+        return view('admin-stock.pindah-gudang.index', [
+            'items' => $items->toArray()
+        ]);
     }
 
     /**

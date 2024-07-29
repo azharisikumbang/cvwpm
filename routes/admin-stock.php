@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminStock\BarangController;
 use App\Http\Controllers\AdminStock\BarangMasukController;
 use App\Http\Controllers\AdminStock\DeliveryOrderController;
+use App\Http\Controllers\AdminStock\DownloadSuratPindahGudangController;
 use App\Http\Controllers\AdminStock\HomeController;
 use App\Http\Controllers\AdminStock\KartuStokController;
 use App\Http\Controllers\AdminStock\MarkSalesCanvasDoneController;
@@ -56,6 +57,7 @@ Route::prefix('admin-stock')
 
         // pindah gudang
         Route::resource('/pindah-gudang', PindahGudangController::class)->names('admin-stock.pindah-gudang');
+        Route::get('/pindah-gudang/{pindah_gudang}/download', [DownloadSuratPindahGudangController::class, '__invoke'])->name('admin-stock.pindah-gudang.download');
 
         // laporan kartu stok
         Route::get('/kartu-stok', [KartuStokController::class, 'index'])->name('admin-stock.kartu-stok.index');
