@@ -50,7 +50,7 @@ Route::prefix('admin-stock')
         Route::get('/sales-canvas/{salesCanvas}', [SalesCanvasController::class, 'show'])->name('admin-stock.sales-canvas.show');
         Route::get('/sales-canvas/{salesCanvas}/edit', [SalesCanvasController::class, 'edit'])->name('admin-stock.sales-canvas.edit');
         Route::put('/sales-canvas/{salesCanvas}/done', [MarkSalesCanvasDoneController::class, '__invoke'])->name('admin-stock.sales-canvas.done');
-        Route::get('/sales-canvas/{salesCanvas}/download', [DownloadSuratJalanCanvasController::class, '__invoke'])->name('admin-stock.sales-canvas.download');
+        Route::get('/sales-canvas/{canvas}/download', [DownloadSuratJalanCanvasController::class, '__invoke'])->name('admin-stock.sales-canvas.download');
 
 
         // riwayat barang masuk
@@ -69,6 +69,5 @@ Route::prefix('admin-stock')
 
         // laporan kartu stok
         Route::get('/kartu-stok', [KartuStokController::class, 'index'])->name('admin-stock.kartu-stok.index');
-        Route::get('/kartu-stok/create', [KartuStokController::class, 'create'])->name('admin-stock.kartu-stok.create');
-
+        Route::get('/kartu-stok/pdf', [KartuStokController::class, 'show'])->name('admin-stock.kartu-stok.show');
     });
