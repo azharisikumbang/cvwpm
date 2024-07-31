@@ -12,7 +12,8 @@ class DownloadSuratJalanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->hasRole(Role::ID_ADMIN_STOCK) || auth()->user()->hasRole(Role::ID_SALES);
+        // return auth()->user()->hasRole(Role::ID_ADMIN_STOCK) || auth()->user()->hasRole(Role::ID_SALES);
+        return auth()->check();
     }
 
     /**
