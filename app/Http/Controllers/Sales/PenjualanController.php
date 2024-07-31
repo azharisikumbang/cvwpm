@@ -13,6 +13,13 @@ class PenjualanController extends Controller
     public function index()
     {
 
+        if (SalesCanvas::where('sales_id', auth()->user()->staf->id)->whereNull('tanggal_selesai')->count() == 0)
+        {
+            return redirect()
+                ->route('sales.canvas.index')
+                ->with('success', 'Tidak ada canvas yang sedang berlangsung');
+        }
+
         $item = SalesCanvas::with('riwayatStok.barang')
             ->where('sales_id', auth()->user()->staf->id)
             ->whereNull('tanggal_selesai')
