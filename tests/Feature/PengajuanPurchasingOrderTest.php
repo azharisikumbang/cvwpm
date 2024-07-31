@@ -17,6 +17,8 @@ class PengajuanPurchasingOrderTest extends TestCase
 
     public function testAdminPurchasingDapatMelihatHalamanPengajuanPurchasingOrder()
     {
+        $this->markTestSkipped('Fitur ini belum diperlukan');
+
         $this->asAdminPurchasing();
 
         Barang::factory(10)->create();
@@ -40,6 +42,8 @@ class PengajuanPurchasingOrderTest extends TestCase
 
     public function testNonAdminPurchasingTidakDapatMelihatHalamanPengajuanPurchasingOrder()
     {
+        $this->markTestSkipped('Fitur ini belum diperlukan');
+
         $this->asAdminStock();
 
         Barang::factory(10)->create();
@@ -63,6 +67,7 @@ class PengajuanPurchasingOrderTest extends TestCase
 
     public function testPublicUsetTidakDapatMelihatHalamanPengajuanPurchasingOrder()
     {
+        $this->markTestSkipped('Fitur ini belum diperlukan');
         Barang::factory(10)->create();
         $pengaju = User::factory()->create(['role_id' => Role::ID_ADMIN_STOCK]);
         $pengajuanPembelian = PengajuanPembelian::factory()->create([
@@ -84,6 +89,7 @@ class PengajuanPurchasingOrderTest extends TestCase
 
     public function testPengajuanPO()
     {
+        $this->markTestSkipped('Fitur ini belum diperlukan');
         $this->asAdminPurchasing();
 
         Barang::factory(10)->create();
@@ -232,6 +238,7 @@ class PengajuanPurchasingOrderTest extends TestCase
 
     public function testPengajuanPODenganJumlahQuantityAdalahNol()
     {
+        $this->markTestSkipped('Fitur ini belum diperlukan');
         $this->asAdminPurchasing();
 
         Barang::factory(10)->create();

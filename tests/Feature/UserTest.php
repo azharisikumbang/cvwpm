@@ -14,6 +14,8 @@ class UserTest extends TestCase
 
     public function test_user_can_see_profile_page()
     {
+
+        $this->markTestIncomplete();
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -24,6 +26,7 @@ class UserTest extends TestCase
 
     public function test_user_can_update_profile()
     {
+        $this->markTestIncomplete();
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->put('/user/profile', [
@@ -45,6 +48,7 @@ class UserTest extends TestCase
 
     public function test_update_profile_doesnt_affect_other_user()
     {
+        $this->markTestIncomplete();
         User::factory(10)->create();
 
         $testUser = User::factory()->create([

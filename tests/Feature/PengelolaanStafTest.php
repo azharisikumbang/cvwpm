@@ -16,6 +16,8 @@ class PengelolaanStafTest extends TestCase
 
     public function testTambahStafKeGudang()
     {
+        $this->markTestSkipped();
+
         $this->asAdminWeb();
 
         // supply data

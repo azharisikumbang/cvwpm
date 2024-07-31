@@ -92,6 +92,6 @@ class PenerimaanBarangPOTest extends TestCase
 
     public function testTestBarangMasukDOTapiTidakSemua()
     {
-
+        $this->markTestIncomplete();
     }
 }
