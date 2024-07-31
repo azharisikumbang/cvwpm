@@ -8,84 +8,93 @@ use App\Models\Gudang;
 use App\Models\PindahGudang;
 use App\Models\SalesCanvas;
 use App\Models\RiwayatStok;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 class PencatatanBarangKeluarService
 {
     public function catatBarangKeluarSales(
         StoreSalesCanvasRequest $request
-    ): SalesCanvas {
+    ): ?SalesCanvas {
 
-        $nomorSuratJalan = $this->generateNomorSuratJalan();
-        $canvas = SalesCanvas::create([
-            'nomor_surat_jalan' => $nomorSuratJalan,
-            'sales_id' => $request->sales,
-            'wilayah' => $request->wilayah,
-            'tanggal_mulai' => $request->tanggal_mulai,
-            'surat_jalan_file' => $this->makeSuratJalanCanvas($nomorSuratJalan),
-        ]);
-
-        $barangCanvas = [];
-        $requestBarang = $request->barang;
-        foreach ($requestBarang as $b)
-        {
-            $barangCanvas[] = RiwayatStok::make([
-                'barang_id' => $b['id'],
-                'jumlah_dus' => $b['jumlah_dus'],
-                'jumlah_kotak' => $b['jumlah_kotak'],
-                'jumlah_satuan' => $b['jumlah_satuan'],
-                'keterangan' => $b['keterangan'] ?? null,
+        $canvas = DB::transaction(function () use ($request) {
+            $nomorSuratJalan = $this->generateNomorSuratJalan();
+            $canvas = SalesCanvas::create([
+                'nomor_surat_jalan' => $nomorSuratJalan,
+                'sales_id' => $request->sales,
+                'wilayah' => $request->wilayah,
+                'tanggal_mulai' => $request->tanggal_mulai,
+                'surat_jalan_file' => $this->makeSuratJalanCanvas($nomorSuratJalan),
             ]);
-        }
 
-        collect($canvas->riwayatStok()->saveMany($barangCanvas))->each(function ($riwayatStok) {
-            $riwayatStok->barang->kurangiStok(
-                $riwayatStok->jumlah_dus,
-                $riwayatStok->jumlah_kotak,
-                $riwayatStok->jumlah_satuan
-            );
+            $barangCanvas = [];
+            $requestBarang = $request->barang;
+            foreach ($requestBarang as $b)
+            {
+                $barangCanvas[] = RiwayatStok::make([
+                    'barang_id' => $b['id'],
+                    'jumlah_dus' => $b['jumlah_dus'],
+                    'jumlah_kotak' => $b['jumlah_kotak'],
+                    'jumlah_satuan' => $b['jumlah_satuan'],
+                    'keterangan' => $b['keterangan'] ?? null,
+                ]);
+            }
+
+            collect($canvas->riwayatStok()->saveMany($barangCanvas))->each(function ($riwayatStok) {
+                $riwayatStok->barang->kurangiStok(
+                    $riwayatStok->jumlah_dus,
+                    $riwayatStok->jumlah_kotak,
+                    $riwayatStok->jumlah_satuan
+                );
+            });
+
+            return $canvas;
         });
 
-        return $canvas;
+        return $canvas ?? null;
     }
 
     public function catatBarangKeluarPindahGudang(
         Gudang $gudangAsal,
         StorePindahGudangRequest $request
-    ): PindahGudang {
-        $nomorSuratJalan = $this->generateNomorPindahGudang($gudangAsal);
+    ): ?PindahGudang {
+        $result = DB::transaction(function () use ($gudangAsal, $request) {
+            $nomorSuratJalan = $this->generateNomorPindahGudang($gudangAsal);
 
-        $pindahGudang = PindahGudang::create([
-            'nomor_surat_jalan' => $nomorSuratJalan,
-            'gudang_asal_id' => $gudangAsal->id,
-            'gudang_tujuan_id' => $request->gudang_tujuan,
-            'tanggal_pemindahan' => $request->tanggal_pemindahan,
-            'surat_jalan_file' => $this->makeSuratJalanCanvas($nomorSuratJalan),
-            'jenis_pindah_gudang' => PindahGudang::PINDAH_KELUAR,
-        ]);
-
-        $barangPindah = [];
-        $requestBarang = $request->barang;
-        foreach ($requestBarang as $b)
-        {
-            $barangPindah[] = RiwayatStok::make([
-                'barang_id' => $b['id'],
-                'jumlah_dus' => $b['jumlah_dus'],
-                'jumlah_kotak' => $b['jumlah_kotak'],
-                'jumlah_satuan' => $b['jumlah_satuan'],
-                'keterangan' => $b['keterangan'] ?? null,
+            $pindahGudang = PindahGudang::create([
+                'nomor_surat_jalan' => $nomorSuratJalan,
+                'gudang_asal_id' => $gudangAsal->id,
+                'gudang_tujuan_id' => $request->gudang_tujuan,
+                'tanggal_pemindahan' => $request->tanggal_pemindahan,
+                'surat_jalan_file' => $this->makeSuratJalanCanvas($nomorSuratJalan),
+                'jenis_pindah_gudang' => PindahGudang::PINDAH_KELUAR,
             ]);
-        }
 
-        collect($pindahGudang->riwayatStok()->saveMany($barangPindah))->each(function ($riwayatStok) {
-            $riwayatStok->barang->kurangiStok(
-                $riwayatStok->jumlah_dus,
-                $riwayatStok->jumlah_kotak,
-                $riwayatStok->jumlah_satuan
-            );
+            $barangPindah = [];
+            $requestBarang = $request->barang;
+            foreach ($requestBarang as $b)
+            {
+                $barangPindah[] = RiwayatStok::make([
+                    'barang_id' => $b['id'],
+                    'jumlah_dus' => $b['jumlah_dus'],
+                    'jumlah_kotak' => $b['jumlah_kotak'],
+                    'jumlah_satuan' => $b['jumlah_satuan'],
+                    'keterangan' => $b['keterangan'] ?? null,
+                ]);
+            }
+
+            collect($pindahGudang->riwayatStok()->saveMany($barangPindah))->each(function ($riwayatStok) {
+                $riwayatStok->barang->kurangiStok(
+                    $riwayatStok->jumlah_dus,
+                    $riwayatStok->jumlah_kotak,
+                    $riwayatStok->jumlah_satuan
+                );
+            });
+
+            return $pindahGudang;
         });
 
-        return $pindahGudang;
+        return $result ?? null;
     }
 
     public function buatSuratJalanCanvas(SalesCanvas $salesCanvas)
