@@ -38,6 +38,8 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                 </td>
                 <td>
                     : {{ $item['nomor_surat_jalan'] }}
+                    (<a class="text-red-500 hover:underline" href="{{ route('sales.canvas.download', $item['id']) }}"
+                        class="text-blue-500" target="_blank">download pdf</a>)
                 </td>
             </tr>
             <tr>

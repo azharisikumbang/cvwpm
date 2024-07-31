@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DownloadSuratJalanCanvasController;
 use App\Http\Controllers\Sales\CanvasController;
 use App\Http\Controllers\Sales\HomeController;
 use App\Http\Controllers\Sales\PenjualanController;
@@ -12,6 +13,7 @@ Route::prefix('sales')
 
         Route::get('/canvas', [CanvasController::class, 'index'])->name('sales.canvas.index');
         Route::get('/canvas/{canvas}', [CanvasController::class, 'show'])->name('sales.canvas.show');
+        Route::get('/canvas/{canvas}/download', [DownloadSuratJalanCanvasController::class, '__invoke'])->name('sales.canvas.download');
 
 
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('sales.penjualan.index');
