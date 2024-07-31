@@ -4,7 +4,15 @@ if (!function_exists('format_rupiah'))
 {
     function format_rupiah($number)
     {
-        return 'Rp' . number_format($number, 0, ',', '.');
+        return 'Rp ' . format_ribuan($number);
+    }
+}
+
+if (!function_exists('format_ribuan'))
+{
+    function format_ribuan($number)
+    {
+        return number_format($number, 0, ',', '.');
     }
 }
 
