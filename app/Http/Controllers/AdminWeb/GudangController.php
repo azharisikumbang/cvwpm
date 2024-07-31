@@ -26,7 +26,7 @@ class GudangController extends Controller
     public function create()
     {
         return view('admin-web.gudang.create', [
-            'listStaf' => Staf::all()->toArray()
+            'listStaf' => Staf::whereNull('gudang_kerja')->get()->toArray()
         ]);
     }
 
