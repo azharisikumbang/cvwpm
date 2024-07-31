@@ -32,11 +32,12 @@ class PindahGudangController extends Controller
      */
     public function create()
     {
-        $items = Gudang::with('penanggungJawab')->whereNot('id', auth()->user()->gudangKerja()->first()->id)->get();
+        $gudangKerja = auth()->user()->staf->gudangKerja;
+        $items = Gudang::with('penanggungJawab')->whereNot('id', $gudangKerja->id)->get();
 
         return view('admin-stock.pindah-gudang.create', [
             'listGudangTujuan' => $items->toArray(),
-            'barang' => auth()->user()->gudangKerja()->first()->barang()->get()->toArray()
+            'barang' => $gudangKerja->barang->toArray()
         ]);
     }
 

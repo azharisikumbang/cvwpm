@@ -131,10 +131,12 @@ class BarangMasukService
                 // cek apakah barang dengan nama dan kemasan yang sama sudah ada
                 /** @var Barang $barangTujuan */
                 $barangAsal = $riwayatStok->barang;
-                $barangTujuan = Barang::where('gudang_id', $pindahGudang->gudang_tujuan_id)
+                $barang = Barang::where('gudang_id', $pindahGudang->gudang_tujuan_id)
                     ->where('nama', $barangAsal->nama)
-                    ->where('kemasan', $barangAsal->kemasan)
-                    ->firstOrCreate([
+                    ->where('kemasan', $barangAsal->kemasan);
+
+                if (!$barang->exists())
+                    Barang::create([
                         'kode_barang' => $barangService->generateKodeBarang($pindahGudang->gudangTujuan),
                         'gudang_id' => $pindahGudang->gudang_tujuan_id,
                         'nama' => $barangAsal->nama,
@@ -146,6 +148,8 @@ class BarangMasukService
                         'satuan_per_kotak' => $barangAsal->satuan_per_kotak,
                         'harga' => $barangAsal->harga,
                     ]);
+
+                $barangTujuan = $barang->first();
 
                 // catat riwayat stok barang masuk
                 RiwayatStok::create([

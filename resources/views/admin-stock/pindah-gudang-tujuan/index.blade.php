@@ -75,12 +75,6 @@ route('admin-stock.pindah-gudang.index') => 'Barang Masuk Pindah Gudang'
                     <td style="text-align: center">
                         <a href="{{ route('admin-stock.pindah-gudang-tujuan.show', $item['id']) }}"
                             class="text-blue-500 hover:underline">Lihat Detail</a>
-                        @if(is_null($item['tanggal_penyelesaian']))
-                        |
-                        <a href="" class="text-blue-500 hover:underline">Catat Barang Masuk</a>
-                        @endif
-
-
                     </td>
                 </tr>
                 @empty

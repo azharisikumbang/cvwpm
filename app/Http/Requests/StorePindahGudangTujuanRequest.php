@@ -13,7 +13,7 @@ class StorePindahGudangTujuanRequest extends FormRequest
     public function authorize(): bool
     {
         return request()->user()->hasRole(Role::ID_ADMIN_STOCK)
-            && request()->user()->gudangKerja()->first()->id !== $this->route('pindah_gudang')->gudang_tujuan_id
+            && request()->user()->staf->gudangKerja->id === $this->route('pindah_gudang')->gudang_tujuan_id
         ;
     }
 
