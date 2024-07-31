@@ -12,14 +12,14 @@ class DownloadSuratJalanCanvasController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(DownloadSuratJalanRequest $request, SalesCanvas $salesCanvas)
+    public function __invoke(DownloadSuratJalanRequest $request, SalesCanvas $canvas)
     {
         abort_if(
-            $salesCanvas->surat_jalan_file === null
-            || !file_exists(storage_path('app/public/surat-jalan-canvas/' . $salesCanvas->surat_jalan_file)),
+            $canvas->surat_jalan_file === null
+            || !file_exists(storage_path('app/public/surat-jalan-canvas/' . $canvas->surat_jalan_file)),
             404
         );
 
-        return response()->file(storage_path('app/public/surat-jalan-canvas/' . $salesCanvas->surat_jalan_file));
+        return response()->file(storage_path('app/public/surat-jalan-canvas/' . $canvas->surat_jalan_file));
     }
 }
