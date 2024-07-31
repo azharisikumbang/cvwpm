@@ -26,8 +26,8 @@ class SalesCanvasController extends Controller
         $gudang = auth()->user()->gudangKerja();
 
         return view('admin-stock.sales-canvas.create', [
-            'barang' => $gudang->barang()->get()->toArray(),
-            'sales' => $gudang->sales()->get()->toArray()
+            'barang' => $gudang->barang()->orderBy('nama')->get()->toArray(),
+            'sales' => $gudang->sales()->get()->toArray()   
         ]);
     }
 
@@ -37,6 +37,14 @@ class SalesCanvasController extends Controller
     ) {
 
         $canvas = $service->catatBarangKeluarSales($request);
+        if (!$canvas)
+        {
+            return redirect()
+                ->route('admin-stock.sales-canvas.create')
+                ->with('error', 'Pencatatan barang keluar gagal disimpan.')
+            ;
+        }
+
         $service->buatSuratJalanCanvas($canvas);
 
         return redirect()

@@ -54,6 +54,9 @@ class PindahGudangController extends Controller
             $request
         );
 
+        if (!$pindahGudang)
+            return redirect()->back()->withErrors('Gagal membuat surat jalan pindah gudang');
+
         $pencatatanBarangKeluarService->simpanSuratJalanPindahGudang($pindahGudang);
 
         return redirect()->route('admin-stock.pindah-gudang.show', $pindahGudang->id);
