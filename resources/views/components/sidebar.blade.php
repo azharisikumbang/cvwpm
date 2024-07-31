@@ -11,8 +11,8 @@
         <div class="flex flex-col flex-1 pt-4 pb-4 overflow-y-auto">
             @include( auth()->user()->role->getSidebarMenuView() )
         </div>
-        <div class="absolute bottom-0 left-0 text-sm w-full p-4 space-x-4" sidebar-bottom-menu="">
+        {{-- <div class="absolute bottom-0 left-0 text-sm w-full p-4 space-x-4" sidebar-bottom-menu="">
             <p>&copy; 2024 {{ env('APP_NAME') }}</p>
-        </div>
+        </div> --}}
     </div>
 </aside>
