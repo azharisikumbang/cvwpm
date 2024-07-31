@@ -54,7 +54,7 @@ route('admin-stock.barang.index') => 'Data Master Barang',
                     <th style="text-align: left">Kode Barang</th>
                     <th style="text-align: left">Nama Barang</th>
                     <th>Stok Gudang</th>
-                    <th>Stok dalam PCs</th>
+                    <th>Stok dalam Satuan</th>
                     <th>Harga Satuan</th>
                     <th></th>
                 </tr>
@@ -67,7 +67,8 @@ route('admin-stock.barang.index') => 'Data Master Barang',
                     <td style="text-align: left; font-weight: 600; text-decoration: uppercase">{{ $item['nama_kemasan']
                         }}</td>
                     <td style="text-align: center">{{ $item['jumlah_text'] }}</td>
-                    <td style="text-align: center">{{ $item['jumlah_satuan'] }} {{ $item['satuan'] }}</td>
+                    <td style="text-align: center">{{ format_ribuan($item['jumlah_satuan']) }} {{ $item['satuan'] }}
+                    </td>
                     <td style="text-align: center">{{ $item['harga_rupiah'] }}</td>
                     <td>
                         <div class="flex justify-end gap-4">
