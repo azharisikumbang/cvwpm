@@ -3,10 +3,10 @@
         Pengaturan Akun
     </div>
 
-    <a href="{{ route('user.profile.index') }}"
+    {{-- <a href="{{ route('user.profile.index') }}"
         class="flex items-center p-2 text-base text-white transition duration-75 rounded-lg hover:bg-blue-700 group hover:underline ">
         <span class="ml-3" sidebar-toggle-item="">Perbaharui Profil</span>
-    </a>
+    </a> --}}
     <a href="{{ route('user.password.index') }}"
         class="flex items-center p-2 text-base text-white transition duration-75 rounded-lg hover:bg-blue-700 group hover:underline ">
         <span class="ml-3" sidebar-toggle-item="">Ganti Password</span>
