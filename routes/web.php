@@ -9,7 +9,7 @@ use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // public
-Route::get('/', [HomeController::class, '__invoke'])->name('homepage');
+Route::get('/', [AuthenticationController::class, 'login'])->name('homepage');
 Route::get('/login', [AuthenticationController::class, 'login'])->name('authentication.login');
 Route::post('/login', [AuthenticationController::class, 'authenticate'])->name('authentication.authenticate');
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authentication.logout');
@@ -26,12 +26,13 @@ Route::prefix('user')
     });
 
 // authenticated
-Route::prefix('laporan')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('kartu-stok/{barang}', [LaporanKartuStokController::class, 'show'])->name('laporan.kartu-stok.show');
-        Route::get('faktur-penjualan/{penjualan}', [LaporanFakturPenjualanCanvasController::class, 'show'])->name('laporan.faktur-penjualan.show');
-    });
+// only for development
+// Route::prefix('laporan')
+//     ->middleware('auth')
+//     ->group(function () {
+//         Route::get('kartu-stok/{barang}', [LaporanKartuStokController::class, 'show'])->name('laporan.kartu-stok.show');
+//         Route::get('faktur-penjualan/{penjualan}', [LaporanFakturPenjualanCanvasController::class, 'show'])->name('laporan.faktur-penjualan.show');
+//     });
 
 
 // role based routes
