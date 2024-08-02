@@ -30,7 +30,8 @@ class RiwayatStok extends Model
         'total_pcs',
         'jumlah_text',
         'tipe_riwayat',
-        'is_kartu_stok'
+        'is_kartu_stok',
+        'sub_total'
     ];
 
     public function barang()
@@ -77,7 +78,7 @@ class RiwayatStok extends Model
                 PurchaseOrder::class => 'Pembelian',
                 DeliveryOrder::class => 'Barang Masuk PO',
                 Penjualan::class => 'Sales ' . $this->stokable->nama_toko,
-                SalesCanvas::class => 'Barang Keluar Canvas',
+                SalesCanvas::class => 'Canvas ' . $this->jumlah_text,
                 default => '-'
             };
         }
@@ -104,5 +105,10 @@ class RiwayatStok extends Model
     public function getIsKartuStokAttribute()
     {
         return true;
+    }
+
+    public function getSubTotalAttribute()
+    {
+        return $this->total_pcs * $this->barang->harga;
     }
 }

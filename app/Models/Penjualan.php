@@ -20,6 +20,11 @@ class Penjualan extends Model
         'kontak_toko',
         'tanggal_transaksi',
         'sales_canvas_id',
+        'file_faktur_penjualan'
+    ];
+
+    protected $appends = [
+        'total'
     ];
 
     public function canvas()
@@ -45,5 +50,15 @@ class Penjualan extends Model
     public function getTerjualKotak()
     {
         return $this->riwayatStok->sum('jumlah_kotak');
+    }
+
+    public function getTerjualSatuan()
+    {
+        return $this->riwayatStok->sum('jumlah_satuan');
+    }
+
+    public function getTotalAttribute()
+    {
+        return 0;
     }
 }

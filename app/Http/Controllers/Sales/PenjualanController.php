@@ -54,11 +54,18 @@ class PenjualanController extends Controller
     ) {
         $canvas = SalesCanvas::find($request->canvas);
 
-        $penjualanService->catatSales(
+        $penjualan = $penjualanService->catatSales(
             auth()->user()->staf,
             $canvas,
             $request
         );
+
+        if (!$penjualan)
+            return redirect()
+                ->route('sales.canvas.index')
+                ->with('error', 'Gagal mencatat penjualan.');
+
+        $penjualanService->buatFakturPenjualan($penjualan);
 
         return redirect()->route('sales.canvas.show', $canvas->id);
     }

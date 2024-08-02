@@ -60,10 +60,12 @@ class PencatatanPenjualanSalesTest extends TestCase
         $response->assertSessionDoesntHaveErrors();
 
         $this->assertDatabaseHas('penjualan', [
+            'nomor' => 'WPM00001',
             'sales_canvas_id' => 1,
             'nama_toko' => 'Toko A',
             'alamat_toko' => 'Padang Panjang',
             'tanggal_transaksi' => '2021-01-01',
+            'file_faktur_penjualan' => md5('WPM00001') . '.pdf'
         ]);
 
         $this->assertDatabaseHas('riwayat_stok', [
@@ -79,6 +81,9 @@ class PencatatanPenjualanSalesTest extends TestCase
             'jumlah_kotak' => 5,
             'jumlah_satuan' => 0,
         ]);
+
+        $this->assertFileExists(storage_path('app/public/faktur-penjualan/' . md5('WPM00001') . '.pdf'));
+
     }
 
     private function setupData(Staf $sales)
