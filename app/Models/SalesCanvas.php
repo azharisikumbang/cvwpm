@@ -11,6 +11,8 @@ class SalesCanvas extends Model
 {
     use HasFactory;
 
+    const SURAT_JALAN_FILE_PATH = 'app/private/surat-jalan-canvas';
+
     protected $fillable = [
         'nomor_surat_jalan',
         'sales_id',
@@ -73,5 +75,10 @@ class SalesCanvas extends Model
         $this->update([
             'tanggal_selesai' => now()
         ]);
+    }
+
+    public function getSuratJalanFileWithFulPath()
+    {
+        return storage_path(self::SURAT_JALAN_FILE_PATH . '/' . $this->surat_jalan_file);
     }
 }

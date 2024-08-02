@@ -16,6 +16,6 @@ class DownloadFakturPenjualanController extends Controller
                 ->with('error', 'Faktur penjualan tidak ditemukan');
         }
 
-        return response()->file(storage_path("app/public/faktur-penjualan/{$penjualan->file_faktur_penjualan}"));
+        return response()->file($penjualan->getFileFakturPenjualanWithFullPath());
     }
 }

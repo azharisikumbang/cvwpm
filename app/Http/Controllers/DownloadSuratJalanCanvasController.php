@@ -20,6 +20,6 @@ class DownloadSuratJalanCanvasController extends Controller
             404
         );
 
-        return response()->file(storage_path('app/public/surat-jalan-canvas/' . $canvas->surat_jalan_file));
+        return response()->file($canvas->getSuratJalanFileWithFulPath());
     }
 }

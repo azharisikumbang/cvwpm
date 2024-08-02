@@ -19,8 +19,6 @@ class DownloadSuratPindahGudangController extends Controller
             404
         );
 
-        return response()->file(
-            storage_path("app/public/surat-jalan-pindah-gudang/{$pindahGudang->surat_jalan_file}")
-        );
+        return response()->file($pindahGudang->getFileSuratJalanWithFullPath());
     }
 }

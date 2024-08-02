@@ -11,6 +11,8 @@ class Penjualan extends Model
 {
     use HasFactory;
 
+    const FILE_FAKTUR_PENJUALAN_PATH = 'app/private/faktur-penjualan';
+
     protected $table = 'penjualan';
 
     protected $fillable = [
@@ -21,6 +23,7 @@ class Penjualan extends Model
         'tanggal_transaksi',
         'sales_canvas_id',
         'file_faktur_penjualan'
+        // TODO: harga setiap item penjualan harus tercatat agar dapat tetap valid saat dibutuhkan pembuatan laporan penjualan
     ];
 
     protected $appends = [
@@ -60,5 +63,10 @@ class Penjualan extends Model
     public function getTotalAttribute()
     {
         return 0;
+    }
+
+    public function getFileFakturPenjualanWithFullPath()
+    {
+        return storage_path(self::FILE_FAKTUR_PENJUALAN_PATH . '/' . $this->file_faktur_penjualan);
     }
 }

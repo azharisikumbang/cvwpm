@@ -66,11 +66,11 @@ class PenjualanService
     {
         $penjualan->load('riwayatStok.barang', 'salesCanvas');
 
+        // TODO: pisah antara logic menyimpan nama file dan logic membuat file
         $suratJalanFile = md5($penjualan->nomor) . '.pdf';
+        $penjualan->update(['file_faktur_penjualan' => $suratJalanFile]);
 
         $pdf = PDF::loadView('export.pdf.faktur-penjualan', ['penjualan' => $penjualan->toArray()]);
-        $pdf->save(storage_path('app/private/faktur-penjualan/' . $suratJalanFile));
-
-        $penjualan->update(['file_faktur_penjualan' => $suratJalanFile]);
+        $pdf->save($penjualan->getFileFakturPenjualanWithFullPath());
     }
 }

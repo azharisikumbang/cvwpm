@@ -11,6 +11,8 @@ class PindahGudang extends Model
 {
     use HasFactory;
 
+    const SURAT_JALAN_PINDAH_GUDANG_PATH = 'app/private/surat-jalan-pindah-gudang';
+
     const PINDAH_KELUAR = 'KELUAR';
 
     const PINDAH_MASUK = 'MASUK';
@@ -68,5 +70,10 @@ class PindahGudang extends Model
     public function getRuteAttribute()
     {
         return sprintf('%s -> %s', $this->gudangAsal->nama, $this->gudangTujuan->nama);
+    }
+
+    public function getFileSuratJalanWithFullPath()
+    {
+        return storage_path(self::SURAT_JALAN_PINDAH_GUDANG_PATH . '/' . $this->surat_jalan_file);
     }
 }
