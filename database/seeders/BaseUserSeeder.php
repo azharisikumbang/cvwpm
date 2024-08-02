@@ -16,22 +16,6 @@ class BaseUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // user with no staf
-        User::factory()->create([
-            'username' => 'admin',
-            'password' => Hash::make('12345678'),
-            'role_id' => Role::ID_ADMIN_WEB
-        ]);
-
-        User::factory()->create([
-            'username' => 'manajer',
-            'password' => Hash::make('12345678'),
-            'role_id' => Role::ID_MANAGER
-        ]);
-
-        // gudang
-        $this->call([GudangSeeder::class]);
-
         // Staf Padang
         // staf admin stok
         $stock = User::factory()->create([
@@ -123,6 +107,5 @@ class BaseUserSeeder extends Seeder
             'gudang_kerja' => 2,
             'user_id' => $sales->id
         ]);
-
     }
 }
