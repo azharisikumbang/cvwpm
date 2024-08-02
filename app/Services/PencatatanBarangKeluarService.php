@@ -110,6 +110,7 @@ class PencatatanBarangKeluarService
         $pindahGudang->load('riwayatStok.barang', 'gudangAsal', 'gudangTujuan');
 
         $pdf = PDF::loadView('export.pdf.surat-jalan-pindah-gudang', ['item' => $pindahGudang->toArray()]);
+        // TODO: simpan di private storage
         $pdf->save(storage_path('app/public/surat-jalan-pindah-gudang/' . $pindahGudang->surat_jalan_file));
     }
 

@@ -17,8 +17,8 @@
 
 <body>
     {{-- logo --}}
-    <div style="height: 120px; width: 50%; background: rgba(202, 202, 202, 0.349)">
-        <img src="" alt="Logo WPM">
+    <div style="height: 120px; width: 50%;">
+        <img src="{{ public_path('storage/static/logo.png') }}" alt="Logo Perusahaan">
     </div>
 
     <hr>
