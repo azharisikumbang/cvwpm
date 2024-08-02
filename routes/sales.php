@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DownloadFakturPenjualanController;
 use App\Http\Controllers\DownloadSuratJalanCanvasController;
 use App\Http\Controllers\Sales\CanvasController;
 use App\Http\Controllers\Sales\HomeController;
@@ -18,4 +19,6 @@ Route::prefix('sales')
 
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('sales.penjualan.index');
         Route::post('/penjualan', [PenjualanController::class, 'store'])->name('sales.penjualan.store');
+
+        Route::get('/penjualan/{penjualan}/download', [DownloadFakturPenjualanController::class, '__invoke'])->name('sales.penjualan.download');
     });

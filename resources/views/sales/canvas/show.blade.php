@@ -126,7 +126,12 @@ route('admin-stock.sales-canvas.index') => 'Sales Canvas',
                         <td style="text-align: center">{{ $loop->index + 1 }}</td>
                         <td style="text-align: left">{{ date('d/m/Y', strtotime($penjualan['tanggal_transaksi'])) }}
                         </td>
-                        <td>{{ $penjualan['nama_toko'] }}</td>
+                        <td>
+                            <a href="{{ route('sales.penjualan.download', $penjualan['id']) }}" target="_blank"
+                                class="text-blue-500 hover:underline">
+                                {{ $penjualan['nama_toko'] }}
+                            </a>
+                        </td>
                         <td>{{ $stok['barang']['nama_kemasan'] }}</td>
                         <td style="text-align: center">{{ $stok['jumlah_dus'] }}</td>
                         <td style="text-align: center">{{ $stok['jumlah_kotak'] }}</td>
