@@ -65,13 +65,17 @@ class PencatatanBarangKeluarPindahGudangTest extends TestCase
         $response->assertRedirect('/admin-stock/pindah-gudang/1');
         $response->assertSessionDoesntHaveErrors();
 
+        // surat jalan 
+        $gudangAsal = Gudang::find(1);
+        $expectedNomorSuratJalan = sprintf("%s/BARR/BBT/%s/%s/001", date('Y'), $gudangAsal->kode_gudang, date('m'));
+        $expectedFileSuratJalan = md5($expectedNomorSuratJalan) . '.pdf';
         $this->assertDatabaseHas('pindah_gudang', [
-            'nomor_surat_jalan' => '2024/BARR/BBT/PDG/07/001',
+            'nomor_surat_jalan' => $expectedNomorSuratJalan,
             'gudang_asal_id' => 1,
             'gudang_tujuan_id' => $gudangTujuan->id,
             'tanggal_pemindahan' => '2021-01-01',
             'tanggal_penyelesaian' => null,
-            'surat_jalan_file' => md5('2024/BARR/BBT/PDG/07/001') . '.pdf',
+            'surat_jalan_file' => $expectedFileSuratJalan
         ]);
 
         $this->assertDatabaseHas('riwayat_stok', [
@@ -109,6 +113,10 @@ class PencatatanBarangKeluarPindahGudangTest extends TestCase
         ]);
 
         // save file
-        $this->assertFileExists(storage_path(sprintf("app/public/surat-jalan-pindah-gudang/%s.pdf", md5('2024/BARR/BBT/PDG/07/001'))));
+        $this->assertFileExists(
+            storage_path(
+                sprintf('app/public/surat-jalan-pindah-gudang/%s', $expectedFileSuratJalan)
+            )
+        );
     }
 }
