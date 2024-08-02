@@ -69,12 +69,14 @@ route('admin-stock.barang.index') => 'Data Master Barang',
                     <td style="text-align: center">{{ $item['jumlah_text'] }}</td>
                     <td style="text-align: center">{{ format_ribuan($item['jumlah_satuan']) }} {{ $item['satuan'] }}
                     </td>
-                    <td style="text-align: center">{{ $item['harga_rupiah'] }}</td>
+                    <td style="text-align: center">
+                        {{ $item['harga_rupiah'] }}
+                    </td>
                     <td>
                         <div class="flex justify-end gap-4">
-                            <a href="{{ route('admin-stock.barang.edit', $item['id']) }}"
-                                class="hover:underline text-blue-600 hover:text-blue-700 focus:outline-none">Tambah
-                                Kemasan Baru</a>
+                            <a href="{{ route('admin-stock.barang.harga.edit', $item['id']) }}"
+                                class="hover:underline text-blue-600 hover:text-blue-700 focus:outline-none">Ubah
+                                Harga</a>
                         </div>
                     </td>
                 </tr>

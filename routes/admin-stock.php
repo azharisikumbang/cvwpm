@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminStock\BarangController;
 use App\Http\Controllers\AdminStock\BarangMasukController;
 use App\Http\Controllers\AdminStock\DeliveryOrderController;
 use App\Http\Controllers\AdminStock\DownloadSuratPindahGudangController;
+use App\Http\Controllers\AdminStock\HargaBarangController;
 use App\Http\Controllers\AdminStock\HomeController;
 use App\Http\Controllers\AdminStock\KartuStokController;
 use App\Http\Controllers\AdminStock\MarkSalesCanvasDoneController;
@@ -24,6 +25,8 @@ Route::prefix('admin-stock')
 
         // barang management
         Route::resource('/barang', BarangController::class)->names('admin-stock.barang');
+        Route::get('/barang/{barang}/edit/harga', [HargaBarangController::class, 'edit'])->name('admin-stock.barang.harga.edit');
+        Route::put('/barang/{barang}/harga', [HargaBarangController::class, 'update'])->name('admin-stock.barang.harga.update');
 
         // toko management
         Route::resource('/toko', TokoController::class)->names('admin-stock.toko');
