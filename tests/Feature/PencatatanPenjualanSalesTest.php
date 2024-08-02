@@ -82,7 +82,7 @@ class PencatatanPenjualanSalesTest extends TestCase
             'jumlah_satuan' => 0,
         ]);
 
-        $this->assertFileExists(storage_path('app/public/faktur-penjualan/' . md5('WPM00001') . '.pdf'));
+        $this->assertFileExists(storage_path('app/private/faktur-penjualan/' . md5('WPM00001') . '.pdf'));
 
     }
 

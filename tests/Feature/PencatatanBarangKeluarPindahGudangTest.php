@@ -115,7 +115,7 @@ class PencatatanBarangKeluarPindahGudangTest extends TestCase
         // save file
         $this->assertFileExists(
             storage_path(
-                sprintf('app/public/surat-jalan-pindah-gudang/%s', $expectedFileSuratJalan)
+                sprintf('app/private/surat-jalan-pindah-gudang/%s', $expectedFileSuratJalan)
             )
         );
     }

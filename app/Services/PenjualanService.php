@@ -69,7 +69,7 @@ class PenjualanService
         $suratJalanFile = md5($penjualan->nomor) . '.pdf';
 
         $pdf = PDF::loadView('export.pdf.faktur-penjualan', ['penjualan' => $penjualan->toArray()]);
-        $pdf->save(storage_path('app/public/faktur-penjualan/' . $suratJalanFile));
+        $pdf->save(storage_path('app/private/faktur-penjualan/' . $suratJalanFile));
 
         $penjualan->update(['file_faktur_penjualan' => $suratJalanFile]);
     }

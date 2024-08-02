@@ -102,7 +102,7 @@ class PencatatanBarangKeluarService
         $salesCanvas->load('riwayatStok.barang', 'sales');
 
         $pdf = PDF::loadView('export.pdf.surat-jalan-canvas', ['canvas' => $salesCanvas->toArray()]);
-        $pdf->save(storage_path('app/public/surat-jalan-canvas/' . $salesCanvas->surat_jalan_file));
+        $pdf->save(storage_path('app/private/surat-jalan-canvas/' . $salesCanvas->surat_jalan_file));
     }
 
     public function simpanSuratJalanPindahGudang(PindahGudang $pindahGudang)
@@ -111,7 +111,7 @@ class PencatatanBarangKeluarService
 
         $pdf = PDF::loadView('export.pdf.surat-jalan-pindah-gudang', ['item' => $pindahGudang->toArray()]);
         // TODO: simpan di private storage
-        $pdf->save(storage_path('app/public/surat-jalan-pindah-gudang/' . $pindahGudang->surat_jalan_file));
+        $pdf->save(storage_path('app/private/surat-jalan-pindah-gudang/' . $pindahGudang->surat_jalan_file));
     }
 
     private function makeSuratJalanCanvas($suratJalan)
