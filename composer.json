@@ -39,6 +39,7 @@
     },
     "scripts": {
         "post-autoload-dump": [
+            "mkdir -p ./bootstrap/cache",
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
@@ -52,6 +53,11 @@
             "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
+        ],
+        "post-install-cmd": [
+            "chmod -R 755 ./bootstrap/cache",
+            "php artisan optimize",
+            "php artisan icons:cache"
         ]
     },
     "extra": {
