@@ -59,6 +59,3 @@ jobs:
             DB_USERNAME=${{ secrets.DB_USERNAME }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             DB_SOCKET=${{ secrets.DB_SOCKET }}
-            APP_STORAGE=/tmp
-            VIEW_COMPILED_PATH=/tmp
-            GAE_SERVICE=true
