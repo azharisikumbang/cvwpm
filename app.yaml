@@ -1,0 +1,43 @@
+runtime: php82
+
+handlers:
+  - url: /(.*\.(gif|png|jpg|css|js))$
+    static_files: public/\1
+    upload: public/.*\.(gif|png|jpg|css|js)$
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto
+
+env_variables:
+  # application
+  APP_URL: https://bold-guru-427007-a8.et.r.appspot.com/ # change
+  APP_DEBUG: false
+  APP_ENV: production
+  APP_TIMEZONE: Asia/Jakarta
+
+  APP_LOCALE: id_ID
+  APP_FALLBACK_LOCALE: id
+  APP_FAKER_LOCALE: id_ID
+
+  # file driver
+  CACHE_STORE: file
+  SESSION_DRIVER: database
+
+  # cache path
+  VIEW_COMPILED_PATH: /tmp
+  APP_STORAGE: /tmp
+  APP_SERVICES_CACHE: /tmp/services.php
+  APP_PACKAGES_CACHE: /tmp/packages.php
+  APP_CONFIG_CACHE: /tmp/config.php
+  APP_ROUTES_CACHE: /tmp/routes.php
+  APP_EVENTS_CACHE: /tmp/events.php
+
+  # database
+  DB_COLLATION: utf8mb4_unicode_ci
+  DB_CONNECTION: mysql
+  DB_HOST: 127.0.0.1
+  DB_PORT: 3306
+
+build_env_variables:
+  GOOGLE_COMPOSER_VERSION: 2.5.8
