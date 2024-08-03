@@ -61,3 +61,4 @@ jobs:
             DB_SOCKET=${{ secrets.DB_SOCKET }}
             APP_STORAGE=/tmp
             VIEW_COMPILED_PATH=/tmp
+            GAE_SERVICE=true
