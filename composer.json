@@ -56,8 +56,9 @@
         ],
         "post-install-cmd": [
             "chmod -R 755 ./bootstrap/cache",
-            "php artisan optimize",
-            "php artisan icons:cache"
+            "@php artisan cache:clear",
+            "@php artisan optimize",
+            "@php artisan icons:cache"
         ]
     },
     "extra": {
