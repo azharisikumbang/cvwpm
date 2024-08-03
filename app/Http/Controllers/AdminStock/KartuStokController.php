@@ -29,9 +29,15 @@ class KartuStokController extends Controller
     ) {
         /** @var array $item */
         $item = $service->createFromRequest($request);
+        $periode = sprintf(
+            '%s s/d %s',
+            format_tanggal_indonesia(date('d-m-Y', strtotime($request->get('awal')))),
+            format_tanggal_indonesia($request->get('akhir') ? date('d-m-Y', strtotime($request->get('akhir'))) : now()->format('d-m-Y'))
+        ); // TODO: pindah ke dalam service
 
         return PDF::loadView('laporan.kartu-stok', [
             'item' => $item,
+            'periode' => $periode,
         ])->setPaper('a4')->stream();
     }
 }
