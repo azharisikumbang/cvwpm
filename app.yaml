@@ -25,8 +25,8 @@ env_variables:
   SESSION_DRIVER: database
 
   # cache path
-  VIEW_COMPILED_PATH: /tmp
   APP_STORAGE: /tmp
+  VIEW_COMPILED_PATH: /tmp
   APP_SERVICES_CACHE: /tmp/services.php
   APP_PACKAGES_CACHE: /tmp/packages.php
   APP_CONFIG_CACHE: /tmp/config.php
