@@ -36,6 +36,9 @@ env_variables:
   APP_ROUTES_CACHE: /tmp/routes.php
   APP_EVENTS_CACHE: /tmp/events.php
 
+  # google cloud storage
+  FILESYSTEM_DISK: gcs
+
   # database
   DB_COLLATION: utf8mb4_unicode_ci
   DB_CONNECTION: mysql
