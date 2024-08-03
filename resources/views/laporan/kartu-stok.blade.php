@@ -19,8 +19,9 @@
     <table>
         <tr>
             <td style="height: 120px; width: 120px; background:rgba(115, 112, 112, 0.349)">
-                <div>
-                    <img src="" alt="Logo WPM">
+                {{-- logo --}}
+                <div style="height: 120px;">
+                    <img src="{{ public_path('storage/static/logo.png') }}" alt="Logo Perusahaan">
                 </div>
             </td>
             <td>
@@ -34,11 +35,15 @@
     <table>
         <tr>
             <td style="width: 120px">Gudang</td>
-            <td> : {{ $item['gudang']['nama'] }} ({{ $item['gudang']['kode_gudang'] }})</td>
+            <td> : {{ $item['gudang']['nama'] }} / {{ $item['gudang']['kode_gudang'] }}</td>
         </tr>
         <tr>
             <td>Nama Barang</td>
             <td> : {{ $item['barang']['nama_kemasan'] }}</td>
+        </tr>
+        <tr>
+            <td>Periode</td>
+            <td> : {{ $periode }}</td>
         </tr>
     </table>
 
