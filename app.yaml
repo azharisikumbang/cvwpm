@@ -12,8 +12,10 @@ handlers:
 env_variables:
   # application
   APP_URL: https://bold-guru-427007-a8.et.r.appspot.com/ # change
-  APP_DEBUG: false
-  APP_ENV: production
+  APP_DEBUG: true
+  APP_ENV: local
+  # APP_DEBUG: false
+  # APP_ENV: production
   APP_TIMEZONE: Asia/Jakarta
 
   APP_LOCALE: id_ID
