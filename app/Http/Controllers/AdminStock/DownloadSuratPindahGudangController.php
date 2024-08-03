@@ -15,7 +15,7 @@ class DownloadSuratPindahGudangController extends Controller
     {
         abort_if(
             $pindahGudang->surat_jalan_file === null
-            || !file_exists(storage_path('app/public/surat-jalan-pindah-gudang/' . $pindahGudang->surat_jalan_file)),
+            || !file_exists($pindahGudang->getFileSuratJalanWithFullPath()),
             404
         );
 

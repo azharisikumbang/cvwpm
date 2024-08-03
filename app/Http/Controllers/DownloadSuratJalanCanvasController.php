@@ -16,7 +16,7 @@ class DownloadSuratJalanCanvasController extends Controller
     {
         abort_if(
             $canvas->surat_jalan_file === null
-            || !file_exists(storage_path('app/public/surat-jalan-canvas/' . $canvas->surat_jalan_file)),
+            || !file_exists($canvas->getSuratJalanFileWithFulPath()),
             404
         );
 
