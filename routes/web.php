@@ -9,8 +9,15 @@ use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // public
-// Route::get('/', [AuthenticationController::class, 'login'])->name('homepage');
-// Route::get('/login', [AuthenticationController::class, 'login'])->name('authentication.login');
+Route::get('/daftar', function () {
+    echo "Ini adalah halaman pendaftaran supplier";
+
+    return;
+});
+
+
+Route::get('/', [AuthenticationController::class, 'login'])->name('homepage');
+Route::get('/login', [AuthenticationController::class, 'login'])->name('authentication.login');
 Route::post('/login', [AuthenticationController::class, 'authenticate'])->name('authentication.authenticate');
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authentication.logout');
 
