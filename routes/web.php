@@ -16,8 +16,6 @@ Route::get('/daftar', function () {
 });
 
 
-Route::get('/', [AuthenticationController::class, 'login'])->name('homepage');
-Route::get('/login', [AuthenticationController::class, 'login'])->name('authentication.login');
 Route::post('/login', [AuthenticationController::class, 'authenticate'])->name('authentication.authenticate');
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authentication.logout');
 
@@ -31,15 +29,6 @@ Route::prefix('user')
         Route::get('/password', [ChangePasswordController::class, 'index'])->name('user.password.index');
         Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');
     });
-
-// authenticated
-// only for development
-// Route::prefix('laporan')
-//     ->middleware('auth')
-//     ->group(function () {
-//         Route::get('kartu-stok/{barang}', [LaporanKartuStokController::class, 'show'])->name('laporan.kartu-stok.show');
-//         Route::get('faktur-penjualan/{penjualan}', [LaporanFakturPenjualanCanvasController::class, 'show'])->name('laporan.faktur-penjualan.show');
-//     });
 
 
 // role based routes
