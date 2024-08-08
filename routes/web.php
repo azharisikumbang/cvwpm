@@ -15,6 +15,8 @@ Route::get('/daftar-supplier', function () {
     return;
 });
 
+Route::get('/', [AuthenticationController::class, 'login'])->name('homepage');
+Route::get('/login', [AuthenticationController::class, 'login'])->name('authentication.login');
 Route::post('/login', [AuthenticationController::class, 'authenticate'])->name('authentication.authenticate');
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authentication.logout');
 
