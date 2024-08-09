@@ -6,11 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePindahGudangRequest;
 use App\Models\Gudang;
 use App\Models\PindahGudang;
+use App\Services\BarangService;
 use App\Services\PencatatanBarangKeluarService;
 use Illuminate\Http\Request;
 
 class PindahGudangController extends Controller
 {
+    public function __construct(
+        protected BarangService $barangService,
+        protected PencatatanBarangKeluarService $pencatatanBarangKeluarService
+    ) {
+        # code...
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -46,19 +54,19 @@ class PindahGudangController extends Controller
      */
     public function store(
         StorePindahGudangRequest $request,
-        PencatatanBarangKeluarService $pencatatanBarangKeluarService
     ) {
         $gudangAsal = auth()->user()->staf->gudangKerja;
 
-        $pindahGudang = $pencatatanBarangKeluarService->catatBarangKeluarPindahGudang(
+        $pindahGudang = $this->pencatatanBarangKeluarService->catatBarangKeluarPindahGudang(
             $gudangAsal,
-            $request
+            $request,
+            $this->barangService
         );
 
         if (!$pindahGudang)
             return redirect()->back()->withErrors('Gagal membuat surat jalan pindah gudang');
 
-        $pencatatanBarangKeluarService->simpanSuratJalanPindahGudang($pindahGudang);
+        $this->pencatatanBarangKeluarService->simpanSuratJalanPindahGudang($pindahGudang);
 
         return redirect()->route('admin-stock.pindah-gudang.show', $pindahGudang->id);
     }

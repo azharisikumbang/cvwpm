@@ -5,11 +5,19 @@ namespace App\Http\Controllers\AdminStock;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSalesCanvasRequest;
 use App\Models\SalesCanvas;
+use App\Services\BarangService;
 use App\Services\PencatatanBarangKeluarService;
 use Illuminate\Http\Request;
 
 class SalesCanvasController extends Controller
 {
+    public function __construct(
+        protected PencatatanBarangKeluarService $pencatatanBarangKeluarService,
+        protected BarangService $barangService
+    ) {
+        # code...
+    }
+
     public function index()
     {
         $items = SalesCanvas::with('sales', 'riwayatStok', 'penjualan')->whereRelation('sales', function ($relation) {
@@ -27,16 +35,15 @@ class SalesCanvasController extends Controller
 
         return view('admin-stock.sales-canvas.create', [
             'barang' => $gudang->barang()->orderBy('nama')->get()->toArray(),
-            'sales' => $gudang->sales()->get()->toArray()   
+            'sales' => $gudang->sales()->get()->toArray()
         ]);
     }
 
     public function store(
-        StoreSalesCanvasRequest $request,
-        PencatatanBarangKeluarService $service
+        StoreSalesCanvasRequest $request
     ) {
 
-        $canvas = $service->catatBarangKeluarSales($request);
+        $canvas = $this->pencatatanBarangKeluarService->catatBarangKeluarSales($request, $this->barangService);
         if (!$canvas)
         {
             return redirect()
@@ -45,7 +52,7 @@ class SalesCanvasController extends Controller
             ;
         }
 
-        $service->buatSuratJalanCanvas($canvas);
+        $this->pencatatanBarangKeluarService->buatSuratJalanCanvas($canvas);
 
         return redirect()
             ->route('admin-stock.sales-canvas.show', $canvas->id)
