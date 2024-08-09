@@ -34,7 +34,7 @@ class SalesCanvasController extends Controller
         $gudang = auth()->user()->gudangKerja();
 
         return view('admin-stock.sales-canvas.create', [
-            'barang' => $gudang->barang()->orderBy('nama')->get()->toArray(),
+            'barang' => $gudang->barang()->where('jumlah_satuan', '>', 0)->orderBy('nama')->get()->toArray(),
             'sales' => $gudang->sales()->get()->toArray()
         ]);
     }
