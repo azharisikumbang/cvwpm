@@ -72,37 +72,6 @@ class Barang extends Model
         return $this->hasMany(RiwayatStok::class);
     }
 
-    public function kurangiStok(
-        int $jumlahDus,
-        int $jumlahKotak,
-        int $jumlahSatuan = 0
-    ) {
-        $pcsKeluar = $jumlahDus * $this->satuan_per_dus + $jumlahKotak * $this->satuan_per_kotak + $jumlahSatuan;
-        if ($pcsKeluar > $this->jumlah_satuan)
-            return false;
-
-        $this->jumlah_dus -= $jumlahDus;
-        $this->jumlah_kotak -= $jumlahKotak;
-
-        $this->jumlah_satuan -= $pcsKeluar;
-        $this->save();
-    }
-
-    public function tambahStok(int $jumlahDus, int $jumlahKotak, int $jumlahSatuan)
-    {
-        // jumlah dus = jumlah dus masuk + jumlah dus yang ada
-        $this->jumlah_kotak += $jumlahKotak;
-
-        // jumlah kotak = jumlah kotak masuk + jumlah kotak yang ada
-        $this->jumlah_dus += $jumlahDus;
-
-        // jumlah pcs = (dus * pcs per dus) + (kotak * pcs per kotak) + jumlah pcs yang ada
-        $pcsMasuk = $jumlahDus * $this->satuan_per_dus + $jumlahKotak * $this->satuan_per_kotak;
-        $this->jumlah_satuan += $pcsMasuk + $jumlahSatuan;
-
-        $this->save();
-    }
-
     public function getJumlahSatuanBukanDusKotakAttribute()
     {
         $pcs = $this->jumlah_satuan;

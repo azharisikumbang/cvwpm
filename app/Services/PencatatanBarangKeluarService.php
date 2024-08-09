@@ -14,10 +14,11 @@ use PDF;
 class PencatatanBarangKeluarService
 {
     public function catatBarangKeluarSales(
-        StoreSalesCanvasRequest $request
+        StoreSalesCanvasRequest $request,
+        BarangService $barangService
     ): ?SalesCanvas {
 
-        $canvas = DB::transaction(function () use ($request) {
+        $canvas = DB::transaction(function () use ($request, $barangService) {
             $nomorSuratJalan = $this->generateNomorSuratJalan();
             $canvas = SalesCanvas::create([
                 'nomor_surat_jalan' => $nomorSuratJalan,
@@ -40,13 +41,15 @@ class PencatatanBarangKeluarService
                 ]);
             }
 
-            collect($canvas->riwayatStok()->saveMany($barangCanvas))->each(function ($riwayatStok) {
-                $riwayatStok->barang->kurangiStok(
-                    $riwayatStok->jumlah_dus,
-                    $riwayatStok->jumlah_kotak,
-                    $riwayatStok->jumlah_satuan
-                );
-            });
+            collect($canvas->riwayatStok()->saveMany($barangCanvas))
+                ->each(function ($riwayatStok) use ($barangService) {
+                    $barangService->kurangiStok(
+                        $riwayatStok->barang,
+                        $riwayatStok->jumlah_dus,
+                        $riwayatStok->jumlah_kotak,
+                        $riwayatStok->jumlah_satuan
+                    );
+                });
 
             return $canvas;
         });
@@ -56,9 +59,10 @@ class PencatatanBarangKeluarService
 
     public function catatBarangKeluarPindahGudang(
         Gudang $gudangAsal,
-        StorePindahGudangRequest $request
+        StorePindahGudangRequest $request,
+        BarangService $barangService
     ): ?PindahGudang {
-        $result = DB::transaction(function () use ($gudangAsal, $request) {
+        $result = DB::transaction(function () use ($gudangAsal, $request, $barangService) {
             $nomorSuratJalan = $this->generateNomorPindahGudang($gudangAsal);
 
             $pindahGudang = PindahGudang::create([
@@ -83,13 +87,15 @@ class PencatatanBarangKeluarService
                 ]);
             }
 
-            collect($pindahGudang->riwayatStok()->saveMany($barangPindah))->each(function ($riwayatStok) {
-                $riwayatStok->barang->kurangiStok(
-                    $riwayatStok->jumlah_dus,
-                    $riwayatStok->jumlah_kotak,
-                    $riwayatStok->jumlah_satuan
-                );
-            });
+            collect($pindahGudang->riwayatStok()->saveMany($barangPindah))
+                ->each(function ($riwayatStok) use ($barangService) {
+                    $barangService->kurangiStok(
+                        $riwayatStok->barang,
+                        $riwayatStok->jumlah_dus,
+                        $riwayatStok->jumlah_kotak,
+                        $riwayatStok->jumlah_satuan
+                    );
+                });
 
             return $pindahGudang;
         });

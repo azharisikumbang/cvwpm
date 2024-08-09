@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDeliveryOrderRequest;
 use App\Models\PurchaseOrder;
 use App\Services\BarangMasukService;
+use App\Services\BarangService;
 use Illuminate\Http\Request;
 
 class DeliveryOrderController extends Controller
@@ -13,9 +14,11 @@ class DeliveryOrderController extends Controller
     public function store(
         StoreDeliveryOrderRequest $request,
         BarangMasukService $barangMasukService,
-        PurchaseOrder $purchaseOrder
+        PurchaseOrder $purchaseOrder,
+        BarangService $barangService
     ) {
         $barangMasukService->simpanDeliveryOrder(
+            $barangService,
             $purchaseOrder,
             $request->validated()
         );

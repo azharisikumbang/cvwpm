@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class BarangMasukService
 {
     public function simpanDeliveryOrder(
+        BarangService $barangService,
         PurchaseOrder $purchaseOrder,
         array $data
     ): void {
@@ -30,18 +31,17 @@ class BarangMasukService
             $requestListBarang->select('id')->toArray()
         );
 
-        // dd($requestListBarang, $listBarang->toArray());
-
         $purchaseOrder->load('riwayatStok');
         $listBarangPO = $purchaseOrder->riwayatStok->select('barang_id', 'jumlah_dus', 'jumlah_kotak', 'jumlah_satuan')->keyBy('barang_id');
 
         $poLunas = true;
         /** @var Barang $barang */
-        $listBarang->map(function (Barang $barang) use ($requestListBarang, $deliveryOrder, $listBarangPO, &$poLunas) {
-            $barang->tambahStok(
-                jumlahDus: $requestListBarang[$barang->id]['jumlah_dus'],
-                jumlahKotak: $requestListBarang[$barang->id]['jumlah_kotak'],
-                jumlahSatuan: $requestListBarang[$barang->id]['jumlah_satuan']
+        $listBarang->map(function (Barang $barang) use ($requestListBarang, $deliveryOrder, $listBarangPO, &$poLunas, $barangService) {
+            $barangService->tambahStokBarang(
+                $barang,
+                $requestListBarang[$barang->id]['jumlah_dus'],
+                $requestListBarang[$barang->id]['jumlah_kotak'],
+                $requestListBarang[$barang->id]['jumlah_satuan']
             );
 
             RiwayatStok::create([
@@ -161,13 +161,12 @@ class BarangMasukService
                     'jumlah_kotak' => $riwayatStok->jumlah_kotak,
                 ]);
 
-                // tambahkan stok barang
-                $barangTujuan->tambahStok(
-                    jumlahDus: $riwayatStok->jumlah_dus,
-                    jumlahKotak: $riwayatStok->jumlah_kotak,
-                    jumlahSatuan: $riwayatStok->jumlah_satuan
+                $barangService->tambahStokBarang(
+                    $barangTujuan,
+                    $riwayatStok->jumlah_dus,
+                    $riwayatStok->jumlah_kotak,
+                    $riwayatStok->jumlah_satuan
                 );
-
             }
 
             return $pindahGudangMasuk;

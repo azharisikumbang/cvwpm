@@ -33,6 +33,44 @@ class BarangService
         return Barang::insert($listBarang);
     }
 
+    public function tambahStokBarang(
+        Barang $barang,
+        int $jumlahDus,
+        int $jumlahKotak,
+        int $jumlahSatuan
+    ): void {
+        // jumlah dus = jumlah dus masuk + jumlah dus yang ada
+        $barang->jumlah_kotak += $jumlahKotak;
+
+        // jumlah kotak = jumlah kotak masuk + jumlah kotak yang ada
+        $barang->jumlah_dus += $jumlahDus;
+
+        // jumlah pcs = (dus * pcs per dus) + (kotak * pcs per kotak) + jumlah pcs yang ada
+        $pcsMasuk = $jumlahDus * $barang->satuan_per_dus + $jumlahKotak * $barang->satuan_per_kotak;
+        $barang->jumlah_satuan += $pcsMasuk + $jumlahSatuan;
+
+        $barang->save();
+    }
+
+    public function kurangiStok(
+        Barang $barang,
+        int $jumlahDus,
+        int $jumlahKotak,
+        int $jumlahSatuan = 0
+    ): bool {
+        $pcsKeluar = $jumlahDus * $barang->satuan_per_dus + $jumlahKotak * $barang->satuan_per_kotak + $jumlahSatuan;
+        if ($pcsKeluar > $barang->jumlah_satuan)
+            return false;
+
+        $barang->jumlah_dus -= $jumlahDus;
+        $barang->jumlah_kotak -= $jumlahKotak;
+
+        $barang->jumlah_satuan -= $pcsKeluar;
+        $barang->save();
+
+        return true;
+    }
+
     public function generateKodeBarang(Gudang $gudang, $start = 0): string
     {
         $start = $start < 1 ? $this->getNomorBarangTerakhir($gudang) : $start;
