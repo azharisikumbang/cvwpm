@@ -45,7 +45,7 @@ class PindahGudangController extends Controller
 
         return view('admin-stock.pindah-gudang.create', [
             'listGudangTujuan' => $items->toArray(),
-            'barang' => $gudangKerja->barang->toArray()
+            'barang' => $gudangKerja->barang()->where('jumlah_satuan', '>', 0)->get()->toArray()
         ]);
     }
 
