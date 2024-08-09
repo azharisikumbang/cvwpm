@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\DB;
 
 class BarangMasukService
 {
+    public function __construct(
+        protected BarangService $barangService
+    ) {
+        # code...
+    }
+
     public function simpanDeliveryOrder(
         BarangService $barangService,
         PurchaseOrder $purchaseOrder,
@@ -36,8 +42,8 @@ class BarangMasukService
 
         $poLunas = true;
         /** @var Barang $barang */
-        $listBarang->map(function (Barang $barang) use ($requestListBarang, $deliveryOrder, $listBarangPO, &$poLunas, $barangService) {
-            $barangService->tambahStokBarang(
+        $listBarang->map(function (Barang $barang) use ($requestListBarang, $deliveryOrder, $listBarangPO, &$poLunas) {
+            $this->barangService->tambahStokBarang(
                 $barang,
                 $requestListBarang[$barang->id]['jumlah_dus'],
                 $requestListBarang[$barang->id]['jumlah_kotak'],
@@ -93,10 +99,11 @@ class BarangMasukService
             $sisaKotak = $riwayatStok->jumlah_kotak - $jumlahTerjualKotak;
             $sisaSatuan = $riwayatStok->jumlah_satuan - $jumlahTerjualSatuan;
 
-            $barang->tambahStok(
-                jumlahDus: $sisaDus,
-                jumlahKotak: $sisaKotak,
-                jumlahSatuan: $sisaSatuan
+            $this->barangService->tambahStokBarang(
+                $barang,
+                $sisaDus,
+                $sisaKotak,
+                $sisaSatuan
             );
         });
 
