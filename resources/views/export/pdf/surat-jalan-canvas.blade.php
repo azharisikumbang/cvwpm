@@ -17,7 +17,7 @@
 
 <body>
     {{-- logo --}}
-    <div style="height: 120px; width: 50%;">
+    <div style="height: 120px; width: 50%;w">
         <img src="{{ public_path('storage/static/logo.png') }}" alt="Logo Perusahaan">
     </div>
 

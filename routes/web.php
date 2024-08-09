@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LaporanFakturPenjualanCanvasController;
 use App\Http\Controllers\LaporanKartuStokController;
+use App\Http\Controllers\LaporanPersediaanController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,12 @@ Route::get('/', [AuthenticationController::class, 'login'])->name('homepage');
 Route::get('/login', [AuthenticationController::class, 'login'])->name('authentication.login');
 Route::post('/login', [AuthenticationController::class, 'authenticate'])->name('authentication.authenticate');
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authentication.logout');
+
+Route::get('laporan-persediaan', [LaporanPersediaanController::class, 'create'])
+    ->name('laporan-persediaan.create');
+
+Route::get('laporan-persediaan/{gudang}/{year}/{month}', [LaporanPersediaanController::class, 'show'])
+    ->name('laporan-persediaan.show');
 
 
 // authenticated

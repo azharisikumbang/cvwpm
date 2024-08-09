@@ -49,7 +49,7 @@
             <span class="ml-3" sidebar-toggle-item="">Kartu Stok</span>
         </a>
 
-        <a href="{{ route('admin-stock.kartu-stok.index') }}"
+        <a href="{{ route('laporan-persediaan.create') }}"
             class="flex items-center p-2 text-base text-white transition duration-75 rounded-lg hover:bg-blue-700 group hover:underline ">
             <span class="ml-3" sidebar-toggle-item="">Persediaan</span>
         </a>

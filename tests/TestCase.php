@@ -57,6 +57,17 @@ abstract class TestCase extends BaseTestCase
 
         return $user;
     }
+
+    public function asManager()
+    {
+        $user = User::factory()->create([
+            'role_id' => Role::ID_MANAGER
+        ]);
+
+        $this->actingAs($user);
+
+        return $user;
+    }
     public function asGuest()
     {
         $this->assertGuest();
@@ -76,5 +87,10 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         return [$gudang, $staf];
+    }
+
+    public function createGudang(int $total = 10)
+    {
+        return Gudang::factory($total)->create();
     }
 }
