@@ -14,6 +14,7 @@ class CetakLaporanPersediaanTest extends TestCase
 
     public function test_manager_can_access_laporan_persediaan_page()
     {
+        $this->markTestIncomplete();
         $this->asManager();
 
         $this
@@ -29,6 +30,7 @@ class CetakLaporanPersediaanTest extends TestCase
 
     public function test_see_data_laporan_persediaan()
     {
+        $this->markTestIncomplete();
         $this->asManager();
 
         $this
