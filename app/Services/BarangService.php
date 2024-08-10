@@ -38,7 +38,7 @@ class BarangService
         int $jumlahDus,
         int $jumlahKotak,
         int $jumlahSatuan
-    ): void {
+    ): Barang {
         // jumlah dus = jumlah dus masuk + jumlah dus yang ada
         $barang->jumlah_kotak += $jumlahKotak;
 
@@ -50,6 +50,7 @@ class BarangService
         $barang->jumlah_satuan += $pcsMasuk + $jumlahSatuan;
 
         $barang->save();
+        return $barang;
     }
 
     public function kurangiStok(
@@ -57,7 +58,7 @@ class BarangService
         int $jumlahDus,
         int $jumlahKotak,
         int $jumlahSatuan = 0
-    ): bool {
+    ): false|Barang {
         $pcsKeluar = $jumlahDus * $barang->satuan_per_dus + $jumlahKotak * $barang->satuan_per_kotak + $jumlahSatuan;
         if ($pcsKeluar > $barang->jumlah_satuan)
             return false;
@@ -68,7 +69,7 @@ class BarangService
         $barang->jumlah_satuan -= $pcsKeluar;
         $barang->save();
 
-        return true;
+        return $barang;
     }
 
     public function generateKodeBarang(Gudang $gudang, $start = 0): string
