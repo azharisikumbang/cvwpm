@@ -5,6 +5,8 @@ namespace Contracts\DTOs\Domain;
 
 interface StafDTO
 {
+    public function getId(): int;
+
     public function getKodeStaf(): string;
 
     public function getNamaStaf(): string;

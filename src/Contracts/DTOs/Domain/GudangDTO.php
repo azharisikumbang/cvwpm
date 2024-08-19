@@ -4,6 +4,8 @@ namespace Contracts\DTOs\Domain;
 
 interface GudangDTO
 {
+    public function getId(): int;
+    
     public function getKodeGudang(): string;
 
     public function getNamaGudang(): string;

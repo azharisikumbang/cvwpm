@@ -10,12 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('riwayat_stok', function (Blueprint $table) {
+        Schema::create('riwayat_stok_bibit', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('barang_id')->constrained('barang');
-            $table->morphs('stokable');
-            $table->morphs('riwayatable');
-            $table->text('keterangan')->nullable();
+            $table->unsignedInteger('dus')->default(0);
+            $table->unsignedInteger('kotak')->default(0);
+            $table->unsignedInteger('satuan')->default(0);
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('riwayat_stok');
+        Schema::dropIfExists('riwayat_stok_bibit');
     }
 };

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LaporanFakturPenjualanCanvasController;
 use App\Http\Controllers\LaporanKartuStokController;
 use App\Http\Controllers\LaporanPersediaanController;
+use App\Http\Controllers\PengajuanPembelian\PengajuanPembelianController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,10 @@ Route::prefix('user')
         Route::get('/password', [ChangePasswordController::class, 'index'])->name('user.password.index');
         Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');
     });
+
+// Pengajuan Pembelian
+Route::resource('pengajuan-pembelian', PengajuanPembelianController::class)
+    ->middleware('auth');
 
 
 // role based routes

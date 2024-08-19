@@ -2,7 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\DTOs\BarangMasuk\BarangMasukBibitDTO;
+use App\DTOs\BarangMasuk\BarangMasukDTO;
+use App\DTOs\PengajuanPembelian\PengajuanPembelianDTORequest;
+use App\DTOs\PengajuanPembelianDTO;
+use Contracts\DTOs\Domain\Enum\JenisBarangEnum;
+use Contracts\DTOs\Requests\StorePengajuanPembelianRequestDTOInterface;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePengajuanPembelianRequest extends FormRequest
 {
@@ -22,10 +29,11 @@ class StorePengajuanPembelianRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'barang.*.barang_id' => 'required|exists:App\Models\Barang,id',
-            'barang.*.jumlah_kotak' => 'required|integer|min:0',
-            'barang.*.jumlah_dus' => 'required|integer|min:0',
-            'catatan' => 'nullable|string',
+            'type' => ['required', Rule::in(JenisBarangEnum::cases())],
+            'barang.*.id' => 'required|exists:App\Models\Barang,id',
+            'barang.*.kotak' => 'required|integer|min:0',
+            'barang.*.dus' => 'required|integer|min:0',
+            'barang.*.satuan' => 'nullable|integer|min:0',
         ];
     }
 
@@ -38,15 +46,38 @@ class StorePengajuanPembelianRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'barang.*.barang_id.required' => 'Barang harus diisi',
-            'barang.*.barang_id.exists' => 'Barang tidak ditemukan',
-            'barang.*.jumlah_kotak.required' => 'Jumlah kotak harus diisi',
-            'barang.*.jumlah_kotak.integer' => 'Jumlah kotak harus berupa angka',
-            'barang.*.jumlah_kotak.min' => 'Jumlah kotak minimal 0',
-            'barang.*.jumlah_dus.required' => 'Jumlah dus harus diisi',
-            'barang.*.jumlah_dus.integer' => 'Jumlah dus harus berupa angka',
-            'barang.*.jumlah_dus.min' => 'Jumlah dus minimal 0',
-            'catatan.string' => 'Catatan harus berupa teks',
+            'type.required' => 'Jenis barang harus diisi',
+            'type.in' => 'Jenis barang tidak sesuai',
+            'barang.*.id.required' => 'Barang harus diisi',
+            'barang.*.id.exists' => 'Barang tidak ditemukan',
+            'barang.*.kotak.required' => 'Kotak harus diisi',
+            'barang.*.kotak.integer' => 'Kotak harus berupa angka',
+            'barang.*.kotak.min' => 'Kotak tidak boleh kurang dari 0',
+            'barang.*.dus.required' => 'Dus harus diisi',
+            'barang.*.dus.integer' => 'Dus harus berupa angka',
+            'barang.*.dus.min' => 'Dus tidak boleh kurang dari 0',
+            'barang.*.satuan.integer' => 'Satuan harus berupa angka',
+            'barang.*.satuan.min' => 'Satuan tidak boleh kurang dari 0',
         ];
+    }
+
+    public function toDTO(): StorePengajuanPembelianRequestDTOInterface
+    {
+        $validated = $this->validated();
+
+        return match (JenisBarangEnum::from($validated['type']))
+        {
+            JenisBarangEnum::BIBIT => new PengajuanPembelianDTORequest(
+                JenisBarangEnum::BIBIT,
+                array_map(fn($barang) => new BarangMasukBibitDTO(
+                    $barang['id'],
+                    $barang['kotak'],
+                    $barang['dus'],
+                    $barang['satuan'],
+                ), $validated['barang'])
+                // TODO: handle jenis barang yang lain
+            ),
+            default => throw new \Exception('Jenis barang tidak dikenal', 500),
+        };
     }
 }

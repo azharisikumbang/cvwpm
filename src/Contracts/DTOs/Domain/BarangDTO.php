@@ -4,11 +4,11 @@ namespace Contracts\DTOs\Domain;
 
 interface BarangDTO
 {
+    public function getId(): int;
+
     public function getKodeBarang(): string;
 
     public function getNamaBarang(): string;
-
-    public function getKemasanBarang(): string;
 
     public function getHargaBeliBarang(): float;
 
@@ -16,7 +16,11 @@ interface BarangDTO
 
     public function getMarginProfitBarang(): float;
 
-    public function getStokBarang(): int;
+    public function getStokBarangDalamSatuan(): int;
 
     public function getNamaSatuanTerkecil(): int;
+
+    public function getJenisBarang(): JenisBarangEnum;
+
+    public function getGudang(): GudangDTO;
 }

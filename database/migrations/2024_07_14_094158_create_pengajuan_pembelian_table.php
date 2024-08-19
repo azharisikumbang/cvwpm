@@ -1,5 +1,6 @@
 <?php
 
+use Contracts\DTOs\Domain\Enum\StatusPengajuanPembelian;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +13,11 @@ return new class extends Migration {
     {
         Schema::create('pengajuan_pembelian', function (Blueprint $table) {
             $table->id();
-            // $table->date('tanggal_pengajuan'); // tidak dibutuhkan karena sudah ada created_at
-            $table->enum('status', ['pending', 'approved', 'rejected', 'revised'])->default('pending');
+            $table->date('tanggal_pengajuan');
+            $table->string('nomor_pengajuan')->unique();
+            $table->enum('status_pengajuan', array_column(StatusPengajuanPembelian::cases(), 'value'))->default(StatusPengajuanPembelian::DRAFT->value);
             $table->text('catatan')->nullable();
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('staf_pengaju_id')->constrained('staf');
             $table->timestamps();
         });
     }

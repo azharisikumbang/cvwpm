@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PengajuanPembelian>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RiwayatStokBibit>
  */
-class PengajuanPembelianFactory extends Factory
+class RiwayatStokBibitFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,7 @@ class PengajuanPembelianFactory extends Factory
     public function definition(): array
     {
         return [
-            'nomor' => $this->faker->numerify('PP###'),
-            'tanggal' => $this->faker->date(),
-            'status' => 'draft',
+            //
         ];
     }
 }

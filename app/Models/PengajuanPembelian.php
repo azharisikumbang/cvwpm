@@ -11,87 +11,11 @@ class PengajuanPembelian extends Model
 
     protected $table = 'pengajuan_pembelian';
 
-    const STATUS_PENDING = 'pending';
-
-    const STATUS_APPROVED = 'approved';
-
-    const STATUS_REJECTED = 'rejected';
-
-    const STATUS_REVISED = 'revised';
-
     protected $fillable = [
-        'status',
-        'catatan',
-        'created_by',
-    ];
-
-    protected $appends = [
-        'status_label',
-        'status_color',
+        'nomor_pengajuan',
         'tanggal_pengajuan',
-        'total_dus',
-        'total_kotak',
-        'total_barang',
+        'staf_pengaju_id',
+        'gudang_pengaju_id',
+        'status_pengajuan'
     ];
-
-    protected static function booted(): void
-    {
-        static::creating(function ($model) {
-            $model->status = self::STATUS_PENDING;
-        });
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function details()
-    {
-        return $this->hasMany(PengajuanPembelianDetail::class);
-    }
-
-    public function getStatusLabelAttribute()
-    {
-        return match ($this->status)
-        {
-            self::STATUS_PENDING => 'Diajukan Ke Purchasing',
-            self::STATUS_APPROVED => 'Sudah di PO',
-            self::STATUS_REJECTED => 'Ditolak',
-            self::STATUS_REVISED => 'Direvisi',
-            default => 'Unknown',
-        };
-    }
-
-    public function getStatusColorAttribute()
-    {
-        return match ($this->status)
-        {
-            self::STATUS_PENDING => 'yellow',
-            self::STATUS_APPROVED => 'green',
-            self::STATUS_REJECTED => 'red',
-            self::STATUS_REVISED => 'info',
-            default => 'gray',
-        };
-    }
-
-    public function getTanggalPengajuanAttribute()
-    {
-        return $this->created_at->format('d/m/Y');
-    }
-
-    public function getTotalDusAttribute()
-    {
-        return $this->details->sum('jumlah_dus');
-    }
-
-    public function getTotalKotakAttribute()
-    {
-        return $this->details->sum('jumlah_kotak');
-    }
-
-    public function getTotalBarangAttribute()
-    {
-        return $this->details->count();
-    }
 }
