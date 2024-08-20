@@ -196,4 +196,33 @@ class PengajuanPembelianTest extends TestCase
             'status_pengajuan' => 'DITERIMA',
         ]);
     }
+
+    public function test_admin_purchasing_dapat_menolak_pengajuan_pembelian()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->seed();
+        Barang::factory(10)->create([
+            'gudang_id' => 1,
+        ]);
+
+
+        $adminPurchasing = User::where('role_id', Role::ID_ADMIN_PURCHASING)->first();
+        $adminStok = User::where('role_id', Role::ID_ADMIN_STOCK)->first();
+
+        $this->assertEquals($adminStok->staf->gudang_kerja, $adminPurchasing->staf->gudang_kerja);
+
+        $pengajuan = PengajuanPembelian::factory()->create([
+            'staf_pengaju_id' => $adminStok->staf->id,
+        ]);
+
+        $this->actingAs($adminPurchasing)
+            ->put("/pengajuan-pembelian/" . $pengajuan->id . '/reject')
+            ->assertStatus(302);
+
+        $this->assertDatabaseHas('pengajuan_pembelian', [
+            'id' => $pengajuan->id,
+            'status_pengajuan' => 'DITOLAK',
+        ]);
+    }
 }

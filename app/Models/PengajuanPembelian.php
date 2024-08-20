@@ -25,4 +25,10 @@ class PengajuanPembelian extends Model
         $this->status_pengajuan = StatusPengajuanPembelian::DITERIMA;
         $this->save();
     }
+
+    public function reject()
+    {
+        $this->status_pengajuan = StatusPengajuanPembelian::DITOLAK;
+        $this->save();
+    }
 }
