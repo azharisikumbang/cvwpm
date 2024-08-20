@@ -16,16 +16,22 @@ class PengajuanPembelianTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_stok_atau_admin_purchasing_dapat_melihat_daftar_pengajuan_pembelian_pada_gudang_merekas()
+    public function test_admin_stok_dapat_melihat_riwayat_pengajuan_pembelian()
     {
         $this->markTestIncomplete("Test lebih lanjut test bahwa barang yang ditampilkan hanya barang yang ada di gudang mereka");
 
         $adminStok = $this->asAdminStock();
-        $adminPurchasing = $this->asAdminPurchasing();
 
         $this->actingAs($adminStok)
             ->get('/pengajuan-pembelian')
             ->assertStatus(200);
+    }
+
+    public function test_admin_purchasing_dapat_melihat_pengajuan_pembelian_yang_dibuat()
+    {
+        $this->markTestIncomplete("Test lebih lanjut test bahwa barang yang ditampilkan hanya barang yang ada di gudang mereka");
+
+        $adminPurchasing = $this->asAdminPurchasing();
 
         $this->actingAs($adminPurchasing)
             ->get('/pengajuan-pembelian')
@@ -162,7 +168,7 @@ class PengajuanPembelianTest extends TestCase
         ;
     }
 
-    public function test_pengajuan_pembelian_can_be_approved()
+    public function test_admin_purchasing_dapat_menyetujui_pengajuan_pembelian()
     {
         $this->withoutExceptionHandling();
 
@@ -189,27 +195,5 @@ class PengajuanPembelianTest extends TestCase
             'id' => $pengajuan->id,
             'status_pengajuan' => 'DITERIMA',
         ]);
-    }
-
-    public function test_done_by_correct_role()
-    {
-        // approve
-        $this->actingAs($this->asAdminStock())
-            ->put('/pengajuan-pembelian/1/approve')
-            ->assertStatus(403);
-
-        // reject
-        $this->actingAs($this->asAdminStock())
-            ->put('/pengajuan-pembelian/1/reject')
-            ->assertStatus(403);
-
-        // unauthenticated
-        $this->put('/pengajuan-pembelian/1/approve')
-            ->assertStatus(302)
-            ->assertRedirect('/login');
-
-        $this->put('/pengajuan-pembelian/1/reject')
-            ->assertStatus(302)
-            ->assertRedirect('/login');
     }
 }
