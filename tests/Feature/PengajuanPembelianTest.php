@@ -313,11 +313,6 @@ class PengajuanPembelianTest extends TestCase
         $this->assertDatabaseCount('pengajuan_pembelian', 0);
     }
 
-    public function test_pengajuan_pada_gudang_yang_salah()
-    {
-        $this->markTestIncomplete("Belum diimplementasikan karena staf tidak berpotensi pindah ke gudang lain.");
-    }
-
     public function test_persetujuan_pada_dokumen_bukan_milik_admin_purchasing()
     {
         $this->seed();
@@ -356,6 +351,37 @@ class PengajuanPembelianTest extends TestCase
 
     public function test_penolakan_pada_dokumen_bukan_milik_admin_purchasing()
     {
+        $this->seed();
+        Barang::factory(10)->create([
+            'gudang_id' => 1,
+        ]);
 
+        $adminStokGudangA = User::where('role_id', Role::ID_ADMIN_STOCK)->first();
+
+        // admin purchasing lain
+        $adminPurchasingGudangB = User::factory()->create([
+            'role_id' => Role::ID_ADMIN_PURCHASING
+        ]);
+
+        Staf::factory()->create([
+            'gudang_kerja' => 2,
+            'user_id' => $adminPurchasingGudangB->id,
+        ]);
+
+        $this->assertNotEquals($adminStokGudangA->staf->gudang_kerja, $adminPurchasingGudangB->staf->gudang_kerja);
+
+        $pengajuan = PengajuanPembelian::factory()->create([
+            'staf_pengaju_id' => $adminStokGudangA->staf->id,
+        ]);
+
+        $this->actingAs($adminPurchasingGudangB)
+            ->put("/pengajuan-pembelian/" . $pengajuan->id . '/reject')
+            ->assertUnauthorized()
+        ;
+
+        $this->assertDatabaseHas('pengajuan_pembelian', [
+            'id' => $pengajuan->id,
+            'status_pengajuan' => 'DRAFT',
+        ]);
     }
 }
