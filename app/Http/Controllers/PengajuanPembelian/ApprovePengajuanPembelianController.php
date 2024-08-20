@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PengajuanPembelian;
 use Illuminate\Http\Request;
 
-class ApprovePengajuanPembelian extends Controller
+class ApprovePengajuanPembelianController extends Controller
 {
     /**
      * Handle the incoming request.
