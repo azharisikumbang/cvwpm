@@ -109,19 +109,30 @@ class PengajuanPembelianTest extends TestCase
 
     public function test_pengajuan_pembelian_can_be_approved()
     {
-        $adminPurchasing = $this->asAdminPurchasing();
-        $adminStok = $this->asAdminStock();
+        $this->withoutExceptionHandling();
+
+        $this->seed();
+        Barang::factory(10)->create([
+            'gudang_id' => 1,
+        ]);
+
+
+        $adminPurchasing = User::where('role_id', Role::ID_ADMIN_PURCHASING)->first();
+        $adminStok = User::where('role_id', Role::ID_ADMIN_STOCK)->first();
+
+        $this->assertEquals($adminStok->staf->gudang_kerja, $adminPurchasing->staf->gudang_kerja);
+
         $pengajuan = PengajuanPembelian::factory()->create([
-            'pengaju' => $adminStok->id,
+            'staf_pengaju_id' => $adminStok->staf->id,
         ]);
 
         $this->actingAs($adminPurchasing)
-            ->put('/pengajuan-pembelian/' . $pengajuan->id . '/approve')
+            ->put("/pengajuan-pembelian/" . $pengajuan->id . '/approve')
             ->assertStatus(302);
 
         $this->assertDatabaseHas('pengajuan_pembelian', [
             'id' => $pengajuan->id,
-            'status' => 'approved',
+            'status_pengajuan' => 'DITERIMA',
         ]);
     }
 

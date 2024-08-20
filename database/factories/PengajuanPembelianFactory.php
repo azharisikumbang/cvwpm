@@ -17,9 +17,9 @@ class PengajuanPembelianFactory extends Factory
     public function definition(): array
     {
         return [
-            'nomor' => $this->faker->numerify('PP###'),
-            'tanggal' => $this->faker->date(),
-            'status' => 'draft',
+            'nomor_pengajuan' => $this->faker->numerify('PP###'),
+            'tanggal_pengajuan' => $this->faker->date(),
+            'status_pengajuan' => 'DRAFT',
         ];
     }
 }

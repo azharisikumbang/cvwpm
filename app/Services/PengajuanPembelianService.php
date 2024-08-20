@@ -104,7 +104,7 @@ class PengajuanPembelianService implements PengajuanPembelianInterface
     }
     public function simpanDokumenPDF(): void
     {
-
+        throw new \Exception('Not implemented yet', 500);
     }
 
     public function approve(): void

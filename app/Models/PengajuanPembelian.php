@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Contracts\DTOs\Domain\Enum\StatusPengajuanPembelian;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,4 +19,10 @@ class PengajuanPembelian extends Model
         'gudang_pengaju_id',
         'status_pengajuan'
     ];
+
+    public function approve()
+    {
+        $this->status_pengajuan = StatusPengajuanPembelian::DITERIMA;
+        $this->save();
+    }
 }
