@@ -14,6 +14,7 @@ use Contracts\DTOs\Domain\Enum\StatusPengajuanPembelian; // TODO: implementasi d
 use Contracts\DTOs\Domain\Enum\JenisBarangEnum; // TODO: implementasi dari App
 use Contracts\DTOs\Domain\PengajuanPembelianDTO as PengajuanPembelianDTOConctract; // TODO: change naming convention
 use Contracts\DTOs\Requests\StorePengajuanPembelianRequestDTOInterface;
+use Illuminate\Support\Facades\DB;
 
 class PengajuanPembelianService implements PengajuanPembelianInterface
 {
@@ -33,20 +34,19 @@ class PengajuanPembelianService implements PengajuanPembelianInterface
     }
     public function simpan(StorePengajuanPembelianRequestDTOInterface $dto): void
     {
-        $staf = auth()->user()->staf;
+        DB::transaction(function () use ($dto) {
+            $pengajuanPembelian = PengajuanPembelian::create([
+                'nomor_pengajuan' => $this->generateNomorPengajuanPembelian(),
+                'tanggal_pengajuan' => now(),
+                'staf_pengaju_id' => auth()->user()->staf->id,
+                'status_pengajuan' => StatusPengajuanPembelian::DRAFT,
+            ]);
 
-        $stored = [
-            'nomor_pengajuan' => $this->generateNomorPengajuanPembelian(),
-            'tanggal_pengajuan' => now(),
-            'staf_pengaju_id' => $staf->id,
-            'status_pengajuan' => StatusPengajuanPembelian::DRAFT,
-        ];
-
-        $pengajuanPembelian = PengajuanPembelian::create($stored);
-        $this->simpanRiwayatStokBarang(
-            $pengajuanPembelian,
-            $dto
-        );
+            $this->simpanRiwayatStokBarang(
+                $pengajuanPembelian,
+                $dto
+            );
+        });
     }
 
     private function simpanRiwayatStokBarang(
