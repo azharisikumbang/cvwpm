@@ -7,6 +7,7 @@ use App\Models\PengajuanPembelian;
 use App\Models\RiwayatStok;
 use App\Models\RiwayatStokBibit;
 use App\Models\Role;
+use App\Models\Staf;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -224,5 +225,56 @@ class PengajuanPembelianTest extends TestCase
             'id' => $pengajuan->id,
             'status_pengajuan' => 'DITOLAK',
         ]);
+    }
+
+    public function test_pengajuan_hanya_oleh_admin_purchasing_pada_gudang_terkait()
+    {
+        $this->markTestIncomplete("Belum diimplementasikan karena staf tidak berpotensi pindah ke gudang lain.");
+    }
+
+    public function test_pengajuan_pada_gudang_yang_salah()
+    {
+        $this->markTestIncomplete("Belum diimplementasikan karena staf tidak berpotensi pindah ke gudang lain.");
+    }
+
+    public function test_persetujuan_pada_dokumen_bukan_milik_admin_purchasing()
+    {
+        $this->seed();
+        Barang::factory(10)->create([
+            'gudang_id' => 1,
+        ]);
+
+        $adminStokGudangA = User::where('role_id', Role::ID_ADMIN_STOCK)->first();
+
+        // admin purchasing lain
+        $adminPurchasingGudangB = User::factory()->create([
+            'role_id' => Role::ID_ADMIN_PURCHASING
+        ]);
+
+        Staf::factory()->create([
+            'gudang_kerja' => 2,
+            'user_id' => $adminPurchasingGudangB->id,
+        ]);
+
+        $this->assertNotEquals($adminStokGudangA->staf->gudang_kerja, $adminPurchasingGudangB->staf->gudang_kerja);
+
+        $pengajuan = PengajuanPembelian::factory()->create([
+            'staf_pengaju_id' => $adminStokGudangA->staf->id,
+        ]);
+
+        $this->actingAs($adminPurchasingGudangB)
+            ->put("/pengajuan-pembelian/" . $pengajuan->id . '/approve')
+            ->assertUnauthorized()
+        ;
+
+        $this->assertDatabaseHas('pengajuan_pembelian', [
+            'id' => $pengajuan->id,
+            'status_pengajuan' => 'DRAFT',
+        ]);
+    }
+
+    public function test_penolakan_pada_dokumen_bukan_milik_admin_purchasing()
+    {
+
     }
 }

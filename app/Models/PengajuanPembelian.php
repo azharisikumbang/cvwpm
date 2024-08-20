@@ -31,4 +31,9 @@ class PengajuanPembelian extends Model
         $this->status_pengajuan = StatusPengajuanPembelian::DITOLAK;
         $this->save();
     }
+
+    public function stafPengaju()
+    {
+        return $this->belongsTo(Staf::class, 'staf_pengaju_id');
+    }
 }
