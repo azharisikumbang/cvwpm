@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\DTOs\PengajuanPembelianDTO;
+use App\Models\Barang;
+use App\Models\Gudang;
 use App\Models\PengajuanPembelian;
 use App\Models\RiwayatStok;
 use App\Models\RiwayatStokBibit;
@@ -35,11 +37,21 @@ class PengajuanPembelianService implements PengajuanPembelianInterface
     public function simpan(StorePengajuanPembelianRequestDTOInterface $dto): void
     {
         DB::transaction(function () use ($dto) {
+            $staf = auth()->user()->staf;
+
+            abort_if(
+                !$this->cekBarangBeradaDiGudangYangBenar($staf->gudangKerja, $dto),
+                400,
+                'Barang yang diajukan tidak ada di gudang staf'
+            );
+
+            // execute
             $pengajuanPembelian = PengajuanPembelian::create([
                 'nomor_pengajuan' => $this->generateNomorPengajuanPembelian(),
                 'tanggal_pengajuan' => now(),
-                'staf_pengaju_id' => auth()->user()->staf->id,
+                'staf_pengaju_id' => $staf->id,
                 'status_pengajuan' => StatusPengajuanPembelian::DRAFT,
+                'gudang_id' => $staf->gudangKerja->id,
             ]);
 
             $this->simpanRiwayatStokBarang(
@@ -138,5 +150,19 @@ class PengajuanPembelianService implements PengajuanPembelianInterface
     public function getDokumenPengajuanPembelian(): string
     {
 
+    }
+
+    private function cekBarangBeradaDiGudangYangBenar(Gudang $gudang, StorePengajuanPembelianRequestDTOInterface $request): bool
+    {
+        // cek apakah barang bukan bagian dari gudang staf
+        $ids = collect($request->getBarang())->map(function (BarangMasukDTOInterface $barang) {
+            return is_int($barang->getBarang()) ? $barang->getBarang() : $barang->getBarang()->getId();
+        });
+
+        $jumlahBarangGudangYangAda = Barang::where('gudang_id', $gudang->id)
+            ->whereIn('id', $ids->toArray())
+            ->count();
+
+        return $jumlahBarangGudangYangAda === count($ids);
     }
 }

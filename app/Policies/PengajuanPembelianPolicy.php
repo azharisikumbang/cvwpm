@@ -27,9 +27,11 @@ class PengajuanPembelianPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user): Response
     {
-        //
+        return $user->isAdminStock()
+            ? Response::allow()
+            : Response::denyWithStatus(401, 'Anda tidak dapat membuat pengajuan pembelian baru.');
     }
 
     /**
@@ -47,7 +49,7 @@ class PengajuanPembelianPolicy
      */
     public function delete(User $user, PengajuanPembelian $pengajuanPembelian): bool
     {
-        //
+        return false;
     }
 
     /**

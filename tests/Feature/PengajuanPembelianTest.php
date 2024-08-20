@@ -227,9 +227,90 @@ class PengajuanPembelianTest extends TestCase
         ]);
     }
 
-    public function test_pengajuan_hanya_oleh_admin_purchasing_pada_gudang_terkait()
+    public function test_pengajuan_hanya_oleh_admin_stock_pada_gudang_terkait_dengan_barang_dari_gudang_lain()
     {
-        $this->markTestIncomplete("Belum diimplementasikan karena staf tidak berpotensi pindah ke gudang lain.");
+        $this->seed();
+        Barang::factory(10)->create([
+            'gudang_id' => 1,
+        ]);
+
+        Barang::factory(10)->create([
+            'gudang_id' => 2,
+        ]);
+
+        $barangGudang2 = Barang::where('gudang_id', 2)->first();
+
+        $adminStok = User::where('role_id', Role::ID_ADMIN_STOCK)->first();
+        $this->actingAs($adminStok);
+
+        $request = [
+            'type' => 'BIBIT',
+            'barang' => [
+                [
+                    'id' => $barangGudang2->id,
+                    'kotak' => 10,
+                    'dus' => 5,
+                    'satuan' => 0,
+                ],
+                [
+                    'id' => 12,
+                    'kotak' => 10,
+                    'dus' => 5,
+                    'satuan' => 0,
+                ]
+            ],
+        ];
+
+        $response = $this->actingAs($adminStok)->post('/pengajuan-pembelian', $request);
+        $response->assertBadRequest();
+
+        $this->assertDatabaseCount('pengajuan_pembelian', 0);
+    }
+
+    public function test_pengajuan_hanya_oleh_admin_stock_pada_gudang_terkait_dengan_barang_campuran_antara_gudang_benar_dan_salah()
+    {
+        $this->seed();
+        Barang::factory(10)->create([
+            'gudang_id' => 1,
+        ]);
+
+        Barang::factory(10)->create([
+            'gudang_id' => 2,
+        ]);
+
+        $barangGudang2 = Barang::where('gudang_id', 2)->first();
+
+        $adminStok = User::where('role_id', Role::ID_ADMIN_STOCK)->first();
+        $this->actingAs($adminStok);
+
+        $request = [
+            'type' => 'BIBIT',
+            'barang' => [
+                [
+                    'id' => $barangGudang2->id, // barang gudang lain
+                    'kotak' => 10,
+                    'dus' => 5,
+                    'satuan' => 0,
+                ],
+                [
+                    'id' => 12, // barang gudang lain
+                    'kotak' => 10,
+                    'dus' => 5,
+                    'satuan' => 0,
+                ],
+                [
+                    'id' => 1, // barang gudang benar
+                    'kotak' => 10,
+                    'dus' => 5,
+                    'satuan' => 0,
+                ]
+            ],
+        ];
+
+        $response = $this->actingAs($adminStok)->post('/pengajuan-pembelian', $request);
+        $response->assertBadRequest();
+
+        $this->assertDatabaseCount('pengajuan_pembelian', 0);
     }
 
     public function test_pengajuan_pada_gudang_yang_salah()
