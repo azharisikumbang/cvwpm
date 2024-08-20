@@ -107,6 +107,61 @@ class PengajuanPembelianTest extends TestCase
         $response->assertSessionHas('success', 'Pengajuan pembelian berhasil ditambahkan');
     }
 
+    public function test_pengajuan_pembelian_hanya_oleh_admin_stok()
+    {
+        $this->seed();
+        Barang::factory(10)->create([
+            'gudang_id' => 1,
+        ]);
+
+        $request = [
+            'type' => 'BIBIT',
+            'barang' => [
+                [
+                    'id' => 1,
+                    'kotak' => 10,
+                    'dus' => 5,
+                    'satuan' => 0,
+                ],
+                [
+                    'id' => 2,
+                    'kotak' => 100,
+                    'dus' => 10,
+                    'satuan' => 3,
+                ],
+            ],
+        ];
+
+        // guest
+        $this->asGuest();
+
+        $this
+            ->post('/pengajuan-pembelian', $request)
+            ->assertStatus(302);
+        ;
+
+        // admin purchasing
+        $this->asAdminPurchasing();
+        $this
+            ->post('/pengajuan-pembelian', $request)
+            ->assertStatus(403);
+        ;
+
+        // manajer
+        $this->asManager();
+        $this
+            ->post('/pengajuan-pembelian', $request)
+            ->assertStatus(403);
+        ;
+
+        // sales
+        $this->asSales();
+        $this
+            ->post('/pengajuan-pembelian', $request)
+            ->assertStatus(403);
+        ;
+    }
+
     public function test_pengajuan_pembelian_can_be_approved()
     {
         $this->withoutExceptionHandling();

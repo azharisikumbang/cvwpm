@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function hasRole(string|int|Role $role): bool
     {
-        return $this->role->id == $role || $this->role->name == $role || $this->role == $role;
+        return $this->role->id === $role || $this->role->name === $role || $this->role === $role;
     }
 
     public function getJabatanAttribute(): string
@@ -89,5 +89,9 @@ class User extends Authenticatable
     public function isAdminWeb(): bool
     {
         return $this->hasRole(Role::ID_ADMIN_WEB);
+    }
+    public function isAdminStock(): bool
+    {
+        return $this->hasRole(Role::ID_ADMIN_STOCK);
     }
 }

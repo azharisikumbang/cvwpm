@@ -18,7 +18,7 @@ class StorePengajuanPembelianRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->isAdminStock();
     }
 
     /**
