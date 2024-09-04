@@ -19,24 +19,54 @@ class PengajuanPembelianTest extends TestCase
 
     public function test_admin_stok_dapat_melihat_riwayat_pengajuan_pembelian()
     {
-        $this->markTestIncomplete("Test lebih lanjut test bahwa barang yang ditampilkan hanya barang yang ada di gudang mereka");
+        $this->seed();
+        Barang::factory(10)->create([
+            'gudang_id' => 1
+        ]);
 
-        $adminStok = $this->asAdminStock();
+        Barang::factory(10)->create([
+            'gudang_id' => 2
+        ]);
 
-        $this->actingAs($adminStok)
-            ->get('/pengajuan-pembelian')
-            ->assertStatus(200);
+        // aktor
+        $adminStok = Staf::where('gudang_kerja', 1)->first()->user;
+
+        $pengajuan = PengajuanPembelian::factory()->create([
+            'staf_pengaju_id' => $adminStok->staf->id,
+        ]);
+
+        $response = $this->actingAs($adminStok)->get('/pengajuan-pembelian');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('pengajuan-pembelian.index');
+
+        $response = $this->actingAs($adminStok)->get('/pengajuan-pembelian/' . $pengajuan->id);
+        $response->assertStatus(200);
+        $response->assertViewIs('pengajuan-pembelian.show');
     }
 
     public function test_admin_purchasing_dapat_melihat_pengajuan_pembelian_yang_dibuat()
     {
-        $this->markTestIncomplete("Test lebih lanjut test bahwa barang yang ditampilkan hanya barang yang ada di gudang mereka");
-
         $adminPurchasing = $this->asAdminPurchasing();
 
-        $this->actingAs($adminPurchasing)
-            ->get('/pengajuan-pembelian')
-            ->assertStatus(200);
+        $response = $this->actingAs($adminPurchasing)->get('/pengajuan-pembelian');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('pengajuan-pembelian.index');
+
+        $response = $this->actingAs($adminPurchasing)->get('/pengajuan-pembelian/1');
+        $response->assertStatus(200);
+        $response->assertViewIs('pengajuan-pembelian.show');
+    }
+
+    public function test_admin_stok_tidak_dapat_melihat_pengajuan_pembelian_gudang_lain()
+    {
+
+    }
+
+    public function test_admin_purchasing_tidak_dapat_melihat_pengajuan_pembelian_gudang_lain()
+    {
+
     }
 
     public function test_admin_stok_dapat_menambahkan_pengajuan_pembelian_dan_berkas_pengajuan()

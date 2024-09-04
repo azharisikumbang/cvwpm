@@ -5,6 +5,7 @@ namespace App\Models;
 use Contracts\DTOs\Domain\Enum\StatusPengajuanPembelian;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PengajuanPembelian extends Model
 {
@@ -32,8 +33,13 @@ class PengajuanPembelian extends Model
         $this->save();
     }
 
-    public function stafPengaju()
+    public function stafPengaju(): BelongsTo
     {
         return $this->belongsTo(Staf::class, 'staf_pengaju_id');
+    }   
+
+    public function riwayatStok()
+    {
+        return $this->morphMany(RiwayatStok::class, 'riwayatable');
     }
 }

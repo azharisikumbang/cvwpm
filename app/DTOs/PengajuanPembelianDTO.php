@@ -2,14 +2,13 @@
 
 namespace App\DTOs;
 
+use App\DTOs\Common\StafDTO;
 use App\Http\Requests\StorePengajuanPembelianRequest;
 use App\Models\PengajuanPembelian;
 use Contracts\DTOs\Domain\BarangDTO;
 use Contracts\DTOs\Domain\Enum\StatusPengajuanPembelian;
 use Contracts\DTOs\Domain\GudangDTO;
-use Contracts\DTOs\Domain\JenisBarangEnum;
 use Contracts\DTOs\Domain\PengajuanPembelianDTO as PengajuanPembelianDTOContract;
-use Contracts\DTOs\Domain\StafDTO;
 use DateTimeInterface;
 
 final class PengajuanPembelianDTO implements PengajuanPembelianDTOContract
@@ -30,8 +29,18 @@ final class PengajuanPembelianDTO implements PengajuanPembelianDTOContract
     private array $listBarang;
 
     public function __construct(
+        string $nomorPengajuan,
+        DateTimeInterface $tanggalPengajuan,
+        StafDTO $stafPengaju,
+        GudangDTO $gudangPengaju,
+        StatusPengajuanPembelian $statusPengajuan,
         array $listBarang = []
     ) {
+        $this->nomorPengajuan = $nomorPengajuan;
+        $this->tanggalPengajuan = $tanggalPengajuan;
+        $this->stafPengaju = $stafPengaju;
+        $this->gudangPengaju = $gudangPengaju;
+        $this->statusPengajuan = $statusPengajuan;
         $this->listBarang = $listBarang;
     }
 
@@ -75,7 +84,19 @@ final class PengajuanPembelianDTO implements PengajuanPembelianDTOContract
 
     public static function fromModel(PengajuanPembelian $model): static
     {
-        return new static;
+        $model->load('stafPengaju.gudangKerja', 'riwayatStok');
+
+        $stafDTO = StafDTO::fromModel($model->stafPengaju);
+        $gudangDTO = $stafDTO->getGudangKerja();
+
+        return new static(
+            nomorPengajuan: $model->nomor_pengajuan,
+            tanggalPengajuan: $model->tanggal_pengajuan,
+            stafPengaju: $stafDTO,
+            gudangPengaju: $gudangDTO,
+            statusPengajuan: StatusPengajuanPembelian::from($model->status_pengajuan),
+            listBarang: $model->riwayatStok->map(fn($riwayatStok) => BarangDTO::fromModel($riwayatStok->stokable))->toArray()
+        );
     }
 
     public static function fromRequest(StorePengajuanPembelianRequest $request): static

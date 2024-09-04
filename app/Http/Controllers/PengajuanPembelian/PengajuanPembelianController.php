@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PengajuanPembelian;
 
 use App\DTOs\PengajuanPembelianDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\IndexPengajuanPembelianRequest;
 use App\Http\Requests\StorePengajuanPembelianRequest;
 use App\Models\PengajuanPembelian;
 use App\Services\PengajuanPembelianService;
@@ -20,9 +21,13 @@ class PengajuanPembelianController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(IndexPengajuanPembelianRequest $request)
     {
-        //
+        $listPengajuanPembelian = $this->pengajuanPembelianService->listPengajuanPembelianStaf(
+            $request->toDTO()
+        );
+
+        dd($listPengajuanPembelian);
     }
 
     /**

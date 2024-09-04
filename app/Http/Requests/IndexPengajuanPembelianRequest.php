@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\DTOs\PengajuanPembelian\IndexPengajuanPembelianDTORequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class IndexPengajuanPembelianRequest extends FormRequest
@@ -27,5 +28,14 @@ class IndexPengajuanPembelianRequest extends FormRequest
             'per_page' => ['sometimes', 'integer', 'min:1'],
             'search' => ['sometimes', 'string'],
         ];
+    }
+
+    public function toDTO(): IndexPengajuanPembelianDTORequest
+    {
+        return new IndexPengajuanPembelianDTORequest(
+            stafPengajuId: auth()->user()->staf->id,
+            limit: $this->input('per_page', 10),
+            offset: $this->input('page', 1),
+        );
     }
 }

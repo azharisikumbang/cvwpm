@@ -8,6 +8,7 @@ use App\Models\Gudang;
 use App\Models\PengajuanPembelian;
 use App\Models\RiwayatStok;
 use App\Models\RiwayatStokBibit;
+use App\Models\Staf;
 use Contracts\Domain\PengajuanPembelian\PengajuanPembelianInterface;
 use Contracts\DTOs\Domain\BarangDTO;
 use Contracts\DTOs\Domain\BarangMasuk\BarangMasukBibitDTOInterface;
@@ -15,6 +16,7 @@ use Contracts\DTOs\Domain\BarangMasuk\BarangMasukDTOInterface;
 use Contracts\DTOs\Domain\Enum\StatusPengajuanPembelian; // TODO: implementasi dari App
 use Contracts\DTOs\Domain\Enum\JenisBarangEnum; // TODO: implementasi dari App
 use Contracts\DTOs\Domain\PengajuanPembelianDTO as PengajuanPembelianDTOConctract; // TODO: change naming convention
+use Contracts\DTOs\Requests\IndexPengajuanPembelianRequestDTOInterface;
 use Contracts\DTOs\Requests\StorePengajuanPembelianRequestDTOInterface;
 use Illuminate\Support\Facades\DB;
 
@@ -26,6 +28,18 @@ class PengajuanPembelianService implements PengajuanPembelianInterface
 
     ) {
         //
+    }
+
+    public function listPengajuanPembelianStaf(IndexPengajuanPembelianRequestDTOInterface $dto)
+    {
+        $results = PengajuanPembelian::where('staf_pengaju_id', $dto->getStafPengajuId())
+            ->latest()
+            ->simplePaginate($dto->getLimit())
+            ->withQueryString();
+
+        return $results->map(function (PengajuanPembelian $result) {
+            return PengajuanPembelianDTO::fromModel($result);
+        });
     }
 
     public function cari(string $nomor): PengajuanPembelianDTOConctract
