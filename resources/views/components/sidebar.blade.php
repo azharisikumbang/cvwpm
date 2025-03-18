@@ -5,14 +5,14 @@
         <div class="w-full border-b p-3 text-center hover:bg-blue-700 cursor-pointer">
             <a href="{{ route('homepage') }}">
                 <span class="font-bold whitespace-nowrap w-full">{{
-                    env('APP_NAME') }}</span>
+                    config('app.name') }}</span>
             </a>
         </div>
         <div class="flex flex-col flex-1 pt-4 pb-4 overflow-y-auto">
             @include( auth()->user()->role->getSidebarMenuView() )
         </div>
         {{-- <div class="absolute bottom-0 left-0 text-sm w-full p-4 space-x-4" sidebar-bottom-menu="">
-            <p>&copy; 2024 {{ env('APP_NAME') }}</p>
+            <p>&copy; 2024 {{ config('app.name') }}</p>
         </div> --}}
     </div>
 </aside>
