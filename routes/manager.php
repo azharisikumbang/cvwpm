@@ -13,12 +13,12 @@ Route::prefix('manager')
 
         Route::get('/laporan-kartu-stok', function () {
             echo "test";
-        })->name('laporan-kartu-stok.index');
+        })->name('manager.laporan-kartu-stok.index');
 
         Route::get('laporan-persediaan', [LaporanPersediaanController::class, 'create'])
-            ->name('laporan-persediaan.create');
+            ->name('manager.laporan-persediaan.create');
 
         Route::post('laporan-persediaan', [LaporanPersediaanController::class, 'show'])
-            ->name('laporan-persediaan.show');
+            ->name('manager.laporan-persediaan.show');
 
     });
