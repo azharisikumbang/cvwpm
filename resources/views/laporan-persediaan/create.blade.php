@@ -5,7 +5,7 @@
 @section('breadcrumb')
 @include('components.breadcrumb', ['links' => [
 route('manager.home') => 'Panel Manajemen',
-route('laporan-persediaan.create') => 'Laporan Persediaan',
+route('manager.laporan-persediaan.create') => 'Laporan Persediaan',
 ]])
 @endsection
 
@@ -30,7 +30,7 @@ route('laporan-persediaan.create') => 'Laporan Persediaan',
     @endif
 
     <div x-data="data">
-        <form method="POST" action="{{ route('laporan-persediaan.show') }}" class="w-full">
+        <form method="POST" action="{{ route('manager.laporan-persediaan.show') }}" class="w-full">
             @csrf
 
             <div class="flex justify-between w-full gap-8">
