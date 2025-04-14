@@ -43,5 +43,27 @@
             </div>
         </form>
     </div>
+
+    <div class="mt-4 sm:max-w-lg">
+        <h2 class="font-bold">Perhatian! </h2>
+        <p>Informasi yang terkandung pada website ini adalah bukan sebernarnya, hanya diperuntukkan sebagai uji coba.
+        </p>
+        <h2 class="font-bold">Akun Akses!</h2>
+        <p>Gunakan username di bawah sesuai hak akses nya. Semua password adalah sama. (password:
+            <strong>12345678</strong>)
+        </p>
+        <ul class="list-disc list-inside">
+            <li><b>admin</b> (Web Admin)</li>
+            <li><b>manager</b> (Manager)</li>
+            <p>&nbsp;</p>
+            <li><b>stockpadang</b> (Admin Stok Padang)</li>
+            <li><b>purchasingpadang</b> (Admin Purchasing Padang)</li>
+            <li><b>salespadang</b> (Sales Padang)</li>
+            <p>&nbsp;</p>
+            <li><b>stocksolok</b> (Admin Stok solok)</li>
+            <li><b>purchasingsolok</b> (Admin Purchasing solok)</li>
+            <li><b>salessolok</b> (Sales solok)</li>
+        </ul>
+    </div>
 </div>
 @endsection

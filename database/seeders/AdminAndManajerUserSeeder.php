@@ -23,7 +23,7 @@ class AdminAndManajerUserSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'username' => 'manajer',
+            'username' => 'manager',
             'password' => Hash::make('12345678'),
             'role_id' => Role::ID_MANAGER
         ]);
