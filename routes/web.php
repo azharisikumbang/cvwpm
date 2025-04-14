@@ -35,7 +35,13 @@ Route::prefix('user')
         Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile.index');
         Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
         Route::get('/password', [ChangePasswordController::class, 'index'])->name('user.password.index');
-        Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');
+        // Route::put('/password', [ChangePasswordController::class, 'update'])->name('user.password.update');
+        Route::put('/password', function () {
+            return redirect()
+                ->back()
+                ->withErrors(['Maaf, fitur pergantian password dinonaktifkan.']);
+        })->name('user.password.update');
+
     });
 
 

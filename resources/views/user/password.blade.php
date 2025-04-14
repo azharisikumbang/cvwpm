@@ -11,6 +11,9 @@ route('user.profile.index') => 'Perbaharui Password'
 
 @section('content')
 <div>
+    <div class="sm:max-w-md w-full">
+        <x-alert color="green" message="Untuk keperluan demo, fitu ganti password tidak berfungsi." />
+    </div>
     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-600 md:text-2xl">
         Perbaharui Password
     </h1>
