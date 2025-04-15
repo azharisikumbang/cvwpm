@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Barang;
+use App\Models\Gudang;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +14,13 @@ class BarangSeeder extends Seeder
      */
     public function run(): void
     {
-        Barang::factory(25)->create();
+        $listGudang = Gudang::get();
+        if ($listGudang)
+        {
+            foreach ($listGudang as $gudang)
+            {
+                Barang::factory(500)->create(['gudang_id' => $gudang->id]);
+            }
+        }
     }
 }
