@@ -48,7 +48,12 @@ class Gudang extends Model
 
     public function getPicAttribute()
     {
-        return $this->penanggungJawab ? sprintf("%s (%s)", $this->penanggungJawab->nama, $this->penanggungJawab->kontak) : 'Tidak ada PIC';
+        $staf = $this->stafs()->where('jabatan', Role::where('id', Role::ID_ADMIN_STOCK)->first()->getDisplaybleName())->first(['nama', 'kontak']);
+
+        if (is_null($staf))
+            return "Tidak Ada PIC";
+
+        return sprintf("%s (%s)", $staf->nama, $staf->kontak);
     }
 
     public function purchaseOrders()
