@@ -23,11 +23,11 @@ $app = Application::configure(basePath: dirname(__DIR__))
 
 // Set the storage path for app engine standard compatibility
 // its only store files in /tmp folder
-$app->useStoragePath(
-    env(
-        'APP_STORAGE',
-        $app->storagePath()
-    )
-);
+// $app->useStoragePath(
+//     env(
+//         'APP_STORAGE',
+//         $app->storagePath()
+//     )
+// );
 
 return $app;
