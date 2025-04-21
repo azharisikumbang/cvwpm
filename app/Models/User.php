@@ -58,7 +58,15 @@ class User extends Authenticatable
 
     public function hasRole(string|int|Role $role): bool
     {
+        if (is_int($role) && $this->hasRoleId($role))
+            return true;
+
         return $this->role->id == $role || $this->role->name == $role || $this->role == $role;
+    }
+
+    public function hasRoleId(int $role): bool
+    {
+        return $this->role_id === $role;
     }
 
     public function getJabatanAttribute(): string
