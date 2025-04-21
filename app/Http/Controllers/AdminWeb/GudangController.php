@@ -16,7 +16,7 @@ class GudangController extends Controller
     public function index()
     {
         return view('admin-web.gudang.index', [
-            'items' => Gudang::paginate(10)->toArray()
+            'items' => Gudang::paginate(10, ['id', 'nama', 'lokasi'])->toArray()
         ]);
     }
 
