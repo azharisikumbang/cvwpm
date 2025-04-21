@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminStock\KartuStokController;
 use App\Http\Controllers\LaporanPersediaanController;
 use App\Http\Controllers\Manager\HomeController;
 use App\Models\Role;
@@ -11,9 +12,11 @@ Route::prefix('manager')
         Route::get('/', HomeController::class)
             ->name('manager.home');
 
-        Route::get('/laporan-kartu-stok', function () {
-            echo "test";
-        })->name('manager.laporan-kartu-stok.index');
+        Route::get('laporan-kartu-stok', [KartuStokController::class, 'index'])
+            ->name('manager.laporan-kartu-stok.index');
+
+        Route::post('laporan-kartu-stok', [KartuStokController::class, 'show'])
+            ->name('manager.laporan-kartu-stok.show');
 
         Route::get('laporan-persediaan', [LaporanPersediaanController::class, 'create'])
             ->name('manager.laporan-persediaan.create');

@@ -1,9 +1,9 @@
 @extends('app')
 
-@section('title', 'Page Title')
+@section('title', 'Welcome')
 
 @section('content')
-<p>This is my body content.</p>
+<p>Welcome web administrator.</p>
 @endsection
 
 @section('script')
