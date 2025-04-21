@@ -15,6 +15,7 @@ class KartuStokController extends Controller
     {
         $items = Barang::query()
             ->where('gudang_id', auth()->user()->staf->gudangKerja->id)
+            ->orderBy('nama')
             ->get();
 
 

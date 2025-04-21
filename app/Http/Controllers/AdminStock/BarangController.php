@@ -19,7 +19,7 @@ class BarangController extends Controller
         $barang = Barang::when(request('search'), fn($query) => $query->where('nama', 'like', '%' . request('search') . '%'))
             ->when(request('page'), fn($query) => $query->offset((request('page') - 1) * 10))
             ->where('gudang_id', auth()->user()->staf->gudangKerja->id)
-            ->orderBy('kode_barang')->paginate(request('per_page', 10));
+            ->orderBy('nama')->paginate(request('per_page', 10));
 
         return view('admin-stock.barang.index', ['barang' => $barang->toArray()]);
     }
