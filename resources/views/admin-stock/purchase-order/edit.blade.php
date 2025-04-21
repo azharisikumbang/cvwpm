@@ -66,6 +66,13 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                 </tr>
             </table>
 
+            <div class="flex justify-end">
+                <button onclick="autoFillAll()" type="button"
+                    class="bg-green-600 px-4 py-2 rounded text-white hover:bg-green-500">Isi otomatis
+                    sesuai jumlah
+                    pesanan</button>
+            </div>
+
             <div>
                 <div class="font-semibold text-lg pb-2">Daftar Barang Masuk</div>
 
@@ -80,7 +87,7 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                             <th>Jumlah Satuan</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="table-content">
                         @forelse ($item['riwayat_stok'] as $stok)
                         <tr>
                             <td style="text-align: center">{{ $loop->index + 1 }}</td>
@@ -92,11 +99,13 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
                                 <input type="number" name="barang[{{ $loop->index }}][jumlah_dus]" min="0"
                                     max="{{ $stok['jumlah_dus'] }}" value="0" class="px-2 py-1 w-16 border rounded"
                                     required>
+                                <small class="text-sm italic text-gray-500">(max: {{ $stok['jumlah_dus'] }})</small>
                             </td>
                             <td style="text-align: center">
                                 <input type="number" name="barang[{{ $loop->index }}][jumlah_kotak]" min="0"
                                     max="{{ $stok['jumlah_kotak'] }}" value="0" class="px-2 py-1 w-16 border rounded"
                                     required>
+                                <small class="text-sm italic text-gray-500">(max: {{ $stok['jumlah_kotak'] }})</small>
                             </td>
                             <td style="text-align: center">
                                 <input type="number" name="barang[{{ $loop->index }}][jumlah_satuan]" min="0" value="0"
@@ -123,5 +132,17 @@ route('admin-purchasing.index') => 'Panel Admin Purchasing',
 @endsection
 
 @section('script')
+<script>
+    function autoFillAll()
+    {
+        let inputLists = document.querySelectorAll("#table-content input[type=number]");
 
+        for (let i = 0; i < inputLists.length; i++) {
+            let maxValue = inputLists[i].getAttribute('max');
+            if (maxValue != undefined) {
+                inputLists[i].value = maxValue;
+            }
+        }
+    }
+</script>
 @endsection
