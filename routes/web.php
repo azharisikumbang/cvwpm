@@ -24,7 +24,10 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->name('authe
 Route::get('laporan-persediaan', [LaporanPersediaanController::class, 'create'])
     ->name('laporan-persediaan.create');
 
-Route::get('laporan-persediaan/{gudang}/{year}/{month}', [LaporanPersediaanController::class, 'show'])
+// Route::get('laporan-persediaan/{gudang}/{year}/{month}', [LaporanPersediaanController::class, 'show'])
+//     ->name('laporan-persediaan.show');
+
+Route::post('laporan-persediaan', [LaporanPersediaanController::class, 'show'])
     ->name('laporan-persediaan.show');
 
 
