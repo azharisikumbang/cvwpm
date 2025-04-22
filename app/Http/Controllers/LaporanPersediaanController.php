@@ -25,6 +25,9 @@ class LaporanPersediaanController extends Controller
     public function show(
         CreateLaporanPersediaanRequest $request
     ) {
+
+        // TODO temporary solution for memory limit, please refactor the code
+        ini_set('memory_limit', '512M');
         $data = $this->laporanPersediaanService->createFromRequest($request);
 
         return Pdf::loadView('export.pdf.laporan-persediaan', [
